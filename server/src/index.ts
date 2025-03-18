@@ -1,8 +1,10 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
-import { entries } from "./db/schema";
-import { eq } from "drizzle-orm";
+import swagger from "@elysiajs/swagger";
+import { charactersRoute } from "./routes/character";
+import { moviesRoute } from "./routes/movies";
+import { entriesRoute } from "./routes/entries";
 
 const client = createClient({
   url: process.env.DB_URL!,
@@ -12,23 +14,22 @@ const client = createClient({
 export const db = drizzle({ client });
 
 const app = new Elysia()
-  .get("/", () => "Hello Elysia")
-  .get("/movies", async () => {
-    const data = await db
-      .select()
-      .from(entries)
-      .where(eq(entries.medium, "Movie"));
-
-    return data;
-  })
-  .get("/movies/:id", async ({ params }) => {
-    const data = await db
-      .select()
-      .from(entries)
-      .where(eq(entries.id, parseInt(params.id)));
-
-    return data[0];
-  })
+  .use(
+    swagger({
+      path: "/docs",
+      documentation: {
+        info: {
+          title: "Disasterisk's Marvel API Documentation",
+          description:
+            "This web API provides details for the entire release history of the Marvel Cinematic Universe. Characters are included for filtering purposes.",
+          version: "0.1",
+        },
+      },
+    })
+  )
+  .use(entriesRoute)
+  .use(moviesRoute)
+  .use(charactersRoute)
   .listen(3000);
 
 console.log(
