@@ -13,9 +13,7 @@
     "install-s": "cd server && bun install",
     "install": "bun run install-c && bun run install-s",
     "client": "cd client && bun run dev",
-    "server": "cd server && bun run dev"
-  },
-  "dependencies": {
-    "@elysiajs/bearer": "^1.2.0"
+    "server": "cd server && bun run dev",
+    "db:studio": "cd server && bunx drizzle-kit studio"
   }
 }

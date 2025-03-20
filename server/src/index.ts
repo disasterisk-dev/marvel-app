@@ -16,7 +16,7 @@ export const db = drizzle({ client });
 const app = new Elysia()
   .use(
     swagger({
-      path: "/docs",
+      path: "/",
       documentation: {
         info: {
           title: "Disasterisk's Marvel API Documentation",

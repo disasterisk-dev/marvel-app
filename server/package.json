@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@elysiajs/swagger": "^1.2.2",
+    "@elysiajs/bearer": "^1.2.0",
     "@libsql/client": "^0.14.0",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.40.0",

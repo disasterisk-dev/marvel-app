@@ -2,10 +2,9 @@ import { Elysia, t } from "elysia";
 import { bearer } from "@elysiajs/bearer";
 import { db } from "..";
 import { characters, entries } from "../db/schema";
-import { eq, inArray } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 export const charactersRoute = new Elysia({ prefix: "/characters" })
-  // @ts-ignore
   .use(bearer())
   .get(
     "/",
@@ -57,6 +56,7 @@ export const charactersRoute = new Elysia({ prefix: "/characters" })
   )
   .post(
     "/",
+    // @ts-ignore
     async ({ bearer, query }) => {
       if (bearer !== process.env.API_BEARER) {
         return new Response("This endpoint is not public accessible", {
@@ -73,7 +73,6 @@ export const charactersRoute = new Elysia({ prefix: "/characters" })
       return new Response("Created new character", { status: 201 });
     },
     {
-      bearer: t.String(),
       query: t.Object({
         name: t.String(),
         actors: t.Array(t.String()),
