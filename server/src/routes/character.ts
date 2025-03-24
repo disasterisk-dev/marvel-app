@@ -76,7 +76,6 @@ export const charactersRoute = new Elysia({ prefix: "/characters" })
       query: t.Object({
         name: t.String(),
         actors: t.Array(t.String()),
-        portraitUrl: t.String({ format: "uri" }),
       }),
       detail: {
         description:

@@ -30,7 +30,6 @@ export type Episode = InferSelectModel<typeof episodes>;
 export const characters = sqliteTable("characters", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
-  portraitUrl: text("portrait_url").notNull(),
   actors: text("actors", { mode: "json" }).default("[]"),
 });
 
