@@ -56,9 +56,7 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
         directors: t.Array(t.String()),
         medium: t.UnionEnum(["Movie", "Show", "Extra"]),
         runtime: t.Optional(t.Number()),
-        posterUrl: t.String({
-          format: "uri",
-        }),
+        posterUrl: t.String(),
         characters: t.Array(t.Number()),
       }),
       detail: {

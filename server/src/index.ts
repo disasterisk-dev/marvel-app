@@ -5,6 +5,7 @@ import swagger from "@elysiajs/swagger";
 import { charactersRoute } from "./routes/character";
 import { moviesRoute } from "./routes/movies";
 import { entriesRoute } from "./routes/entries";
+import staticPlugin from "@elysiajs/static";
 
 const client = createClient({
   url: process.env.DB_URL!,
@@ -27,6 +28,7 @@ const app = new Elysia()
       },
     })
   )
+  .use(staticPlugin())
   .use(entriesRoute)
   .use(moviesRoute)
   .use(charactersRoute)

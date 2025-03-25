@@ -13,6 +13,10 @@ export const moviesRoute = new Elysia({ prefix: "/movies" })
         .from(entries)
         .where(eq(entries.medium, "Movie"));
 
+      data.forEach((m) => {
+        m.posterUrl = process.env.BASE_URL + "/public/" + m.posterUrl;
+      });
+
       return data;
     },
     {
@@ -28,6 +32,8 @@ export const moviesRoute = new Elysia({ prefix: "/movies" })
         .select()
         .from(entries)
         .where(eq(entries.id, params.id));
+
+      data[0].posterUrl = process.env.BASE_URL + "/public" + data[0].posterUrl;
 
       return data[0];
     },

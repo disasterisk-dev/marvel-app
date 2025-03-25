@@ -10,6 +10,7 @@ export const entries = sqliteTable("entries", {
   runtime: integer("runtime"),
   posterUrl: text("poster_url").notNull(),
   characters: text("characters", { mode: "json" }).default("[]"),
+  phase: integer("phase"),
 });
 
 export type Entry = InferSelectModel<typeof entries>;
