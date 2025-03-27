@@ -54,6 +54,7 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
         runtime: t.Optional(t.Number()),
         posterUrl: t.String(),
         characters: t.Array(t.Number()),
+        phase: t.Number(),
       }),
       detail: {
         description: "Create a new media entries. NOT PUBLICLY ACCESSIBLE",

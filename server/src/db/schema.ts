@@ -19,10 +19,9 @@ export const episodes = sqliteTable("episodes", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   title: text("title").notNull(),
   releaseDate: integer("release_date", { mode: "timestamp" }).notNull(),
-  director: text("director").notNull(),
+  directors: text("directors", { mode: "json" }).notNull().default("[]"),
   runtime: integer("runtime").notNull(),
-  series: text("series").notNull(),
-  seasonNumber: integer("season_number").notNull(),
+  series: integer("series").notNull(),
   episodeNumber: integer("episode_number").notNull(),
 });
 
