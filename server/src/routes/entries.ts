@@ -42,14 +42,10 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
       }
 
       return new Response("Created new entry", { status: 201 });
-
-      return query;
     },
     {
       query: t.Object({
-        title: t.String({
-          description: "test",
-        }),
+        title: t.String(),
         releaseDate: t.String({
           description: "Use this format: YYYY-MM-DD",
         }),
