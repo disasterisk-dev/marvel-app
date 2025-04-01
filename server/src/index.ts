@@ -3,7 +3,6 @@ import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
 import swagger from "@elysiajs/swagger";
 import { charactersRoute } from "./routes/character";
-import { moviesRoute } from "./routes/movies";
 import { entriesRoute } from "./routes/entries";
 import staticPlugin from "@elysiajs/static";
 import { showsRoute } from "./routes/shows";
@@ -43,7 +42,6 @@ const app = new Elysia()
   )
   .use(staticPlugin())
   .use(entriesRoute)
-  .use(moviesRoute)
   .use(charactersRoute)
   .use(showsRoute)
   .use(episodesRoute)

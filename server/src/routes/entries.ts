@@ -2,13 +2,40 @@ import bearer from "@elysiajs/bearer";
 import { Elysia, t } from "elysia";
 import { entries } from "../db/schema";
 import { db, entryBrief } from "..";
+import { eq } from "drizzle-orm";
 
 export const entriesRoute = new Elysia({ prefix: "/entries" })
   .use(bearer())
   .get(
     "/",
     // @ts-ignore
-    async ({ error }) => {
+    async ({ error, query }) => {
+      if (query.medium) {
+        const data = await db
+          .select({
+            id: entries.id,
+            title: entries.title,
+            releaseDate: entries.releaseDate,
+            runtime: entries.runtime,
+            medium: entries.medium,
+          })
+          .from(entries)
+          .where(eq(entries.medium, query.medium));
+
+        if (data === null)
+          return error(400, {
+            status: 400,
+            error: "Something went wrong",
+          });
+
+        return {
+          status: 200,
+          retrievedAt: new Date(),
+          count: data.length,
+          data: data,
+        };
+      }
+
       const data = await db
         .select({
           id: entries.id,
@@ -34,6 +61,9 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
       };
     },
     {
+      query: t.Object({
+        medium: t.Optional(t.UnionEnum([null, "Movie", "Show", "Extra"])),
+      }),
       response: {
         200: t.Object({
           status: t.Number({
@@ -84,6 +114,9 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
       },
     }
   )
+  .get("/:id", ({ params }) => {
+    // get entry by ID
+  })
   .post(
     "/",
     async ({ bearer, query, error }) => {
