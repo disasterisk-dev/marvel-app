@@ -1,6 +1,10 @@
 import bearer from "@elysiajs/bearer";
 import { Elysia, t } from "elysia";
-import { entries } from "../db/schema";
+import {
+  entries,
+  entryCreateSchema,
+  entrySelectSchema,
+} from "../db/entrySchema";
 import { db, entryBrief } from "..";
 import { eq } from "drizzle-orm";
 
@@ -8,8 +12,10 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
   .use(bearer())
   .get(
     "/",
+    // Type error being thrown as null & undefined can't be reconciled with the entry schema's MEDIUM property
     // @ts-ignore
     async ({ error, query }) => {
+      // Check if user has passed the optional medium query
       if (query.medium) {
         const data = await db
           .select({
@@ -36,6 +42,7 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
         };
       }
 
+      // if no query return all
       const data = await db
         .select({
           id: entries.id,
@@ -72,31 +79,12 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
           retrievedAt: t.Date(),
           count: t.Number(),
           data: t.Array(
-            t.Object({
-              id: t.Number({
-                description:
-                  "The numerical ID assigned to the entry. Not sequential to release order, use releaseDate for that.",
-                default: "5",
-              }),
-              title: t.String({
-                description: "The title of the movie, show, or extra material",
-                default: "Iron Man",
-              }),
-              releaseDate: t.Date({
-                description:
-                  "The date of the original premier in ISO standard format. All times default to midnight.",
-              }),
-              medium: t.UnionEnum(["Movie", "Show", "Extra"], {
-                description:
-                  "The format of the project. One Shots, web series and Disney+ special presentations are all Extras.",
-              }),
-              runtime: t.Nullable(
-                t.Number({
-                  description:
-                    "How long is the piece? Not listed on shows but available by querying the ID with the /show end point.",
-                })
-              ),
-            })
+            t.Omit(entrySelectSchema, [
+              "directors",
+              "posterUrl",
+              "characters",
+              "phase",
+            ])
           ),
         }),
         400: t.Object({
@@ -148,52 +136,7 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
       };
     },
     {
-      query: t.Object({
-        title: t.String({
-          description: "The title of the movie or show",
-        }),
-        releaseDate: t.String({
-          description:
-            "Date of the original premiere. Use this format: YYYY-MM-DD",
-        }),
-        directors: t.Array(
-          t.String({
-            description:
-              "For shows this refers to the showrunner(s). Directors of individual episodes are addressed in the episode entry.",
-          })
-        ),
-        writers: t.Optional(
-          t.Array(
-            t.String({
-              description:
-                "Writers should be left blank for shows, instead the writers should be included on individual episodes.",
-            })
-          )
-        ),
-        medium: t.UnionEnum(["Movie", "Show", "Extra"], {
-          description:
-            "One Shots, web series and Disney+ special presentations are all Extras.",
-        }),
-        runtime: t.Optional(
-          t.Number({
-            description:
-              "Leave blank for shows, its counted by individual episodes.",
-          })
-        ),
-        posterUrl: t.String({
-          description:
-            "More accurately the file name of the poster as stored in the repository.",
-        }),
-        characters: t.Optional(
-          t.Array(t.Number(), {
-            description:
-              "Numerical IDs for characters stored on the DB. Characters don't get an entry unless they are in varied enough projects to be a useful filter.",
-          })
-        ),
-        phase: t.Number({
-          description: "Which era of the MCU did this project come out in?",
-        }),
-      }),
+      query: t.Omit(entrySelectSchema, ["id"]),
       response: {
         201: t.Object({
           status: t.Number({

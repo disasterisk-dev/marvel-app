@@ -1,7 +1,7 @@
 import bearer from "@elysiajs/bearer";
 import { Elysia, t } from "elysia";
 import { db } from "..";
-import { episodes } from "../db/schema";
+import { episodes, episodeSchema } from "../db/episodeSchema";
 
 export const episodesRoute = new Elysia({ prefix: "/episodes" })
   .use(bearer())
@@ -40,14 +40,7 @@ export const episodesRoute = new Elysia({ prefix: "/episodes" })
       };
     },
     {
-      query: t.Object({
-        title: t.String(),
-        releaseDate: t.Date(),
-        directors: t.Array(t.String()),
-        runtime: t.Number(),
-        series: t.Number(),
-        episodeNumber: t.Number(),
-      }),
+      query: t.Omit(episodeSchema, ["id"]),
       response: {
         201: t.Object({
           status: t.Number({

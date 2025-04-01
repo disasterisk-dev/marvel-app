@@ -1,8 +1,9 @@
 import { Elysia, t } from "elysia";
 import { bearer } from "@elysiajs/bearer";
 import { db } from "..";
-import { characters, entries } from "../db/schema";
+import { entries } from "../db/entrySchema";
 import { eq } from "drizzle-orm";
+import { characters } from "../db/characterSchema";
 
 export const charactersRoute = new Elysia({ prefix: "/characters" })
   .use(bearer())

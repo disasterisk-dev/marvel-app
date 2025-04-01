@@ -5,7 +5,6 @@ import swagger from "@elysiajs/swagger";
 import { charactersRoute } from "./routes/character";
 import { entriesRoute } from "./routes/entries";
 import staticPlugin from "@elysiajs/static";
-import { showsRoute } from "./routes/shows";
 import { episodesRoute } from "./routes/episodes";
 
 const client = createClient({
@@ -43,7 +42,6 @@ const app = new Elysia()
   .use(staticPlugin())
   .use(entriesRoute)
   .use(charactersRoute)
-  .use(showsRoute)
   .use(episodesRoute)
   .listen(3000);
 
