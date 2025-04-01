@@ -66,11 +66,18 @@ export const moviesRoute = new Elysia({ prefix: "/movies" })
   .get(
     "/:id",
     // @ts-ignore
-    async ({ params }) => {
+    async ({ params, error }) => {
       const data = await db
         .select()
         .from(entries)
         .where(and(eq(entries.medium, "Movie"), eq(entries.id, params.id)));
+
+      if (data.length === 0) {
+        return error(404, {
+          status: 404,
+          error: "Could not find movie with that ID",
+        });
+      }
 
       data[0].posterUrl = process.env.BASE_URL + "/public" + data[0].posterUrl;
 
@@ -112,6 +119,12 @@ export const moviesRoute = new Elysia({ prefix: "/movies" })
             }),
             characters: t.Array(t.Number()),
             phase: t.Number(),
+          }),
+        }),
+        404: t.Object({
+          status: t.Number(),
+          error: t.String({
+            default: "Could not find movie with that ID",
           }),
         }),
       },
