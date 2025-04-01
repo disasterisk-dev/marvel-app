@@ -1,10 +1,6 @@
 import bearer from "@elysiajs/bearer";
 import { Elysia, t } from "elysia";
-import {
-  entries,
-  entryCreateSchema,
-  entrySelectSchema,
-} from "../db/entrySchema";
+import { entries, entrySelectSchema } from "../db/entrySchema";
 import { db, entryBrief } from "..";
 import { eq } from "drizzle-orm";
 

@@ -37,10 +37,12 @@ export const entrySelectSchema = createSelectSchema(entries, {
   medium: t.UnionEnum(["Movie", "Show", "Extra"], {
     description: "The format of this project.",
   }),
-  runtime: t.Nullable(t.Number(), {
-    description:
-      "Length of the entry. For series this is calculated at runtime based on episode runtimes.",
-  }),
+  runtime: t.Optional(
+    t.Number({
+      description:
+        "Length of the entry. For series this is calculated at runtime based on episode runtimes.",
+    })
+  ),
   posterUrl: t.String({
     description:
       "A live link to the poster for this project. Hosted on the same server as this API for reliability, all rights belong to Marvel.",
@@ -49,39 +51,6 @@ export const entrySelectSchema = createSelectSchema(entries, {
     t.Number({
       description:
         "An array of IDs belonging to the characters listed in this API.",
-    })
-  ),
-  phase: t.Number({
-    description:
-      "The phase of the MCU this was project released in. Unless a movie is declaratively the end of a phase (ie The Avengers ending phase 1) shows released after the last movie of a phase remain in the previous phase.",
-  }),
-});
-
-// a Typebox schema for creating new entries CURRENTLY OUT OF USE
-export const entryCreateSchema = createInsertSchema(entries, {
-  title: t.String({
-    description:
-      "The title of the movie, series/season, one-shot, or web series.",
-  }),
-  releaseDate: t.String({
-    description:
-      "The earliest premiere date for this project. Use YYYY-MM-DD format, time is not used.",
-  }),
-  medium: t.UnionEnum(["Movie", "Show", "Extra"], {
-    description: "The format of this project.",
-  }),
-  runtime: t.Nullable(t.Number(), {
-    description:
-      "Length of the entry. For series this is calculated at runtime based on episode runtimes.",
-  }),
-  posterUrl: t.String({
-    description:
-      "The file name for the poster image. URL formatting provided at runtime.",
-  }),
-  characters: t.Array(
-    t.Number({
-      description:
-        "A comma separated list of number IDs of characters who appear.",
     })
   ),
   phase: t.Number({
