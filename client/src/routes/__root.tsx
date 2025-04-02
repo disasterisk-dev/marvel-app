@@ -10,7 +10,7 @@ function Root() {
   return (
     <React.Fragment>
       <div className="bg-inverse-subtle text-bold grow min-h-screen flex flex-col">
-        <header className="font-heading flex gap-2 p-2 items-center text-bold bg-inverse sticky top-0">
+        <header className="font-heading flex gap-2 p-2 items-center text-bold bg-inverse sticky top-0 z-50">
           <Link to={"/app"}>
             <h1 className="grow text-2xl font-bold">Uatu the Rewatcher</h1>
           </Link>
