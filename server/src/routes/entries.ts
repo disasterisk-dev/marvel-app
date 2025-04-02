@@ -39,16 +39,7 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
       }
 
       // if no query return all
-      const data = await db
-        .select({
-          id: entries.id,
-          title: entries.title,
-          releaseDate: entries.releaseDate,
-          runtime: entries.runtime,
-          medium: entries.medium,
-        })
-        .from(entries)
-        .all();
+      const data = await db.select().from(entries).all();
 
       if (data === null)
         return error(400, {
@@ -56,11 +47,15 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
           error: "Something went wrong",
         });
 
+      data.forEach((e) => {
+        e.posterUrl = process.env.BASE_URL + "/public/" + e.posterUrl;
+      });
+
       return {
         status: 200,
         retrievedAt: new Date(),
         count: data.length,
-        data: data,
+        items: data,
       };
     },
     {
@@ -74,14 +69,7 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
           }),
           retrievedAt: t.Date(),
           count: t.Number(),
-          data: t.Array(
-            t.Omit(entrySelectSchema, [
-              "directors",
-              "posterUrl",
-              "characters",
-              "phase",
-            ])
-          ),
+          items: t.Array(t.Omit(entrySelectSchema, [])),
         }),
         400: t.Object({
           status: t.Number({

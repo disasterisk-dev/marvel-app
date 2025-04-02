@@ -2,15 +2,49 @@ import bearer from "@elysiajs/bearer";
 import { Elysia, t } from "elysia";
 import { db } from "..";
 import { episodes, episodeSchema } from "../db/episodeSchema";
+import { entries } from "../db/entrySchema";
+import { and, eq } from "drizzle-orm";
 
 export const episodesRoute = new Elysia({ prefix: "/episodes" })
   .use(bearer())
   .get("/:id", ({ params }) => {
     // Returns a single episode by the ID
   })
-  .get("/from/:id", ({ params }) => {
-    // gets episodes from a specific show, via the show ID
-  })
+  .get(
+    "/from/:id",
+    // @ts-ignore - doesn't like params
+    async ({ params }) => {
+      // const series = await db
+      //   .select()
+      //   .from(entries)
+      //   .where(and(eq(entries.medium, "Show"), eq(entries.id, params.id)));
+
+      const episodeList = await db
+        .select()
+        .from(episodes)
+        .where(eq(episodes.series, params.id));
+
+      return {
+        status: 200,
+        retrievedAt: new Date(),
+        count: episodeList.length,
+        items: episodeList,
+      };
+    },
+    {
+      params: t.Object({
+        id: t.Number(),
+      }),
+      response: {
+        200: t.Object({
+          status: t.Number(),
+          retrievedAt: t.Date(),
+          count: t.Number(),
+          items: t.Array(t.Omit(episodeSchema, [])),
+        }),
+      },
+    }
+  )
   .post(
     "/",
     async ({ query, bearer, error }) => {

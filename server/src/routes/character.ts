@@ -3,21 +3,39 @@ import { bearer } from "@elysiajs/bearer";
 import { db } from "..";
 import { entries } from "../db/entrySchema";
 import { eq } from "drizzle-orm";
-import { characters } from "../db/characterSchema";
+import { characters, characterSchema } from "../db/characterSchema";
 
+// Type instantiation too deep/infinite error
+// @ts-ignore
 export const charactersRoute = new Elysia({ prefix: "/characters" })
   .use(bearer())
   .get(
     "/",
     async () => {
-      const data = await db.select().from(characters).all();
+      const data = await db
+        .select({
+          id: characters.id,
+          name: characters.name,
+        })
+        .from(characters)
+        .all();
 
       return {
+        status: 200,
+        retrievedAt: new Date(),
         count: data.length,
         items: data,
       };
     },
     {
+      response: {
+        200: t.Object({
+          status: t.Number(),
+          retrievedAt: t.Date(),
+          count: t.Number(),
+          items: t.Array(t.Omit(characterSchema, ["actors"])),
+        }),
+      },
       detail: {
         description:
           "Return all characters, these are fairly empty, but useful for filtering the entries.",
@@ -26,10 +44,12 @@ export const charactersRoute = new Elysia({ prefix: "/characters" })
   )
   .get(
     "/:id",
-    // @ts-ignore
     async ({ params }) => {
-      const char = await db
-        .select()
+      const chars = await db
+        .select({
+          id: characters.id,
+          name: characters.name,
+        })
         .from(characters)
         .where(eq(characters.id, params.id));
 
@@ -58,11 +78,7 @@ export const charactersRoute = new Elysia({ prefix: "/characters" })
       return {
         status: 200,
         retrievedAt: new Date(),
-        data: {
-          ...char[0],
-          appearances: appearances.length,
-          entries: appearances,
-        },
+        data: chars[0],
       };
     },
     {
@@ -71,39 +87,9 @@ export const charactersRoute = new Elysia({ prefix: "/characters" })
       }),
       response: {
         200: t.Object({
-          status: t.Number({
-            default: 200,
-          }),
-          retrievedAt: t.Date({
-            default: new Date(),
-          }),
-          data: t.Object({
-            id: t.Number(),
-            name: t.String({
-              default: "Iron Man",
-            }),
-            actors: t.Array(
-              t.String({
-                default: ["Rober Downey Jr."],
-              })
-            ),
-            appearances: t.Number({
-              default: 11,
-            }),
-            entries: t.Array(
-              t.Object({
-                id: t.Number({
-                  default: 1,
-                }),
-                title: t.String({
-                  default: "Iron Man",
-                }),
-                releaseDate: t.Date({
-                  default: new Date(),
-                }),
-              })
-            ),
-          }),
+          status: t.Number(),
+          retrievedAt: t.Date(),
+          data: t.Omit(characterSchema, ["actors"]),
         }),
       },
       detail: {
@@ -135,10 +121,7 @@ export const charactersRoute = new Elysia({ prefix: "/characters" })
       return new Response("Created new character", { status: 201 });
     },
     {
-      query: t.Object({
-        name: t.String(),
-        actors: t.Array(t.String()),
-      }),
+      query: t.Omit(characterSchema, ["id"]),
       response: {
         201: t.Object({
           status: t.Number({

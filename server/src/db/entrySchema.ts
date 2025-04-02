@@ -38,10 +38,12 @@ export const entrySelectSchema = createSelectSchema(entries, {
     description: "The format of this project.",
   }),
   runtime: t.Optional(
-    t.Number({
-      description:
-        "Length of the entry. For series this is calculated at runtime based on episode runtimes.",
-    })
+    t.Nullable(
+      t.Number({
+        description:
+          "Length of the entry. For series this is calculated at runtime based on episode runtimes.",
+      })
+    )
   ),
   posterUrl: t.String({
     description:
