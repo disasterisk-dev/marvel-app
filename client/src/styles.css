@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-brand-100: #f75e65;
+  --color-brand-200: #f52e36;
+  --color-brand-300: #e50b14;
+  --color-brand-400: #b40910;
+  --color-brand-500: #83060b;
+
+  --color-bold: #1e1e1e;
+  --color-subtle: #383838;
+  --color-inverse: #f2f2f2;
+  --color-inverse-subtle: #d9d9d9;
+
+  --font-heading: "Rubik", sans-serif;
+  --font-body: "Open Sans", sans-serif;
+}
