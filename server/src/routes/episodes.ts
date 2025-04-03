@@ -13,7 +13,7 @@ export const episodesRoute = new Elysia({ prefix: "/episodes" })
   .get(
     "/from/:id",
     // @ts-ignore - doesn't like params
-    async ({ params }) => {
+    async ({ params, error }) => {
       // const series = await db
       //   .select()
       //   .from(entries)
@@ -23,6 +23,13 @@ export const episodesRoute = new Elysia({ prefix: "/episodes" })
         .select()
         .from(episodes)
         .where(eq(episodes.series, params.id));
+
+      // if (episodeList.length === 0) {
+      //   return error(404, {
+      //     status: 404,
+      //     error: "No episodes",
+      //   });
+      // }
 
       return {
         status: 200,
@@ -41,6 +48,10 @@ export const episodesRoute = new Elysia({ prefix: "/episodes" })
           retrievedAt: t.Date(),
           count: t.Number(),
           items: t.Array(t.Omit(episodeSchema, [])),
+        }),
+        404: t.Object({
+          status: t.Number(),
+          error: t.String(),
         }),
       },
     }

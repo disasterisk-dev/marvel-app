@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { pageTopRef } from "../routes/__root";
+import { character } from "../types";
 interface props {
   charFilter: number[];
   setCharFilter: (values: number[]) => void;
 }
-const Filters = ({ charFilter, setCharFilter }: props) => {
+const CharacterFilters = ({ charFilter, setCharFilter }: props) => {
   function updateFilter(id: number) {
     if (charFilter.includes(id)) {
       const newFilter = charFilter.filter((c) => c !== id);
@@ -38,7 +38,7 @@ const Filters = ({ charFilter, setCharFilter }: props) => {
 
       const data = await res.json();
 
-      data.items.sort((a, b) =>
+      data.items.sort((a: character, b: character) =>
         a.name.toLowerCase().localeCompare(b.name.toLowerCase())
       );
 
@@ -46,24 +46,27 @@ const Filters = ({ charFilter, setCharFilter }: props) => {
     },
   });
   return (
-    <aside>
+    <>
+      <h2 className="font-semibold text-xl mt-2">Characters</h2>
       {characters.error && <div>{characters.error.message}</div>}
       {characters.data &&
-        characters.data.items.map((c) => (
+        characters.data.items.map((c: character) => (
           <div className="flex gap-2" key={c.id}>
             <input
               type="checkbox"
-              name={c.id}
-              id={c.id}
+              name={c.id.toString()}
+              id={c.id.toString()}
               className=""
               value={c.id}
               onChange={(e) => updateFilter(parseInt(e.target.value))}
             />
-            <label htmlFor={c.id}>{c.name}</label>
+            <label className="text-nowrap" htmlFor={c.id.toString()}>
+              {c.name}
+            </label>
           </div>
         ))}
-    </aside>
+    </>
   );
 };
 
-export default Filters;
+export default CharacterFilters;
