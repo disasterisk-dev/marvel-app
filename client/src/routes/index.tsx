@@ -15,6 +15,7 @@ function App() {
   const [charFilter, setCharFilter] = useState<number[]>([]);
   const [mediumFilter, setMediumFilter] = useState<string[]>([]);
   const [epsView, setEpsView] = useState<entry | null>(null);
+  const [sortOrder, setSortOrder] = useState<"release" | "alpha">("release");
 
   // returns an array of entries based on if the character list includes any character from the charFilter
 
@@ -28,12 +29,6 @@ function App() {
       }
 
       const data = await res.json();
-
-      // Sort the entries by release date instead of ID
-      data.items.sort(
-        (a: entry, b: entry) =>
-          new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime()
-      );
 
       console.log(data);
       return data;
@@ -52,6 +47,17 @@ function App() {
           />
         </aside>
         <div className="@container grow order-3 lg:order-2">
+          <select
+            name=""
+            id=""
+            value={sortOrder}
+            // @ts-expect-error safe as the only options fit the union type
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="mb-2"
+          >
+            <option value="release">Realease Order</option>
+            <option value="alpha">Alphabetical Order</option>
+          </select>
           {entries.data && (
             <div className="grid grid-cols-1 @xs:grid-cols-2 @md:grid-cols-3 @3xl:grid-cols-4 auto-rows-min gap-2 max-w-screen-lg mx-auto">
               {filterEntries(entries.data.items).map((e) => (
@@ -87,6 +93,20 @@ function App() {
     if (mediumFilter.length > 0) {
       filteredList = filteredList.filter((e) =>
         mediumFilter.includes(e.medium)
+      );
+    }
+
+    if (sortOrder === "release") {
+      // Sort the entries by release date instead of ID
+      filteredList.sort(
+        (a: entry, b: entry) =>
+          new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime()
+      );
+    }
+
+    if (sortOrder === "alpha") {
+      filteredList.sort((a: entry, b: entry) =>
+        a.title.toLowerCase().localeCompare(b.title.toLowerCase())
       );
     }
 

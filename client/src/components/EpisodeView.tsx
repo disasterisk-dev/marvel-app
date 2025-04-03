@@ -27,6 +27,11 @@ export const EpisodeView = ({ entry, closeEps }: Props) => {
 
       const data = await res.json();
 
+      data.items.sort(
+        (a: episode, b: episode) =>
+          new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime()
+      );
+
       return data;
     },
     enabled: !!entry,
