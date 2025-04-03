@@ -43,15 +43,15 @@ function App() {
 
   return (
     <>
-      <div className="flex gap-4 relative ">
-        <aside className="hidden lg:block">
+      <div className="flex flex-col lg:flex-row gap-4 relative">
+        <aside className="hidden lg:block order-1">
           <MediumFilters state={mediumFilter} method={setMediumFilter} />
           <CharacterFilters
             charFilter={charFilter}
             setCharFilter={setCharFilter}
           />
         </aside>
-        <div className="@container grow">
+        <div className="@container grow order-3 lg:order-2">
           {entries.data && (
             <div className="grid grid-cols-1 @xs:grid-cols-2 @md:grid-cols-3 @3xl:grid-cols-4 auto-rows-min gap-2 max-w-screen-lg mx-auto">
               {filterEntries(entries.data.items).map((e) => (

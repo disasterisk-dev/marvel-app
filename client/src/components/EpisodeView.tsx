@@ -33,7 +33,7 @@ export const EpisodeView = ({ entry, closeEps }: Props) => {
   });
 
   return (
-    <div className="bg-inverse h-min p-4 rounded-md min-w-sm">
+    <div className="bg-inverse h-min p-4 rounded-md min-w-sm order-2 lg:order-3">
       <div className="flex items-center">
         <span className="grow font-heading font-medium text-lg text-subtle">
           Episodes
