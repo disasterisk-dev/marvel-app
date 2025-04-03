@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { entry, episode } from "../types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { format } from "date-fns";
 
 type Props = {
   entry: entry;
@@ -56,11 +57,16 @@ export const EpisodeView = ({ entry, closeEps }: Props) => {
               <>
                 <div className="py-2 flex gap-4">
                   <input type="checkbox" name="" id="" />
-                  <div>
+                  <div className="grow">
                     <h3>
                       {e.episodeNumber}. {e.title}
                     </h3>
-                    <p>{e.runtime}m</p>
+                    <div className="flex items-center">
+                      <p className="grow">{e.runtime}m</p>
+                      <p className="text-sm italic">
+                        {format(e.releaseDate, "do MMMM yyyy")}
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <hr className="last:hidden" />

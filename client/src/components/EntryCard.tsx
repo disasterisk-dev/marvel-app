@@ -1,5 +1,6 @@
 import { entry } from "../types";
 import { useState } from "react";
+import { format } from "date-fns";
 
 type Props = {
   entry: entry;
@@ -11,7 +12,7 @@ export const EntryCard = ({ entry, showEps }: Props) => {
 
   return (
     <div
-      className="bg-inverse text-bold rounded-md relative overflow-hidden"
+      className="bg-inverse text-bold rounded-md relative overflow-hidden flex flex-col"
       key={entry.id}
     >
       <input
@@ -30,15 +31,30 @@ export const EntryCard = ({ entry, showEps }: Props) => {
         <img src={entry.posterUrl} alt="" />
       </div>
 
-      <div className="p-2">
-        <h2>{entry.title}</h2>
-        {entry.medium === "Show" && (
-          <button onClick={() => showEps(entry)}>episodes</button>
-        )}
-        {entry.id === 56 && (
-          <button onClick={() => showEps(entry)}>episodes</button>
-        )}
+      <div className="grow p-2">
+        <h2 className="text-pretty">{entry.title}</h2>
+        <hr className="my-1" />
+        <p className="text-sm">
+          by{" "}
+          {entry.directors.map((d, i) => (
+            <>
+              <span>{d}</span>
+              {i < entry.directors.length - 1 && <span>, </span>}
+            </>
+          ))}
+        </p>
+        <p className="text-sm italic">
+          {format(entry.releaseDate, "do MMMM yyyy")}
+        </p>
       </div>
+      {(entry.medium === "Show" || entry.id === 56) && (
+        <button
+          onClick={() => showEps(entry)}
+          className="bg-subtle w-full text-inverse p-2"
+        >
+          show episodes
+        </button>
+      )}
     </div>
   );
 };
