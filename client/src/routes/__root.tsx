@@ -37,6 +37,7 @@ function Root() {
             <a
               href="https://github.com/disasterisk-dev/marvel-app"
               target="_blank"
+              className="flex items-center justify-end"
             >
               <FontAwesomeIcon icon={faGithub} className="text-2xl" />
             </a>
