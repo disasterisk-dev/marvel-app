@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export const Route = createRootRoute({
   component: Root,
@@ -28,8 +29,6 @@ export const Route = createRootRoute({
 });
 
 function Root() {
-  const { theme, setTheme } = useTheme();
-
   return (
     <React.Fragment>
       <SidebarProvider>
@@ -47,22 +46,7 @@ function Root() {
           </SidebarContent>
           <SidebarFooter>
             <div className="flex items-end justify-between">
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Button>Theme</Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("system")}>
-                    System
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <ThemeToggle />
               <a
                 href="https://github.com/disasterisk-dev/marvel-app"
                 target="_blank"
@@ -84,16 +68,4 @@ function Root() {
 
 function NotFound() {
   return <div>Not Found</div>;
-}
-
-function ThemeToggle() {
-  const theme = document.querySelector("html")?.getAttribute("data-theme");
-
-  if (theme == "light") {
-    document.querySelector("html")?.setAttribute("data-theme", "dark");
-    return;
-  }
-
-  document.querySelector("html")?.setAttribute("data-theme", "light");
-  return;
 }
