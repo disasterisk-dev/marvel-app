@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, Outlet, createRootRoute } from "@tanstack/react-router";
+import { Outlet, createRootRoute } from "@tanstack/react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
@@ -13,9 +13,7 @@ function Root() {
     <React.Fragment>
       <div className="bg-inverse-subtle text-bold flex min-h-screen grow flex-col">
         <header className="font-heading text-inverse bg-brand-300 sticky top-0 z-50 flex items-center gap-2 p-4">
-          <Link to={"/app"} className="grow">
-            <h1 className="text-2xl font-bold">Uatu IO</h1>
-          </Link>
+          <h1 className="grow text-2xl font-bold">Uatu IO</h1>
           <a
             href="https://github.com/disasterisk-dev/marvel-app"
             target="_blank"

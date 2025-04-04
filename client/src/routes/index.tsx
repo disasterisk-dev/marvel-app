@@ -40,6 +40,7 @@ function App() {
     <>
       <div className="relative flex flex-col gap-4 lg:flex-row">
         <aside className="order-1 hidden lg:block">
+          {/* Swap out for ShadCN UI accordion */}
           <MediumFilters state={mediumFilter} method={setMediumFilter} />
           <CharacterFilters
             charFilter={charFilter}
@@ -47,17 +48,19 @@ function App() {
           />
         </aside>
         <div className="@container order-3 grow lg:order-2">
-          <select
-            name=""
-            id=""
-            value={sortOrder}
-            // @ts-expect-error safe as the only options fit the union type
-            onChange={(e) => setSortOrder(e.target.value)}
-            className="mb-2"
-          >
-            <option value="release">Realease Order</option>
-            <option value="alpha">Alphabetical Order</option>
-          </select>
+          <div className="font-heading mx-auto flex max-w-screen-lg justify-end font-medium">
+            <select
+              name=""
+              id=""
+              value={sortOrder}
+              // @ts-expect-error safe as the only options fit the union type
+              onChange={(e) => setSortOrder(e.target.value)}
+              className="mb-2"
+            >
+              <option value="release">Release Order</option>
+              <option value="alpha">Alphabetical Order</option>
+            </select>
+          </div>
           {entries.data && (
             <div className="mx-auto grid max-w-screen-lg auto-rows-min grid-cols-1 gap-2 @xs:grid-cols-2 @md:grid-cols-3 @3xl:grid-cols-4">
               {filterEntries(entries.data.items).map((e) => (
@@ -66,6 +69,7 @@ function App() {
             </div>
           )}
         </div>
+        {/* Swap out for ShadCN UI sheet */}
         {epsView && <EpisodeView entry={epsView} closeEps={setEpsView} />}
       </div>
     </>

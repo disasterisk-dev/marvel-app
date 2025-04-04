@@ -30,7 +30,7 @@ export const EntryCard = ({ entry, showEps }: Props) => {
       >
         <img src={entry.posterUrl} alt="" />
       </div>
-
+      {/* replace with ShadCN UI hover card */}
       <div className="grow p-2">
         <h2 className="text-pretty">{entry.title}</h2>
         <hr className="my-1" />
