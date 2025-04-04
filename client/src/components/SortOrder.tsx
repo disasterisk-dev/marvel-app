@@ -7,11 +7,7 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronDown,
-  faClock,
-  faSortAlphaDown,
-} from "@fortawesome/free-solid-svg-icons";
+import { faClock, faSortAlphaDown } from "@fortawesome/free-solid-svg-icons";
 
 const SortOrder = () => {
   const filters = useFilter();
@@ -27,8 +23,7 @@ const SortOrder = () => {
             {filters?.sortOrder === "alphabetical" && (
               <FontAwesomeIcon icon={faSortAlphaDown} />
             )}
-            <span>Sort by</span>
-            <FontAwesomeIcon icon={faChevronDown} />
+            <span className="font-heading">Sort by</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
