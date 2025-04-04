@@ -5,6 +5,7 @@ import { routeTree } from "./routeTree.gen.ts";
 import "./styles.css";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { FilterContextProvider } from "./context.ts/FilterContext.tsx";
+import { ThemeProvider } from "./context.ts/ThemeContext.tsx";
 
 const queryClient = new QueryClient();
 const router = createRouter({ routeTree });
@@ -13,7 +14,9 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <FilterContextProvider>
-        <RouterProvider router={router} />
+        <ThemeProvider>
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </FilterContextProvider>
     </QueryClientProvider>
   </StrictMode>,
