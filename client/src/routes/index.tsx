@@ -12,7 +12,6 @@ export const Route = createFileRoute("/")({
 
 function App() {
   const [epsView, setEpsView] = useState<entry | null>(null);
-  const [sortOrder, setSortOrder] = useState<"release" | "alpha">("release");
 
   const filters = useContext(FilterContext);
   // returns an array of entries based on if the character list includes any character from the charFilter
@@ -38,19 +37,6 @@ function App() {
     <>
       <div className="relative flex flex-col gap-4 lg:flex-row">
         <div className="@container order-3 grow lg:order-2">
-          <div className="font-heading mx-auto flex max-w-screen-lg justify-end font-medium">
-            <select
-              name=""
-              id=""
-              value={sortOrder}
-              // @ts-expect-error safe as the only options fit the union type
-              onChange={(e) => setSortOrder(e.target.value)}
-              className="mb-2"
-            >
-              <option value="release">Release Order</option>
-              <option value="alpha">Alphabetical Order</option>
-            </select>
-          </div>
           {entries.data && (
             <div className="mx-auto grid max-w-screen-lg auto-rows-min grid-cols-1 gap-2 @xs:grid-cols-2 @md:grid-cols-3 @3xl:grid-cols-4">
               {filterEntries(entries.data.items).map((e) => (
@@ -90,7 +76,7 @@ function App() {
       );
     }
 
-    if (sortOrder === "release") {
+    if (filters?.sortOrder === "release") {
       // Sort the entries by release date instead of ID
       filteredList.sort(
         (a: entry, b: entry) =>
@@ -98,7 +84,7 @@ function App() {
       );
     }
 
-    if (sortOrder === "alpha") {
+    if (filters?.sortOrder === "alphabetical") {
       filteredList.sort((a: entry, b: entry) =>
         a.title.toLowerCase().localeCompare(b.title.toLowerCase()),
       );

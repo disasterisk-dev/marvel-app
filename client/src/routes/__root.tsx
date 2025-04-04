@@ -13,15 +13,8 @@ import {
 } from "@/components/ui/sidebar";
 import MediumFilters from "@/components/MediumFilters";
 import CharacterFilters from "@/components/CharacterFilters";
-import { useTheme } from "@/context.ts/ThemeContext";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ThemeToggle";
+import SortOrder from "@/components/SortOrder";
 
 export const Route = createRootRoute({
   component: Root,
@@ -58,7 +51,10 @@ function Root() {
         </Sidebar>
         {/* Move filters here as sidebar */}
         <main className="bg-inverse-subtle dark:bg-subtle grow overflow-scroll p-4">
-          <SidebarTrigger />
+          <div className="mb-4 flex items-center justify-between">
+            <SidebarTrigger />
+            <SortOrder />
+          </div>
           <Outlet />
         </main>
       </SidebarProvider>

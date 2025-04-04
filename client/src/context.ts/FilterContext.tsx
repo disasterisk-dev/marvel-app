@@ -1,12 +1,12 @@
-import { createContext, ReactElement, useState } from "react";
+import { createContext, ReactElement, useContext, useState } from "react";
 
 interface FilterTypes {
   charFilter: number[];
   setCharFilter: (value: number[]) => void;
   mediumFilter: string[];
   setMediumFilter: (value: string[]) => void;
-  sortOrder: "release" | "alpha";
-  setSortOrder: (value: "release" | "alpha") => void;
+  sortOrder: "release" | "alphabetical";
+  setSortOrder: (value: "release" | "alphabetical") => void;
 }
 
 export const FilterContext = createContext<FilterTypes | null>(null);
@@ -18,7 +18,9 @@ interface props {
 export const FilterContextProvider = ({ children }: props) => {
   const [charFilter, setCharFilter] = useState<number[]>([]);
   const [mediumFilter, setMediumFilter] = useState<string[]>([]);
-  const [sortOrder, setSortOrder] = useState<"release" | "alpha">("release");
+  const [sortOrder, setSortOrder] = useState<"release" | "alphabetical">(
+    "release",
+  );
 
   return (
     <FilterContext.Provider
@@ -34,4 +36,13 @@ export const FilterContextProvider = ({ children }: props) => {
       {children}
     </FilterContext.Provider>
   );
+};
+
+export const useFilter = () => {
+  const context = useContext(FilterContext);
+
+  if (context === undefined)
+    throw new Error("useTheme must be used within a FilterContextProvider");
+
+  return context;
 };
