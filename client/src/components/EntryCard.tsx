@@ -26,15 +26,6 @@ export const EntryCard = ({ entry }: Props) => {
                 onCheckedChange={(c) => setSelected(c)}
               />
             </div>
-            {/* <input
-              type="checkbox"
-              name=""
-              id=""
-              checked={selected}
-              value={entry.id}
-              className="absolute top-2 left-2 scale-150 cursor-pointer"
-              onChange={() => setSelected(!selected)}
-            /> */}
             <div
               className="aspect-2/3 cursor-pointer"
               onClick={() => setSelected(!selected)}
