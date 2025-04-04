@@ -22,7 +22,7 @@ const MediumFilters = ({ state, method }: props) => {
 
   return (
     <>
-      <h2 className="font-semibold text-xl">Format</h2>
+      <h2 className="text-xl font-semibold">Format</h2>
       {media.map((m, i) => (
         <div className="flex gap-2" key={i}>
           <input

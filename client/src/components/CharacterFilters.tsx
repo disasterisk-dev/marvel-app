@@ -29,7 +29,7 @@ const CharacterFilters = ({ charFilter, setCharFilter }: props) => {
     queryKey: ["characters"],
     queryFn: async () => {
       const res = await fetch(
-        import.meta.env.VITE_API_BASE_URL + "/characters"
+        import.meta.env.VITE_API_BASE_URL + "/characters",
       );
 
       if (!res.ok) {
@@ -39,7 +39,7 @@ const CharacterFilters = ({ charFilter, setCharFilter }: props) => {
       const data = await res.json();
 
       data.items.sort((a: character, b: character) =>
-        a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
       );
 
       return data;
@@ -47,7 +47,7 @@ const CharacterFilters = ({ charFilter, setCharFilter }: props) => {
   });
   return (
     <>
-      <h2 className="font-semibold text-xl mt-2">Characters</h2>
+      <h2 className="mt-2 text-xl font-semibold">Characters</h2>
       {characters.error && <div>{characters.error.message}</div>}
       {characters.data &&
         characters.data.items.map((c: character) => (

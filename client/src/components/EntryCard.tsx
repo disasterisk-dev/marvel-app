@@ -12,7 +12,7 @@ export const EntryCard = ({ entry, showEps }: Props) => {
 
   return (
     <div
-      className="bg-inverse text-bold rounded-md relative overflow-hidden flex flex-col"
+      className="bg-inverse text-bold relative flex flex-col overflow-hidden rounded-md"
       key={entry.id}
     >
       <input
@@ -50,7 +50,7 @@ export const EntryCard = ({ entry, showEps }: Props) => {
       {(entry.medium === "Show" || entry.id === 56) && (
         <button
           onClick={() => showEps(entry)}
-          className="bg-subtle w-full text-inverse p-2"
+          className="bg-subtle text-inverse w-full p-2"
         >
           show episodes
         </button>

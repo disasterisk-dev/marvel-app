@@ -18,7 +18,7 @@ export const EpisodeView = ({ entry, closeEps }: Props) => {
       console.log("get eps");
 
       const res = await fetch(
-        import.meta.env.VITE_API_BASE_URL + "/episodes/from/" + entry.id
+        import.meta.env.VITE_API_BASE_URL + "/episodes/from/" + entry.id,
       );
 
       if (!res.ok) {
@@ -29,7 +29,7 @@ export const EpisodeView = ({ entry, closeEps }: Props) => {
 
       data.items.sort(
         (a: episode, b: episode) =>
-          new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime()
+          new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime(),
       );
 
       return data;
@@ -39,20 +39,20 @@ export const EpisodeView = ({ entry, closeEps }: Props) => {
   });
 
   return (
-    <div className="bg-inverse h-min p-4 rounded-md min-w-sm order-2 lg:order-3">
+    <div className="bg-inverse order-2 h-min min-w-sm rounded-md p-4 lg:order-3">
       <div className="flex items-center">
-        <span className="grow font-heading font-medium text-lg text-subtle">
+        <span className="font-heading text-subtle grow text-lg font-medium">
           Episodes
         </span>
         <button
-          className="bg-bold text-inverse aspect-square flex p-2 rounded-full items-center cursor-pointer"
+          className="bg-bold text-inverse flex aspect-square cursor-pointer items-center rounded-full p-2"
           onClick={() => closeEps(null)}
         >
           <FontAwesomeIcon icon={faXmark} />
         </button>
       </div>
 
-      <h2 className="text-nowrap text-xl font-semibold font-heading mt-2">
+      <h2 className="font-heading mt-2 text-xl font-semibold text-nowrap">
         {entry.title}
       </h2>
       {episodes.data && (
@@ -60,7 +60,7 @@ export const EpisodeView = ({ entry, closeEps }: Props) => {
           <div>
             {episodes.data.items.map((e: episode) => (
               <>
-                <div className="py-2 flex gap-4">
+                <div className="flex gap-4 py-2">
                   <input type="checkbox" name="" id="" />
                   <div className="grow">
                     <h3>

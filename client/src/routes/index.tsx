@@ -38,15 +38,15 @@ function App() {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row gap-4 relative">
-        <aside className="hidden lg:block order-1">
+      <div className="relative flex flex-col gap-4 lg:flex-row">
+        <aside className="order-1 hidden lg:block">
           <MediumFilters state={mediumFilter} method={setMediumFilter} />
           <CharacterFilters
             charFilter={charFilter}
             setCharFilter={setCharFilter}
           />
         </aside>
-        <div className="@container grow order-3 lg:order-2">
+        <div className="@container order-3 grow lg:order-2">
           <select
             name=""
             id=""
@@ -59,7 +59,7 @@ function App() {
             <option value="alpha">Alphabetical Order</option>
           </select>
           {entries.data && (
-            <div className="grid grid-cols-1 @xs:grid-cols-2 @md:grid-cols-3 @3xl:grid-cols-4 auto-rows-min gap-2 max-w-screen-lg mx-auto">
+            <div className="mx-auto grid max-w-screen-lg auto-rows-min grid-cols-1 gap-2 @xs:grid-cols-2 @md:grid-cols-3 @3xl:grid-cols-4">
               {filterEntries(entries.data.items).map((e) => (
                 <EntryCard entry={e} key={e.id} showEps={setEpsView} />
               ))}
@@ -92,7 +92,7 @@ function App() {
 
     if (mediumFilter.length > 0) {
       filteredList = filteredList.filter((e) =>
-        mediumFilter.includes(e.medium)
+        mediumFilter.includes(e.medium),
       );
     }
 
@@ -100,13 +100,13 @@ function App() {
       // Sort the entries by release date instead of ID
       filteredList.sort(
         (a: entry, b: entry) =>
-          new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime()
+          new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime(),
       );
     }
 
     if (sortOrder === "alpha") {
       filteredList.sort((a: entry, b: entry) =>
-        a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+        a.title.toLowerCase().localeCompare(b.title.toLowerCase()),
       );
     }
 
