@@ -11,12 +11,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import MediumFilters from "@/components/MediumFilters";
 import CharacterFilters from "@/components/CharacterFilters";
 

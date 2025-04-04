@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, ReactElement, useState } from "react";
 
 interface FilterTypes {
   charFilter: number[];
@@ -11,7 +11,11 @@ interface FilterTypes {
 
 export const FilterContext = createContext<FilterTypes | null>(null);
 
-export const FilterContextProvider = ({ children }) => {
+interface props {
+  children: ReactElement;
+}
+
+export const FilterContextProvider = ({ children }: props) => {
   const [charFilter, setCharFilter] = useState<number[]>([]);
   const [mediumFilter, setMediumFilter] = useState<string[]>([]);
   const [sortOrder, setSortOrder] = useState<"release" | "alpha">("release");
