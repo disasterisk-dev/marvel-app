@@ -54,8 +54,13 @@ const CharacterFilters = () => {
   });
   return (
     <>
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="medium">
+      <Accordion
+        type="single"
+        defaultValue="characters"
+        collapsible
+        className="w-full"
+      >
+        <AccordionItem value="characters">
           <AccordionTrigger className="font-heading text-lg font-medium">
             Characters
           </AccordionTrigger>

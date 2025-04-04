@@ -40,7 +40,7 @@ function App() {
           {entries.data && (
             <div className="mx-auto grid max-w-screen-lg auto-rows-min grid-cols-1 gap-2 @xs:grid-cols-2 @md:grid-cols-3 @3xl:grid-cols-4">
               {filterEntries(entries.data.items).map((e) => (
-                <EntryCard entry={e} key={e.id} showEps={setEpsView} />
+                <EntryCard entry={e} key={e.id} />
               ))}
             </div>
           )}

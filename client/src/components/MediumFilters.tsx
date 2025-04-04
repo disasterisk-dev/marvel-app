@@ -28,7 +28,12 @@ const MediumFilters = () => {
 
   return (
     <>
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion
+        type="single"
+        defaultValue="medium"
+        collapsible
+        className="w-full"
+      >
         <AccordionItem value="medium">
           <AccordionTrigger className="font-heading text-lg font-medium">
             Format

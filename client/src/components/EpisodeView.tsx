@@ -1,17 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { entry, episode } from "../types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { format } from "date-fns";
 
 type Props = {
   entry: entry;
   closeEps: (e: entry | null) => void;
 };
-export const EpisodeView = ({ entry, closeEps }: Props) => {
-  document.body.scrollTop = 0; // For Safari
-  document.documentElement.scrollTop = 0; // For everyone else
-
+export const EpisodeView = ({ entry }: Props) => {
   const episodes = useQuery({
     queryKey: ["episodes", entry.id],
     queryFn: async () => {
@@ -22,7 +17,7 @@ export const EpisodeView = ({ entry, closeEps }: Props) => {
       );
 
       if (!res.ok) {
-        throw new Error("COuld not get episodes");
+        throw new Error("Could not get episodes");
       }
 
       const data = await res.json();
@@ -39,22 +34,7 @@ export const EpisodeView = ({ entry, closeEps }: Props) => {
   });
 
   return (
-    <div className="bg-inverse order-2 h-min min-w-sm rounded-md p-4 lg:order-3">
-      <div className="flex items-center">
-        <span className="font-heading text-subtle grow text-lg font-medium">
-          Episodes
-        </span>
-        <button
-          className="bg-bold text-inverse flex aspect-square cursor-pointer items-center rounded-full p-2"
-          onClick={() => closeEps(null)}
-        >
-          <FontAwesomeIcon icon={faXmark} />
-        </button>
-      </div>
-
-      <h2 className="font-heading mt-2 text-xl font-semibold text-nowrap">
-        {entry.title}
-      </h2>
+    <div className="overflow-scroll p-4">
       {episodes.data && (
         <>
           <div>
