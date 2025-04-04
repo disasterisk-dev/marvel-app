@@ -1,15 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import { character } from "../types";
-interface props {
-  charFilter: number[];
-  setCharFilter: (values: number[]) => void;
-}
-const CharacterFilters = ({ charFilter, setCharFilter }: props) => {
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion";
+import { useContext } from "react";
+import { FilterContext } from "@/context.ts/FilterContext";
+
+const CharacterFilters = () => {
+  const filters = useContext(FilterContext);
+
   function updateFilter(id: number) {
-    if (charFilter.includes(id)) {
-      const newFilter = charFilter.filter((c) => c !== id);
-      setCharFilter(newFilter);
-      console.log(charFilter);
+    if (filters?.charFilter.includes(id)) {
+      const newFilter = filters.charFilter.filter((c) => c !== id);
+      filters.setCharFilter(newFilter);
+      console.log(filters.charFilter);
 
       document.body.scrollTop = 0; // For Safari
       document.documentElement.scrollTop = 0; // For everyone else
@@ -17,7 +24,7 @@ const CharacterFilters = ({ charFilter, setCharFilter }: props) => {
       return;
     }
 
-    setCharFilter([...charFilter, id]);
+    filters?.setCharFilter([...filters.charFilter, id]);
 
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For everyone else
@@ -47,24 +54,32 @@ const CharacterFilters = ({ charFilter, setCharFilter }: props) => {
   });
   return (
     <>
-      <h2 className="mt-2 text-xl font-semibold">Characters</h2>
-      {characters.error && <div>{characters.error.message}</div>}
-      {characters.data &&
-        characters.data.items.map((c: character) => (
-          <div className="flex gap-2" key={c.id}>
-            <input
-              type="checkbox"
-              name={c.id.toString()}
-              id={c.id.toString()}
-              className=""
-              value={c.id}
-              onChange={(e) => updateFilter(parseInt(e.target.value))}
-            />
-            <label className="text-nowrap" htmlFor={c.id.toString()}>
-              {c.name}
-            </label>
-          </div>
-        ))}
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="medium">
+          <AccordionTrigger className="font-heading text-lg font-medium">
+            Characters
+          </AccordionTrigger>
+          <AccordionContent>
+            {characters.error && <div>{characters.error.message}</div>}
+            {characters.data &&
+              characters.data.items.map((c: character) => (
+                <div className="flex gap-2" key={c.id}>
+                  <input
+                    type="checkbox"
+                    name={c.id.toString()}
+                    id={c.id.toString()}
+                    className=""
+                    value={c.id}
+                    onChange={(e) => updateFilter(parseInt(e.target.value))}
+                  />
+                  <label className="text-nowrap" htmlFor={c.id.toString()}>
+                    {c.name}
+                  </label>
+                </div>
+              ))}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </>
   );
 };

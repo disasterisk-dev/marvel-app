@@ -1,22 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { entry } from "../types";
-import CharacterFilters from "../components/CharacterFilters";
-import MediumFilters from "../components/MediumFilters";
 import { EntryCard } from "../components/EntryCard";
 import { EpisodeView } from "../components/EpisodeView";
+import { FilterContext } from "@/context.ts/FilterContext";
 
 export const Route = createFileRoute("/")({
   component: App,
 });
 
 function App() {
-  const [charFilter, setCharFilter] = useState<number[]>([]);
-  const [mediumFilter, setMediumFilter] = useState<string[]>([]);
   const [epsView, setEpsView] = useState<entry | null>(null);
   const [sortOrder, setSortOrder] = useState<"release" | "alpha">("release");
 
+  const filters = useContext(FilterContext);
   // returns an array of entries based on if the character list includes any character from the charFilter
 
   const entries = useQuery({
@@ -39,14 +37,6 @@ function App() {
   return (
     <>
       <div className="relative flex flex-col gap-4 lg:flex-row">
-        <aside className="order-1 hidden lg:block">
-          {/* Swap out for ShadCN UI accordion */}
-          <MediumFilters state={mediumFilter} method={setMediumFilter} />
-          <CharacterFilters
-            charFilter={charFilter}
-            setCharFilter={setCharFilter}
-          />
-        </aside>
         <div className="@container order-3 grow lg:order-2">
           <div className="font-heading mx-auto flex max-w-screen-lg justify-end font-medium">
             <select
@@ -81,11 +71,11 @@ function App() {
     let filteredList: entry[] = [];
 
     // when the filters are empty all results should be shown
-    if (charFilter.length === 0) {
+    if (filters?.charFilter.length === 0) {
       filteredList = entryList;
     } else {
       entryList.forEach((e) => {
-        charFilter.forEach((c) => {
+        filters?.charFilter.forEach((c) => {
           if (e.characters.includes(c)) {
             // does not add entry to list if it already exists there, prevents duplicates
             if (!filteredList.includes(e)) filteredList.push(e);
@@ -94,9 +84,9 @@ function App() {
       });
     }
 
-    if (mediumFilter.length > 0) {
+    if (filters && filters?.mediumFilter.length > 0) {
       filteredList = filteredList.filter((e) =>
-        mediumFilter.includes(e.medium),
+        filters?.mediumFilter.includes(e.medium),
       );
     }
 

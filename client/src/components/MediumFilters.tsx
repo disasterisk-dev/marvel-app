@@ -1,15 +1,21 @@
-interface props {
-  state: string[];
-  method: (values: string[]) => void;
-}
+import { FilterContext } from "@/context.ts/FilterContext";
+import { useContext } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion";
 
-const MediumFilters = ({ state, method }: props) => {
+const MediumFilters = () => {
   const media = ["Movie", "Show", "Extra"];
 
+  const filters = useContext(FilterContext);
+
   function updateFilter(e: string) {
-    if (state.includes(e)) {
-      const newFilter = state.filter((m: string) => m !== e);
-      method(newFilter);
+    if (filters?.mediumFilter.includes(e)) {
+      const newFilter = filters.mediumFilter.filter((m: string) => m !== e);
+      filters.setMediumFilter(newFilter);
 
       document.body.scrollTop = 0; // For Safari
       document.documentElement.scrollTop = 0; // For everyone else
@@ -17,25 +23,33 @@ const MediumFilters = ({ state, method }: props) => {
       return;
     }
 
-    method([...state, e]);
+    filters?.setMediumFilter([...filters.mediumFilter, e]);
   }
 
   return (
     <>
-      <h2 className="text-xl font-semibold">Format</h2>
-      {media.map((m, i) => (
-        <div className="flex gap-2" key={i}>
-          <input
-            type="checkbox"
-            name={m}
-            id={m}
-            className=""
-            value={m}
-            onChange={(e) => updateFilter(e.target.value)}
-          />
-          <label htmlFor={m}>{m}</label>
-        </div>
-      ))}
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="medium">
+          <AccordionTrigger className="font-heading text-lg font-medium">
+            Format
+          </AccordionTrigger>
+          <AccordionContent>
+            {media.map((m, i) => (
+              <div className="flex gap-2" key={i}>
+                <input
+                  type="checkbox"
+                  name={m}
+                  id={m}
+                  className=""
+                  value={m}
+                  onChange={(e) => updateFilter(e.target.value)}
+                />
+                <label htmlFor={m}>{m}</label>
+              </div>
+            ))}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </>
   );
 };
