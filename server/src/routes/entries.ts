@@ -1,7 +1,7 @@
 import bearer from "@elysiajs/bearer";
 import { Elysia, t } from "elysia";
 import { entries, entrySelectSchema } from "../db/entrySchema";
-import { db, entryBrief } from "..";
+import { app, db, entryBrief } from "..";
 import { eq } from "drizzle-orm";
 
 export const entriesRoute = new Elysia({ prefix: "/entries" })
@@ -48,7 +48,7 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
         });
 
       data.forEach((e) => {
-        e.posterUrl = process.env.BASE_URL + "/public/" + e.posterUrl;
+        e.posterUrl = `http://${app.server?.hostname}:${app.server?.port}/public/${e.posterUrl}`;
       });
 
       return {

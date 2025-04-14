@@ -57,7 +57,7 @@ const AdminPanel = () => {
             <TabsContent value="episode"></TabsContent>
           </Tabs>
           <DialogFooter>
-            <Label htmlFor="password">Super Secret Password:</Label>
+            <Label htmlFor="password">Super Secret Key:</Label>
             <Input
               id="password"
               type="password"
