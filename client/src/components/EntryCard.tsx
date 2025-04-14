@@ -27,52 +27,65 @@ export const EntryCard = ({ entry }: Props) => {
               />
             </div>
             <div
-              className="aspect-2/3 cursor-pointer"
+              className="bg-inverse dark:bg-bold flex cursor-pointer flex-col gap-2 md:flex-row"
               onClick={() => setSelected(!selected)}
             >
-              <img src={entry.posterUrl} alt="" />
+              <img
+                className="aspect-2/3 md:max-h-64 lg:max-h-full"
+                src={entry.posterUrl}
+                alt=""
+              />
+              <div className="flex-auto basis-full p-2 lg:hidden">
+                <CardContent entry={entry} />
+              </div>
             </div>
           </HoverCardTrigger>
           <HoverCardContent>
-            <div className="flex flex-col gap-2">
-              <h2 className="text-pretty">{entry.title}</h2>
-              <hr className="my-1" />
-              <p className="text-sm">
-                by{" "}
-                {entry.directors.map((d, i) => (
-                  <>
-                    <span>{d}</span>
-                    {i < entry.directors.length - 1 && <span>, </span>}
-                  </>
-                ))}
-              </p>
-              <p className="text-sm italic">
-                {format(entry.releaseDate, "do MMMM yyyy")}
-              </p>
-              {(entry.medium === "Show" || entry.id === 56) && (
-                <>
-                  <Sheet key={"right"}>
-                    <SheetTrigger>
-                      <Button className="w-full">Show Episodes</Button>
-                    </SheetTrigger>
-                    <SheetContent>
-                      <SheetHeader>
-                        <span className="font-heading text-subtle grow text-lg font-medium">
-                          Episodes
-                        </span>
-                        <h2 className="font-heading text-xl font-semibold text-nowrap">
-                          {entry.title}
-                        </h2>
-                      </SheetHeader>
-                      <EpisodeView entry={entry} closeEps={() => {}} />
-                    </SheetContent>
-                  </Sheet>
-                </>
-              )}
-            </div>
+            <CardContent entry={entry} />
           </HoverCardContent>
         </HoverCard>
       </div>
     </>
+  );
+};
+
+const CardContent = ({ entry }: Props) => {
+  return (
+    <div className="flex h-full flex-col gap-2">
+      <h2 className="text-pretty">{entry.title}</h2>
+      <hr className="my-1" />
+      <p className="text-sm">
+        by{" "}
+        {entry.directors.map((d, i) => (
+          <>
+            <span>{d}</span>
+            {i < entry.directors.length - 1 && <span>, </span>}
+          </>
+        ))}
+      </p>
+      <p className="grow text-sm italic">
+        {format(entry.releaseDate, "do MMMM yyyy")}
+      </p>
+      {(entry.medium === "Show" || entry.id === 56) && (
+        <>
+          <Sheet key={"right"}>
+            <SheetTrigger>
+              <Button className="w-full">Show Episodes</Button>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <span className="font-heading text-subtle grow text-lg font-medium">
+                  Episodes
+                </span>
+                <h2 className="font-heading text-xl font-semibold text-nowrap">
+                  {entry.title}
+                </h2>
+              </SheetHeader>
+              <EpisodeView entry={entry} closeEps={() => {}} />
+            </SheetContent>
+          </Sheet>
+        </>
+      )}
+    </div>
   );
 };

@@ -15,6 +15,8 @@ import MediumFilters from "@/components/MediumFilters";
 import CharacterFilters from "@/components/CharacterFilters";
 import ThemeToggle from "@/components/ThemeToggle";
 import SortOrder from "@/components/SortOrder";
+import AdminPanel from "@/components/admin";
+import { Toaster } from "sonner";
 
 export const Route = createRootRoute({
   component: Root,
@@ -50,12 +52,14 @@ function Root() {
           </SidebarFooter>
         </Sidebar>
         {/* Move filters here as sidebar */}
-        <main className="bg-inverse-subtle dark:bg-subtle grow overflow-scroll p-4">
-          <div className="mb-4 flex items-center justify-between">
+        <main className="bg-inverse-subtle dark:bg-subtle grow overflow-scroll">
+          <div className="mb-4 flex items-center justify-between p-4">
             <SidebarTrigger />
             <SortOrder />
           </div>
           <Outlet />
+          <AdminPanel />
+          <Toaster />
         </main>
       </SidebarProvider>
     </React.Fragment>

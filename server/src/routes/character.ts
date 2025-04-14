@@ -101,16 +101,16 @@ export const charactersRoute = new Elysia({ prefix: "/characters" })
   .post(
     "/",
     // @ts-ignore
-    async ({ bearer, query, error }) => {
+    async ({ bearer, body, error }) => {
       if (bearer !== process.env.API_BEARER) {
         return error(401, {
           status: 401,
-          error: "Not authorised to create characters.",
+          message: "Not authorised to create characters.",
         });
       }
 
       try {
-        await db.insert(characters).values(query);
+        await db.insert(characters).values(body);
       } catch (e) {
         return error(400, {
           status: 400,
@@ -118,16 +118,19 @@ export const charactersRoute = new Elysia({ prefix: "/characters" })
         });
       }
 
-      return new Response("Created new character", { status: 201 });
+      return {
+        status: 201,
+        message: "Created new character",
+      };
     },
     {
-      query: t.Omit(characterSchema, ["id"]),
+      body: t.Omit(characterSchema, ["id"]),
       response: {
         201: t.Object({
           status: t.Number({
             default: 201,
           }),
-          success: t.String({
+          message: t.String({
             default: "Created a new character.",
           }),
         }),
@@ -135,7 +138,7 @@ export const charactersRoute = new Elysia({ prefix: "/characters" })
           status: t.Number({
             default: 400,
           }),
-          error: t.Optional(
+          message: t.Optional(
             t.String({
               default: "Could not create new character.",
             })
@@ -145,7 +148,7 @@ export const charactersRoute = new Elysia({ prefix: "/characters" })
           status: t.Number({
             default: 401,
           }),
-          error: t.String({
+          message: t.String({
             default: "Not authorised to create characters.",
           }),
         }),

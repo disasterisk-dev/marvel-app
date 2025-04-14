@@ -26,8 +26,6 @@ function App() {
       }
 
       const data = await res.json();
-
-      console.log(data);
       return data;
     },
     refetchOnWindowFocus: false,
@@ -38,7 +36,7 @@ function App() {
       <div className="relative flex flex-col gap-4 lg:flex-row">
         <div className="@container order-3 grow lg:order-2">
           {entries.data && (
-            <div className="mx-auto grid max-w-screen-lg auto-rows-min grid-cols-1 gap-2 @xs:grid-cols-2 @md:grid-cols-3 @3xl:grid-cols-4">
+            <div className="mx-auto grid max-w-screen-lg auto-rows-min grid-cols-1 gap-2 lg:grid-cols-3 xl:grid-cols-4">
               {filterEntries(entries.data.items).map((e) => (
                 <EntryCard entry={e} key={e.id} />
               ))}
