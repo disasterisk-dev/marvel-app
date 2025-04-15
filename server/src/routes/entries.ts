@@ -91,7 +91,7 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
   })
   .post(
     "/",
-    async ({ bearer, query, error }) => {
+    async ({ bearer, body, error }) => {
       if (bearer !== process.env.API_BEARER) {
         return error(401, {
           status: 401,
@@ -101,12 +101,13 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
 
       // Throws an error due to the Elysia validation but is converted by Drizzle anyway
       // @ts-ignore
-      query.releaseDate = new Date(query.releaseDate);
+      body.releaseDate = new Date(body.releaseDate);
+      body.runtime = body.runtime! <= 0 ? null : body.runtime;
 
       try {
         // Throws an error due to Elysia validation
         // @ts-ignore
-        await db.insert(entries).values(query);
+        await db.insert(entries).values(body);
       } catch (e) {
         return error(400, {
           status: 400,
@@ -120,7 +121,7 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
       };
     },
     {
-      query: t.Omit(entrySelectSchema, ["id"]),
+      body: t.Omit(entrySelectSchema, ["id"]),
       response: {
         201: t.Object({
           status: t.Number({

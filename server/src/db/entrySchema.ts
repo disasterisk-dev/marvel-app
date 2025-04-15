@@ -37,13 +37,11 @@ export const entrySelectSchema = createSelectSchema(entries, {
   medium: t.UnionEnum(["Movie", "Show", "Extra"], {
     description: "The format of this project.",
   }),
-  runtime: t.Optional(
-    t.Nullable(
-      t.Number({
-        description:
-          "Length of the entry. For series this is calculated at runtime based on episode runtimes.",
-      })
-    )
+  runtime: t.Nullable(
+    t.Number({
+      description:
+        "Length of the entry. For series this is calculated at runtime based on episode runtimes.",
+    })
   ),
   posterUrl: t.String({
     description:

@@ -49,7 +49,7 @@ const AdminPanel = () => {
               <TabsTrigger value="episode">Episode</TabsTrigger>
             </TabsList>
             <TabsContent value="entry">
-              <EntryForm />
+              <EntryForm password={password} close={() => setOpen(false)} />
             </TabsContent>
             <TabsContent value="character">
               <CharacterForm password={password} close={() => setOpen(false)} />

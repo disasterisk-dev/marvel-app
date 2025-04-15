@@ -24,7 +24,7 @@ const CharacterForm = ({ password, close }: Props) => {
 
       await axios
         .post(
-          import.meta.env.VITE_API_BASE_URL + "/characters?",
+          import.meta.env.VITE_API_BASE_URL + "/characters",
           { ...value },
           {
             headers: {
