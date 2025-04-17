@@ -1,4 +1,4 @@
-import { useFilter } from "@/context.ts/FilterContext";
+import { useFilter } from "@/context/FilterContext";
 import {
   DropdownMenu,
   DropdownMenuContent,

@@ -1,11 +1,8 @@
-import { useForm } from "@tanstack/react-form";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { FieldInfo } from "./FieldInfo";
 import { Button } from "../ui/button";
+import { useCharacterForm } from "@/forms/useCharacterForm";
+import { useStore } from "@tanstack/react-form";
 import axios from "axios";
-import { toast } from "sonner";
-import ActorSelect from "./ActorSelect";
+import { character, option } from "@/types";
 
 type Props = {
   password: string | undefined;
@@ -13,42 +10,10 @@ type Props = {
 };
 
 const CharacterForm = ({ password, close }: Props) => {
-  const form = useForm({
-    defaultValues: {
-      name: "",
-      actors: [""],
-    },
-    onSubmit: async ({ value }) => {
-      value.actors.forEach((v) => {
-        return v.trim();
-      });
+  // Pulling in details from the character form hook, contains validation and default values, and the submission method
+  const form = useCharacterForm(password, close);
+  const formErrors = useStore(form.store, (state) => state.errorMap);
 
-      await axios
-        .post(
-          import.meta.env.VITE_API_BASE_URL + "/characters",
-          { ...value },
-          {
-            headers: {
-              Authorization: "Bearer " + password!,
-            },
-          },
-        )
-        .then((res) => {
-          toast("Created New Character", res.data);
-        })
-        .catch((err) => {
-          toast("Something went wrong", {
-            description: err.message,
-            action: {
-              label: "More",
-              onClick: () => console.log(err),
-            },
-          });
-        });
-
-      close();
-    },
-  });
   return (
     <form
       className="flex flex-col gap-2"
@@ -58,46 +23,15 @@ const CharacterForm = ({ password, close }: Props) => {
         form.handleSubmit();
       }}
     >
-      <form.Field
+      <form.AppField
         name="name"
-        validators={{
-          onChange: ({ value }) =>
-            value.split("").length > 0 ? undefined : "Name is required",
-        }}
-        children={(field) => {
-          return (
-            <>
-              <Label htmlFor={field.name}>{field.name}</Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                type="text"
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-              <FieldInfo field={field} />
-            </>
-          );
-        }}
+        children={(field) => <field.TextField label="Character Name" />}
       />
-      <form.Field
+      <form.AppField
         name="actors"
-        validators={{
-          onChange: ({ value }) => {
-            if (value.length === 0) return "At least 1 actor is required";
-            if (value[0].split.length === 0)
-              return "At least 1 actor is required";
-          },
-        }}
-        children={(field) => {
-          return (
-            <>
-              <Label htmlFor={field.name}>{field.name} (Comma separated)</Label>
-              <ActorSelect field={field} />
-              <FieldInfo field={field} />
-            </>
-          );
-        }}
+        children={(field) => (
+          <field.SelectAsyncCreatable label="Actors" loadMethod={loadActors} />
+        )}
       />
       <form.Subscribe
         selector={(state) => [state.canSubmit, state.isSubmitting]}
@@ -107,8 +41,39 @@ const CharacterForm = ({ password, close }: Props) => {
           </Button>
         )}
       />
+      {formErrors.onChange ? (
+        <div>
+          <em>{formErrors.onChange}</em>
+        </div>
+      ) : null}
     </form>
   );
 };
 
 export default CharacterForm;
+
+const loadActors = (
+  inputValue: string,
+  callback: (options: option[]) => void,
+) => {
+  axios.get(import.meta.env.VITE_API_BASE_URL + "/characters").then((res) => {
+    const characters: character[] = res.data.items;
+
+    const options: option[] = [];
+
+    characters.forEach((c) => {
+      c.actors.forEach((a) => {
+        const newOption = { label: a, value: a };
+        if (!options.includes(newOption)) {
+          options.push(newOption);
+        }
+      });
+    });
+
+    callback(
+      options.filter((o) =>
+        o.label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()),
+      ),
+    );
+  });
+};

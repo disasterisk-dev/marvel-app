@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "./ui/accordion";
 import { useContext } from "react";
-import { FilterContext } from "@/context.ts/FilterContext";
+import { FilterContext } from "@/context/FilterContext";
 
 const CharacterFilters = () => {
   const filters = useContext(FilterContext);

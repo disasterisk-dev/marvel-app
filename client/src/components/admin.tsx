@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import CharacterForm from "./forms/CharacterForm";
 import { Label } from "./ui/label";
-import { PasswordField } from "./forms/PasswordField";
+import { PasswordField } from "./forms/fields/PasswordField";
 
 const AdminPanel = () => {
   const [open, setOpen] = useState(false);

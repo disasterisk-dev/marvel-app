@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useContext } from "react";
 import { entry } from "../types";
 import { EntryCard } from "../components/EntryCard";
-import { FilterContext } from "@/context.ts/FilterContext";
+import { FilterContext } from "@/context/FilterContext";
 
 export const Route = createFileRoute("/")({
   component: App,

@@ -4,8 +4,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { routeTree } from "./routeTree.gen.ts";
 import "./styles.css";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
-import { FilterContextProvider } from "./context.ts/FilterContext.tsx";
-import { ThemeProvider } from "./context.ts/ThemeContext.tsx";
+import { FilterContextProvider } from "./context/FilterContext.tsx";
+import { ThemeProvider } from "./context/ThemeContext.tsx";
 
 const queryClient = new QueryClient();
 const router = createRouter({ routeTree });

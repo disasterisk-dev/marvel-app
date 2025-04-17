@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye as eyeSolid } from "@fortawesome/free-solid-svg-icons";
 import { faEye as eyeRegular } from "@fortawesome/free-regular-svg-icons";

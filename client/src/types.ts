@@ -25,3 +25,8 @@ export interface episode {
   series: number;
   episodeNumber: number;
 }
+
+export interface option {
+  readonly value: string | number;
+  readonly label: string;
+}

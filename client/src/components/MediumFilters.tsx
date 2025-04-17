@@ -1,4 +1,4 @@
-import { FilterContext } from "@/context.ts/FilterContext";
+import { FilterContext } from "@/context/FilterContext";
 import { useContext } from "react";
 import {
   Accordion,

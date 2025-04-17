@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { useTheme } from "@/context.ts/ThemeContext";
+import { useTheme } from "@/context/ThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComputer, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 
