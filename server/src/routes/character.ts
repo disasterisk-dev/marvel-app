@@ -11,14 +11,9 @@ export const charactersRoute = new Elysia({ prefix: "/characters" })
   .use(bearer())
   .get(
     "/",
+    // @ts-expect-error Type error being thrown as null & undefined can't be reconciled with the entry schema's MEDIUM property
     async () => {
-      const data = await db
-        .select({
-          id: characters.id,
-          name: characters.name,
-        })
-        .from(characters)
-        .all();
+      const data = await db.select().from(characters).all();
 
       return {
         status: 200,
@@ -33,7 +28,7 @@ export const charactersRoute = new Elysia({ prefix: "/characters" })
           status: t.Number(),
           retrievedAt: t.Date(),
           count: t.Number(),
-          items: t.Array(t.Omit(characterSchema, ["actors"])),
+          items: t.Array(t.Omit(characterSchema, [])),
         }),
       },
       detail: {

@@ -39,17 +39,6 @@ const SortOrder = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {/* <select
-        name=""
-        id=""
-        value={filters?.sortOrder}
-        // @ts-expect-error safe as the only options fit the union type
-        onChange={(e) => filters?.setSortOrder(e.target.value)}
-        className="mb-2"
-      >
-        <option value="release">Release Order</option>
-        <option value="alpha">Alphabetical Order</option>
-      </select> */}
     </>
   );
 };

@@ -16,7 +16,7 @@ export const EntryCard = ({ entry }: Props) => {
 
   return (
     <>
-      <div className="relative overflow-hidden rounded-md" key={entry.id}>
+      <div className="relative overflow-hidden rounded-md">
         <HoverCard>
           <HoverCardTrigger>
             {/* Not completely sold on the shad checkbox */}

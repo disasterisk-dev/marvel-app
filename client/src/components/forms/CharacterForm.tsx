@@ -5,6 +5,7 @@ import { FieldInfo } from "./FieldInfo";
 import { Button } from "../ui/button";
 import axios from "axios";
 import { toast } from "sonner";
+import ActorSelect from "./ActorSelect";
 
 type Props = {
   password: string | undefined;
@@ -92,13 +93,7 @@ const CharacterForm = ({ password, close }: Props) => {
           return (
             <>
               <Label htmlFor={field.name}>{field.name} (Comma separated)</Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                type="text"
-                onChange={(e) => field.handleChange(e.target.value.split(/,/))}
-              />
+              <ActorSelect field={field} />
               <FieldInfo field={field} />
             </>
           );

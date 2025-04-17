@@ -40,7 +40,7 @@ export const EpisodeView = ({ entry }: Props) => {
           <div>
             {episodes.data.items.map((e: episode) => (
               <>
-                <div className="flex gap-4 py-2">
+                <div className="flex gap-4 py-2" key={e.id}>
                   <input type="checkbox" name="" id="" />
                   <div className="grow">
                     <h3>

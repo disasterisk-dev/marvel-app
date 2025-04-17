@@ -10,8 +10,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import CharacterForm from "./forms/CharacterForm";
-import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { PasswordField } from "./forms/PasswordField";
 
 const AdminPanel = () => {
   const [open, setOpen] = useState(false);
@@ -34,9 +34,7 @@ const AdminPanel = () => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              <h2 className="mb-2 text-2xl">Create a new...</h2>
-            </DialogTitle>
+            <DialogTitle>Create a new...</DialogTitle>
             <DialogDescription>
               This super secret panel is only for use by the admin, you can't
               create new entries without the super secret key!
@@ -58,12 +56,7 @@ const AdminPanel = () => {
           </Tabs>
           <DialogFooter>
             <Label htmlFor="password">Super Secret Key:</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <PasswordField state={password} method={setPassword} />
           </DialogFooter>
         </DialogContent>
       </Dialog>

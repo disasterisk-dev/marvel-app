@@ -156,13 +156,6 @@ const EntryForm = ({ password, close }: Props) => {
                   />
                 </PopoverContent>
               </Popover>
-              {/* <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                type="date"
-                onChange={(e) => field.handleChange(e.target.value)}
-              /> */}
               <FieldInfo field={field} />
             </>
           );

@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { entry } from "../types";
 import { EntryCard } from "../components/EntryCard";
-import { EpisodeView } from "../components/EpisodeView";
 import { FilterContext } from "@/context.ts/FilterContext";
 
 export const Route = createFileRoute("/")({
@@ -11,8 +10,6 @@ export const Route = createFileRoute("/")({
 });
 
 function App() {
-  const [epsView, setEpsView] = useState<entry | null>(null);
-
   const filters = useContext(FilterContext);
   // returns an array of entries based on if the character list includes any character from the charFilter
 
@@ -43,8 +40,6 @@ function App() {
             </div>
           )}
         </div>
-        {/* Swap out for ShadCN UI sheet */}
-        {epsView && <EpisodeView entry={epsView} closeEps={setEpsView} />}
       </div>
     </>
   );

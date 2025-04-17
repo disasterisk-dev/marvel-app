@@ -8,8 +8,7 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
   .use(bearer())
   .get(
     "/",
-    // Type error being thrown as null & undefined can't be reconciled with the entry schema's MEDIUM property
-    // @ts-ignore
+    // @ts-expect-error Type error being thrown as null & undefined can't be reconciled with the entry schema's MEDIUM property
     async ({ error, query }) => {
       // Check if user has passed the optional medium query
       if (query.medium) {
