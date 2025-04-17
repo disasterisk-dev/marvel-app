@@ -19,8 +19,6 @@ export const useEntryForm = (
     },
     validators: {
       onChange: ({ value }) => {
-        console.log(value);
-
         // Title validators
         if (value.title.split("").length === 0) {
           return "Title is required";

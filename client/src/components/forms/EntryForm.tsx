@@ -1,5 +1,4 @@
 import { useEntryForm } from "@/forms/useEntryForm";
-import { useStore } from "@tanstack/react-form";
 import { character, entry, option } from "@/types";
 import axios from "axios";
 
@@ -10,7 +9,6 @@ type Props = {
 
 const EntryForm = ({ password, close }: Props) => {
   const form = useEntryForm(password, close);
-  const formErrors = useStore(form.store, (state) => state.errorMap);
 
   return (
     <form.AppForm>
@@ -61,11 +59,7 @@ const EntryForm = ({ password, close }: Props) => {
           )}
         />
         <form.SubmitButton label="Create Entry" />
-        {formErrors.onChange ? (
-          <div>
-            <em>{formErrors.onChange}</em>
-          </div>
-        ) : null}
+        <form.FormErrors />
       </div>
     </form.AppForm>
   );

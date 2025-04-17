@@ -4,9 +4,10 @@ import { NumberField } from "@/components/forms/fields/NumberField";
 import { SelectAsync } from "@/components/forms/fields/SelectAsync";
 import { SelectAsyncCreatable } from "@/components/forms/fields/SelectAsyncCreatable";
 import { SelectField } from "@/components/forms/fields/SelectField";
-import { SubmitButton } from "@/components/forms/fields/SubmitButton";
+import { SubmitButton } from "@/components/forms/SubmitButton";
 import { TextField } from "@/components/forms/fields/TextField";
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
+import { FormErrors } from "@/components/forms/FormErrors";
 
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();
@@ -24,6 +25,7 @@ export const { useAppForm } = createFormHook({
   },
   formComponents: {
     SubmitButton,
+    FormErrors,
   },
   fieldContext,
   formContext,
