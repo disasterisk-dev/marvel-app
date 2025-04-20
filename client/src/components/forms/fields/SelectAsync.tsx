@@ -6,12 +6,13 @@ import AsyncSelect from "react-select/async";
 
 type Props = {
   label: string;
+  isMulti?: boolean;
   loadMethod: (
     inputValue: string,
     callback: (options: option[]) => void,
   ) => void;
 };
-export const SelectAsync = ({ label, loadMethod }: Props) => {
+export const SelectAsync = ({ label, isMulti = true, loadMethod }: Props) => {
   const field = useFieldContext<number[]>();
   return (
     <>
@@ -31,16 +32,22 @@ export const SelectAsync = ({ label, loadMethod }: Props) => {
           option: () => "p-4 hover:bg-input",
         }}
         unstyled
-        isMulti
+        isMulti={isMulti}
         id={field.name}
         cacheOptions={false}
         defaultOptions
         loadOptions={loadMethod}
         onChange={(v) => {
-          const values: number[] = [];
-          //   @ts-expect-error - Doesn't like taking a union type, deal with it
-          v.forEach((i) => values.push(i.value));
-          field.handleChange(values);
+          if (isMulti) {
+            const values: number[] = [];
+            //   @ts-expect-error - Doesn't like taking a union type, deal with it
+            v.forEach((i) => values.push(i.value));
+            field.handleChange(values);
+            return;
+          }
+
+          // @ts-expect-error - This will be caught by validators
+          field.handleChange(v.value);
         }}
       />
     </>

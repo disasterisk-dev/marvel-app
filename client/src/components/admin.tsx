@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import CharacterForm from "./forms/CharacterForm";
 import { Label } from "./ui/label";
 import { PasswordField } from "./forms/fields/PasswordField";
+import { EpisodeForm } from "./forms/EpisodeForm";
 
 const AdminPanel = () => {
   const [open, setOpen] = useState(false);
@@ -52,7 +53,9 @@ const AdminPanel = () => {
             <TabsContent value="character">
               <CharacterForm password={password} close={() => setOpen(false)} />
             </TabsContent>
-            <TabsContent value="episode"></TabsContent>
+            <TabsContent value="episode">
+              <EpisodeForm password={password} close={() => setOpen(false)} />
+            </TabsContent>
           </Tabs>
           <DialogFooter>
             <Label htmlFor="password">Super Secret Key:</Label>

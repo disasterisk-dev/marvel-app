@@ -13,13 +13,7 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
       // Check if user has passed the optional medium query
       if (query.medium) {
         const data = await db
-          .select({
-            id: entries.id,
-            title: entries.title,
-            releaseDate: entries.releaseDate,
-            runtime: entries.runtime,
-            medium: entries.medium,
-          })
+          .select()
           .from(entries)
           .where(eq(entries.medium, query.medium));
 
@@ -33,7 +27,7 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
           status: 200,
           retrievedAt: new Date(),
           count: data.length,
-          data: data,
+          items: data,
         };
       }
 

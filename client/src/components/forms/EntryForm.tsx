@@ -49,7 +49,7 @@ const EntryForm = ({ password, close }: Props) => {
         <form.AppField
           name="characters"
           children={(field) => (
-            <field.SelectAsync label="" loadMethod={loadCharacters} />
+            <field.SelectAsync label="Characters" loadMethod={loadCharacters} />
           )}
         />
         <form.AppField

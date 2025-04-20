@@ -25,10 +25,6 @@ export const useCharacterForm = (
       },
     },
     onSubmit: async ({ value }) => {
-      value.actors.forEach((v) => {
-        return v.trim();
-      });
-
       await axios
         .post(
           import.meta.env.VITE_API_BASE_URL + "/characters",

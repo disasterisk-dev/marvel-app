@@ -7,8 +7,33 @@ import { and, eq } from "drizzle-orm";
 
 export const episodesRoute = new Elysia({ prefix: "/episodes" })
   .use(bearer())
+  .get(
+    "/",
+    // @ts-expect-error - not a fan of the schema
+    async () => {
+      const episodeList = await db.select().from(episodes).all();
+
+      return {
+        status: 200,
+        retrievedAt: new Date(),
+        count: episodeList.length,
+        items: episodeList,
+      };
+    },
+    {
+      response: {
+        200: t.Object({
+          status: t.Number(),
+          retrievedAt: t.Date(),
+          count: t.Number(),
+          items: t.Array(t.Omit(episodeSchema, [])),
+        }),
+      },
+    }
+  )
   .get("/:id", ({ params }) => {
     // Returns a single episode by the ID
+    // Not sure this is useful or necessary
   })
   .get(
     "/from/:id",
@@ -58,7 +83,7 @@ export const episodesRoute = new Elysia({ prefix: "/episodes" })
   )
   .post(
     "/",
-    async ({ query, bearer, error }) => {
+    async ({ body, bearer, error }) => {
       // Limits posting to those who have a key
       if (bearer !== process.env.API_BEARER) {
         return error(401, {
@@ -71,7 +96,7 @@ export const episodesRoute = new Elysia({ prefix: "/episodes" })
       // query.title = query.title.replaceAll('"', "");
 
       try {
-        await db.insert(episodes).values(query);
+        await db.insert(episodes).values(body);
       } catch (e) {
         return error(400, {
           status: 400,
@@ -85,7 +110,7 @@ export const episodesRoute = new Elysia({ prefix: "/episodes" })
       };
     },
     {
-      query: t.Omit(episodeSchema, ["id"]),
+      body: t.Omit(episodeSchema, ["id"]),
       response: {
         201: t.Object({
           status: t.Number({
