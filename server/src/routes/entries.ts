@@ -3,6 +3,7 @@ import { Elysia, t } from "elysia";
 import { entries, entrySelectSchema } from "../db/entrySchema";
 import { app, db, entryBrief } from "..";
 import { eq } from "drizzle-orm";
+import { episodes } from "../db/episodeSchema";
 
 export const entriesRoute = new Elysia({ prefix: "/entries" })
   .use(bearer())
@@ -79,9 +80,66 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
       },
     }
   )
-  .get("/:id", ({ params }) => {
-    // get entry by ID
-  })
+  .get(
+    "/:id",
+    // @ts-expect-error - doesn't like the schema
+    async ({ error, params }) => {
+      // get entry by ID
+      const entry = await db
+        .select()
+        .from(entries)
+        .where(eq(entries.id, params.id))
+        .then((values) => {
+          return values[0];
+        });
+
+      if (!entry) {
+        return error(404, {
+          status: 404,
+          error: "No entry found",
+        });
+      }
+
+      if (entry.medium !== "Show") {
+        return {
+          status: 200,
+          retrievedAt: new Date(),
+          item: entry,
+        };
+      }
+
+      const episodeList = await db
+        .select({ runtime: episodes.runtime })
+        .from(episodes)
+        .where(eq(episodes.series, params.id));
+
+      let runtime = 0;
+      episodeList.forEach((e) => (runtime += e.runtime));
+      entry.runtime = runtime;
+
+      return {
+        status: 200,
+        retrievedAt: new Date(),
+        item: entry,
+      };
+    },
+    {
+      params: t.Object({
+        id: t.Number(),
+      }),
+      response: {
+        200: t.Object({
+          status: t.Number(),
+          retrievedAt: t.Date(),
+          item: t.Omit(entrySelectSchema, []),
+        }),
+        404: t.Object({
+          status: t.Number(),
+          error: t.String(),
+        }),
+      },
+    }
+  )
   .post(
     "/",
     async ({ bearer, body, error }) => {

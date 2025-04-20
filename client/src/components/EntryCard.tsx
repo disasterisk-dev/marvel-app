@@ -1,11 +1,19 @@
 import { entry } from "../types";
 import { useState } from "react";
-import { format } from "date-fns";
+import { format, formatDuration } from "date-fns";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { Checkbox } from "./ui/checkbox";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { EpisodeView } from "./EpisodeView";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCalendar,
+  faClapperboard,
+  faClock,
+} from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 type Props = {
   entry: entry;
@@ -40,7 +48,7 @@ export const EntryCard = ({ entry }: Props) => {
               </div>
             </div>
           </HoverCardTrigger>
-          <HoverCardContent>
+          <HoverCardContent className="min-w-fit">
             <CardContent entry={entry} />
           </HoverCardContent>
         </HoverCard>
@@ -50,22 +58,62 @@ export const EntryCard = ({ entry }: Props) => {
 };
 
 const CardContent = ({ entry }: Props) => {
+  // Separate fetch for show to return and display collective runtime of episodes
+  const { data: showEntry } = useQuery({
+    queryKey: ["show-entry", entry.id],
+    queryFn: () => {
+      const show = axios
+        .get(import.meta.env.VITE_API_BASE_URL + "/entries/" + entry.id)
+        .then((res) => {
+          const show: entry = res.data.item;
+          return show;
+        });
+
+      return show;
+    },
+    enabled: entry.medium === "Show",
+    refetchOnWindowFocus: false,
+  });
+
   return (
     <div className="flex h-full flex-col gap-2">
-      <h2 className="text-pretty">{entry.title}</h2>
+      <h2 className="text-nowrap">{entry.title}</h2>
       <hr className="my-1" />
-      <p className="text-sm">
-        by{" "}
-        {entry.directors.map((d, i) => (
-          <>
-            <span>{d}</span>
-            {i < entry.directors.length - 1 && <span>, </span>}
-          </>
-        ))}
-      </p>
-      <p className="grow text-sm italic">
+      <div className="flex items-center gap-2 text-sm">
+        <FontAwesomeIcon
+          className="text-muted-foreground"
+          icon={faClapperboard}
+        />
+        <span>
+          {entry.directors.map((d, i) => (
+            <>
+              <span
+                key={i}
+                className="after:content-[',\00a0'] last:after:content-['']"
+              >
+                {d}
+              </span>
+            </>
+          ))}
+        </span>
+      </div>
+      <div className="flex items-center gap-2 text-sm">
+        <FontAwesomeIcon className="text-muted-foreground" icon={faCalendar} />
         {format(entry.releaseDate, "do MMMM yyyy")}
-      </p>
+      </div>
+      <div className="flex items-center gap-2 text-sm">
+        <FontAwesomeIcon className="text-muted-foreground" icon={faClock} />
+        {entry.runtime &&
+          formatDuration({
+            hours: Math.floor(entry.runtime / 60),
+            minutes: entry.runtime % 60,
+          })}
+        {showEntry &&
+          formatDuration({
+            hours: Math.floor(showEntry.runtime / 60),
+            minutes: showEntry.runtime % 60,
+          })}
+      </div>
       {(entry.medium === "Show" || entry.id === 56) && (
         <>
           <Sheet key={"right"}>
