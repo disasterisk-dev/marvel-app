@@ -1,21 +1,22 @@
-import { FilterContext } from "@/context/FilterContext";
-import { useContext } from "react";
+import { useFilter } from "@/context/FilterContext";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
+import { Checkbox } from "./ui/checkbox";
+import { Label } from "./ui/label";
 
 const MediumFilters = () => {
   const media = ["Movie", "Show", "Extra"];
 
-  const filters = useContext(FilterContext);
+  const { mediumFilter, setMediumFilter } = useFilter()!;
 
   function updateFilter(e: string) {
-    if (filters?.mediumFilter.includes(e)) {
-      const newFilter = filters.mediumFilter.filter((m: string) => m !== e);
-      filters.setMediumFilter(newFilter);
+    if (mediumFilter.includes(e)) {
+      const newFilter = mediumFilter.filter((m: string) => m !== e);
+      setMediumFilter(newFilter);
 
       document.body.scrollTop = 0; // For Safari
       document.documentElement.scrollTop = 0; // For everyone else
@@ -23,7 +24,9 @@ const MediumFilters = () => {
       return;
     }
 
-    filters?.setMediumFilter([...filters.mediumFilter, e]);
+    setMediumFilter([...mediumFilter, e]);
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For everyone else
   }
 
   return (
@@ -40,16 +43,14 @@ const MediumFilters = () => {
           </AccordionTrigger>
           <AccordionContent>
             {media.map((m, i) => (
-              <div className="flex gap-2" key={i}>
-                <input
-                  type="checkbox"
+              <div className="flex gap-2 pb-1" key={i}>
+                <Checkbox
                   name={m}
                   id={m}
                   className=""
-                  value={m}
-                  onChange={(e) => updateFilter(e.target.value)}
+                  onCheckedChange={() => updateFilter(m)}
                 />
-                <label htmlFor={m}>{m}</label>
+                <Label htmlFor={m}>{m}</Label>
               </div>
             ))}
           </AccordionContent>

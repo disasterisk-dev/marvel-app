@@ -6,17 +6,17 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
-import { useContext } from "react";
-import { FilterContext } from "@/context/FilterContext";
+import { useFilter } from "@/context/FilterContext";
+import { Checkbox } from "./ui/checkbox";
+import { Label } from "./ui/label";
 
 const CharacterFilters = () => {
-  const filters = useContext(FilterContext);
+  const { charFilter, setCharFilter } = useFilter()!;
 
   function updateFilter(id: number) {
-    if (filters?.charFilter.includes(id)) {
-      const newFilter = filters.charFilter.filter((c) => c !== id);
-      filters.setCharFilter(newFilter);
-      console.log(filters.charFilter);
+    if (charFilter.includes(id)) {
+      const newFilter = charFilter.filter((c) => c !== id);
+      setCharFilter(newFilter);
 
       document.body.scrollTop = 0; // For Safari
       document.documentElement.scrollTop = 0; // For everyone else
@@ -24,7 +24,7 @@ const CharacterFilters = () => {
       return;
     }
 
-    filters?.setCharFilter([...filters.charFilter, id]);
+    setCharFilter([...charFilter, id]);
 
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For everyone else
@@ -68,18 +68,13 @@ const CharacterFilters = () => {
             {characters.error && <div>{characters.error.message}</div>}
             {characters.data &&
               characters.data.items.map((c: character) => (
-                <div className="flex gap-2" key={c.id}>
-                  <input
-                    type="checkbox"
-                    name={c.id.toString()}
-                    id={c.id.toString()}
-                    className=""
-                    value={c.id}
-                    onChange={(e) => updateFilter(parseInt(e.target.value))}
+                <div className="flex gap-2 pb-1" key={c.id}>
+                  <Checkbox
+                    name={c.name}
+                    id={c.name}
+                    onCheckedChange={() => updateFilter(c.id)}
                   />
-                  <label className="text-nowrap" htmlFor={c.id.toString()}>
-                    {c.name}
-                  </label>
+                  <Label htmlFor={c.name}>{c.name}</Label>
                 </div>
               ))}
           </AccordionContent>

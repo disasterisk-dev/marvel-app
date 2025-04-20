@@ -7,6 +7,8 @@ interface FilterTypes {
   setMediumFilter: (value: string[]) => void;
   sortOrder: "release" | "alphabetical";
   setSortOrder: (value: "release" | "alphabetical") => void;
+  phaseFilter: number[];
+  setPhaseFilter: (value: number[]) => void;
 }
 
 export const FilterContext = createContext<FilterTypes | null>(null);
@@ -21,6 +23,7 @@ export const FilterContextProvider = ({ children }: props) => {
   const [sortOrder, setSortOrder] = useState<"release" | "alphabetical">(
     "release",
   );
+  const [phaseFilter, setPhaseFilter] = useState<number[]>([]);
 
   return (
     <FilterContext.Provider
@@ -28,9 +31,11 @@ export const FilterContextProvider = ({ children }: props) => {
         charFilter,
         mediumFilter,
         sortOrder,
+        phaseFilter,
         setCharFilter,
         setMediumFilter,
         setSortOrder,
+        setPhaseFilter,
       }}
     >
       {children}

@@ -17,6 +17,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import SortOrder from "@/components/SortOrder";
 import AdminPanel from "@/components/admin";
 import { Toaster } from "sonner";
+import PhaseFilter from "@/components/PhaseFilter";
 
 export const Route = createRootRoute({
   component: Root,
@@ -36,6 +37,7 @@ function Root() {
           <SidebarContent>
             <SidebarGroup>
               <MediumFilters />
+              <PhaseFilter />
               <CharacterFilters />
             </SidebarGroup>
           </SidebarContent>
