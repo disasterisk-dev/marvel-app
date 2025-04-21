@@ -7,6 +7,7 @@ import { entriesRoute } from "./routes/entries";
 import staticPlugin from "@elysiajs/static";
 import { episodesRoute } from "./routes/episodes";
 import cors from "@elysiajs/cors";
+import { aboutRoute } from "./routes/about";
 
 const client = createClient({
   url: process.env.DB_URL!,
@@ -25,6 +26,7 @@ export interface entryBrief {
 
 export const app = new Elysia()
   .use(cors())
+  .use(staticPlugin())
   .use(
     swagger({
       path: "/",
@@ -37,11 +39,11 @@ export const app = new Elysia()
         },
       },
       scalarConfig: {
-        favicon: "../src/favicon.png",
+        favicon: "/public/favicon.png",
       },
     })
   )
-  .use(staticPlugin())
+  .use(aboutRoute)
   .use(entriesRoute)
   .use(charactersRoute)
   .use(episodesRoute)
