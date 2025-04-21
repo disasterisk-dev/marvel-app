@@ -27,7 +27,7 @@ function RouteComponent() {
   });
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center gap-4 p-4 text-center">
+    <div className="bg-background flex h-screen flex-col items-center justify-center gap-4 p-4 text-center">
       <h1 className="text-5xl font-black">Uatu IO</h1>
       {data && (
         <>
@@ -41,7 +41,7 @@ function RouteComponent() {
         </>
       )}
       <Button
-        className="bg-brand-300 w-full max-w-screen-sm cursor-pointer text-xl font-bold md:w-1/2"
+        className="bg-brand text-foreground hover:text-background w-full max-w-screen-sm cursor-pointer text-xl font-bold md:w-1/2"
         onClick={() => navigate({ to: "/app" })}
       >
         Get Started

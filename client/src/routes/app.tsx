@@ -47,7 +47,7 @@ function App() {
     <>
       <SidebarProvider>
         <Sidebar>
-          <div className="bg-brand-300 dark:bg-brand-400 text-inverse">
+          <div className="bg-brand text-background dark:text-foreground">
             <SidebarHeader>
               <h1 className="grow text-2xl font-bold">Uatu IO</h1>
             </SidebarHeader>
