@@ -1,93 +1,52 @@
+import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
-import { entry } from "../types";
-import { EntryCard } from "../components/EntryCard";
-import { useFilter } from "@/context/FilterContext";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import axios from "axios";
 
 export const Route = createFileRoute("/")({
-  component: App,
+  component: RouteComponent,
 });
 
-function App() {
-  const { charFilter, mediumFilter, sortOrder, phaseFilter } = useFilter()!;
-  // returns an array of entries based on if the character list includes any character from the charFilter
+function RouteComponent() {
+  const navigate = useNavigate();
 
-  const entries = useQuery({
-    queryKey: ["entries"],
+  const { data, isError } = useQuery({
+    queryKey: ["about"],
     queryFn: async () => {
-      const res = await fetch(import.meta.env.VITE_API_BASE_URL + "/entries");
+      const data = await axios
+        .get(import.meta.env.VITE_API_BASE_URL + "/about")
+        .then((res) => {
+          return res.data;
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
 
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await res.json();
       return data;
     },
-    refetchOnWindowFocus: false,
   });
 
   return (
-    <>
-      <div className="relative flex flex-col gap-4 lg:flex-row">
-        <div className="@container order-3 grow lg:order-2">
-          {entries.data && (
-            <div className="mx-auto grid max-w-screen-lg auto-rows-min grid-cols-1 gap-2 px-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filterEntries(entries.data.items).map((e) => (
-                <EntryCard entry={e} key={e.id} />
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </>
+    <div className="flex h-screen flex-col items-center justify-center gap-4 p-4 text-center">
+      <h1 className="text-5xl font-black">Uatu IO</h1>
+      {data && (
+        <>
+          <h2 className="text-muted-foreground max-w-prose text-2xl font-semibold">
+            {data.movieCount} Movies, {data.episodeCount} episodes of{" "}
+            {data.showCount} shows, and {data.extraCount} extras
+          </h2>
+          <h3 className="text-muted-foreground max-w-prose text-2xl font-semibold">
+            {Math.ceil(data.totalRuntime / 60)} hours of Marvel
+          </h3>
+        </>
+      )}
+      <Button
+        className="bg-brand-300 w-full max-w-screen-sm cursor-pointer text-xl font-bold md:w-1/2"
+        onClick={() => navigate({ to: "/app" })}
+      >
+        Get Started
+      </Button>
+      {isError && <span>Oops</span>}
+    </div>
   );
-
-  // Filter method
-
-  function filterEntries(entryList: entry[]) {
-    let filteredList: entry[] = [];
-
-    // when the filters are empty all results should be shown
-    if (charFilter.length === 0) {
-      filteredList = entryList;
-    } else {
-      entryList.forEach((e) => {
-        charFilter.forEach((c) => {
-          if (e.characters.includes(c)) {
-            // does not add entry to list if it already exists there, prevents duplicates
-            if (!filteredList.includes(e)) filteredList.push(e);
-          }
-        });
-      });
-    }
-
-    if (mediumFilter.length > 0) {
-      filteredList = filteredList.filter((e) =>
-        mediumFilter.includes(e.medium),
-      );
-    }
-
-    if (phaseFilter.length > 0) {
-      filteredList = filteredList.filter((e) => phaseFilter.includes(e.phase));
-    }
-
-    if (sortOrder === "release") {
-      // Sort the entries by release date instead of ID
-      filteredList.sort(
-        (a: entry, b: entry) =>
-          new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime(),
-      );
-    }
-
-    if (sortOrder === "alphabetical") {
-      filteredList.sort((a: entry, b: entry) =>
-        a.title.toLowerCase().localeCompare(b.title.toLowerCase()),
-      );
-    }
-
-    return filteredList;
-  }
 }
-
-export default App;
