@@ -83,12 +83,7 @@ export const EntryCard = ({ entry }: Props) => {
             )}
             <SheetFooter>
               {entry.medium !== "Show" && (
-                <Button
-                  onClick={toggleSelect}
-                  // disabled={
-                  //   entry.medium === "Show" && selectedEpisodes.length === 0
-                  // }
-                >
+                <Button onClick={toggleSelect}>
                   {entries.find((e) => e.id === entry.id)
                     ? "Remove from List"
                     : "Add to List"}

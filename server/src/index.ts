@@ -8,6 +8,7 @@ import staticPlugin from "@elysiajs/static";
 import { episodesRoute } from "./routes/episodes";
 import cors from "@elysiajs/cors";
 import { aboutRoute } from "./routes/about";
+import { uploadRoute } from "./routes/upload";
 
 const client = createClient({
   url: process.env.DB_URL!,
@@ -47,6 +48,7 @@ export const app = new Elysia()
   .use(entriesRoute)
   .use(charactersRoute)
   .use(episodesRoute)
+  .use(uploadRoute)
   .listen(3000);
 
 console.log(

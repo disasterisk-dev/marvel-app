@@ -39,7 +39,7 @@ export const WatchListItem = ({ entry }: Props) => {
           </div>
           <Button
             variant={"outline"}
-            className="aspect-square"
+            className="text-destructive aspect-square"
             onClick={removeFromList}
           >
             <FontAwesomeIcon icon={faTrash} />

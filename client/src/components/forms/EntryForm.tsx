@@ -44,7 +44,9 @@ const EntryForm = ({ password, close }: Props) => {
         />
         <form.AppField
           name="posterUrl"
-          children={(field) => <field.FilePickerField label="Poster" />}
+          children={(field) => (
+            <field.FilePickerField password={password!} label="Poster" />
+          )}
         />
         <form.AppField
           name="characters"
