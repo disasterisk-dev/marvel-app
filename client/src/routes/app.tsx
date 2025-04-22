@@ -6,6 +6,7 @@ import { useFilter } from "@/context/FilterContext";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import SortOrder from "@/components/SortOrder";
 import AppSidebar from "@/components/AppSidebar";
+import WatchList from "@/components/WatchList";
 
 export const Route = createFileRoute("/app")({
   component: App,
@@ -51,6 +52,7 @@ function App() {
             </div>
           </div>
         </main>
+        <WatchList />
       </SidebarProvider>
     </>
   );

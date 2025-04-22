@@ -8,6 +8,7 @@ export interface entry {
   medium: "Movie" | "Show" | "Extra";
   posterUrl: string;
   phase: number;
+  episodes?: episode[];
 }
 
 export interface character {

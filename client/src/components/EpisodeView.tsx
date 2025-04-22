@@ -1,19 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { entry, episode } from "../types";
-import { format } from "date-fns";
+import { episode } from "../types";
+import { EpisodeItem } from "./EpisodeItem";
 
 type Props = {
-  entry: entry;
-  closeEps: (e: entry | null) => void;
+  entryID: number;
 };
-export const EpisodeView = ({ entry }: Props) => {
+export const EpisodeView = ({ entryID }: Props) => {
   const episodes = useQuery({
-    queryKey: ["episodes", entry.id],
+    queryKey: ["episodes", entryID],
     queryFn: async () => {
       console.log("get eps");
 
       const res = await fetch(
-        import.meta.env.VITE_API_BASE_URL + "/episodes/from/" + entry.id,
+        import.meta.env.VITE_API_BASE_URL + "/episodes/from/" + entryID,
       );
 
       if (!res.ok) {
@@ -29,7 +28,7 @@ export const EpisodeView = ({ entry }: Props) => {
 
       return data;
     },
-    enabled: !!entry,
+    enabled: !!entryID,
     refetchOnWindowFocus: false,
   });
 
@@ -38,24 +37,9 @@ export const EpisodeView = ({ entry }: Props) => {
       {episodes.data && (
         <>
           <div>
+            <h3>Episodes:</h3>
             {episodes.data.items.map((e: episode) => (
-              <>
-                <div className="flex gap-4 py-2" key={e.id}>
-                  <input type="checkbox" name="" id="" />
-                  <div className="grow">
-                    <h3>
-                      {e.episodeNumber}. {e.title}
-                    </h3>
-                    <div className="flex items-center">
-                      <p className="grow">{e.runtime}m</p>
-                      <p className="text-sm italic">
-                        {format(e.releaseDate, "do MMMM yyyy")}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <hr className="last:hidden" />
-              </>
+              <EpisodeItem episode={e} key={e.id} />
             ))}
           </div>
         </>
