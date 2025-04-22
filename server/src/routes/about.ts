@@ -1,5 +1,5 @@
 import { episodes } from "../db/episodeSchema";
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
 import { db } from "..";
 import { entries } from "../db/entrySchema";
 
@@ -47,5 +47,27 @@ export const aboutRoute = new Elysia({ prefix: "/about" }).get(
       episodeCount,
       totalRuntime,
     };
+  },
+  {
+    response: {
+      200: t.Object({
+        movieCount: t.Number({
+          description: "The number of movies currently in the MCU.",
+        }),
+        showCount: t.Number({
+          description: "The number of TV and streaming shows in the MCU.",
+        }),
+        extraCount: t.Number({
+          description:
+            "The number of one shots, web series, and special presentations in the MCU.",
+        }),
+        episodeCount: t.Number({
+          description: "The number of episodes across all shows.",
+        }),
+        totalRuntime: t.Number({
+          description: "The total runtime of the above.",
+        }),
+      }),
+    },
   }
 );

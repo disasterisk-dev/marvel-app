@@ -41,7 +41,7 @@ function RouteComponent() {
         </>
       )}
       <Button
-        className="bg-brand text-foreground hover:text-background w-full max-w-screen-sm cursor-pointer text-xl font-bold md:w-1/2"
+        className="bg-brand text-background dark:text-foreground hover:text-background w-full max-w-screen-sm cursor-pointer text-xl font-bold md:w-1/2"
         onClick={() => navigate({ to: "/app" })}
       >
         Get Started

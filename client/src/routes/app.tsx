@@ -3,22 +3,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { entry } from "../types";
 import { EntryCard } from "../components/EntryCard";
 import { useFilter } from "@/context/FilterContext";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarHeader,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import MediumFilters from "@/components/MediumFilters";
-import PhaseFilter from "@/components/PhaseFilter";
-import CharacterFilters from "@/components/CharacterFilters";
-import ThemeToggle from "@/components/ThemeToggle";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import SortOrder from "@/components/SortOrder";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import AppSidebar from "@/components/AppSidebar";
 
 export const Route = createFileRoute("/app")({
   component: App,
@@ -46,32 +33,7 @@ function App() {
   return (
     <>
       <SidebarProvider>
-        <Sidebar>
-          <div className="bg-brand text-background dark:text-foreground">
-            <SidebarHeader>
-              <h1 className="grow text-2xl font-bold">Uatu IO</h1>
-            </SidebarHeader>
-          </div>
-          <SidebarContent>
-            <SidebarGroup>
-              <MediumFilters />
-              <PhaseFilter />
-              <CharacterFilters />
-            </SidebarGroup>
-          </SidebarContent>
-          <SidebarFooter>
-            <div className="flex items-end justify-between">
-              <ThemeToggle />
-              <a
-                href="https://github.com/disasterisk-dev/marvel-app"
-                target="_blank"
-              >
-                <FontAwesomeIcon icon={faGithub} className="text-4xl" />
-              </a>
-            </div>
-          </SidebarFooter>
-        </Sidebar>
-        {/* Move filters here as sidebar */}
+        <AppSidebar />
         <main className="bg-inverse-subtle dark:bg-subtle grow overflow-scroll">
           <div className="mb-4 flex items-center justify-between p-4">
             <SidebarTrigger />
