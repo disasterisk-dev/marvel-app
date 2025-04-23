@@ -72,31 +72,64 @@ export const useEpisodeForm = (
     },
     onSubmit: async ({ value }) => {
       // post request
-      await axios
-        .post(
-          import.meta.env.VITE_API_BASE_URL + "/episodes",
-          { ...value },
-          {
-            headers: {
-              Authorization: "Bearer " + password!,
-            },
-          },
-        )
-        .then((res) => {
-          toast("Created New Episode", res.data);
-        })
-        .catch((err) => {
-          toast("Something went wrong", {
-            description: err.message,
-            action: {
-              label: "More",
-              onClick: () => console.log(err),
-            },
-          });
-        });
+      if (initial.id > 0) {
+        updateEpisode(value, initial.id, password!);
+      } else {
+        createEpisode(value, password!);
+      }
       close();
     },
   });
 
   return form;
 };
+
+async function createEpisode(value, password: string) {
+  await axios
+    .post(
+      import.meta.env.VITE_API_BASE_URL + "/episodes",
+      { ...value },
+      {
+        headers: {
+          Authorization: "Bearer " + password,
+        },
+      },
+    )
+    .then((res) => {
+      toast("Created New Episode", res.data);
+    })
+    .catch((err) => {
+      toast("Something went wrong", {
+        description: err.message,
+        action: {
+          label: "More",
+          onClick: () => console.log(err),
+        },
+      });
+    });
+}
+
+async function updateEpisode(value, id: number, password: string) {
+  await axios
+    .put(
+      import.meta.env.VITE_API_BASE_URL + "/episodes/" + id,
+      { ...value },
+      {
+        headers: {
+          Authorization: "Bearer " + password,
+        },
+      },
+    )
+    .then((res) => {
+      toast("Updated episode", res.data);
+    })
+    .catch((err) => {
+      toast("Something went wrong", {
+        description: err.message,
+        action: {
+          label: "More",
+          onClick: () => console.log(err),
+        },
+      });
+    });
+}

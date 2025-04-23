@@ -17,8 +17,8 @@ import {
 import { useAdmin } from "@/context/AdminContext";
 
 const AdminPanel = () => {
-  const { open, setOpen, tab, setTab, setEdit } = useAdmin()!;
-  const [password, setPassword] = useState<string | undefined>();
+  const { open, setOpen, tab, setTab, setEdit, password, setPassword } =
+    useAdmin()!;
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {

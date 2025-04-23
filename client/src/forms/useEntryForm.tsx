@@ -83,6 +83,10 @@ export const useEntryForm = (
           return "Phase is needed";
         }
 
+        if (!password) {
+          return "Don't forget the super secret key!";
+        }
+
         return undefined;
       },
     },

@@ -140,4 +140,51 @@ export const episodesRoute = new Elysia({ prefix: "/episodes" })
         }),
       },
     }
+  )
+  .put(
+    "/:id",
+    // @ts-expect-error - Doesn't like the schema
+    async ({ params, body, error, bearer }) => {
+      if (bearer !== process.env.API_BEARER) {
+        console.log(bearer);
+        return error(401, {
+          status: 401,
+          error: "Not authorised to edit entries.",
+        });
+      }
+
+      try {
+        await db.update(episodes).set(body).where(eq(episodes.id, params.id));
+
+        return {
+          status: 200,
+          success: "Updated episode",
+        };
+      } catch {
+        error(400, {
+          status: 400,
+          error: "Could not edit episode",
+        });
+      }
+    },
+    {
+      params: t.Object({
+        id: t.Number(),
+      }),
+      body: t.Omit(episodeSchema, ["id"]),
+      response: {
+        200: t.Object({
+          status: t.Number(),
+          success: t.String(),
+        }),
+        400: t.Object({
+          status: t.Number(),
+          error: t.String(),
+        }),
+        401: t.Object({
+          status: t.Number(),
+          error: t.String(),
+        }),
+      },
+    }
   );

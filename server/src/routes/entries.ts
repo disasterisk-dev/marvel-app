@@ -208,7 +208,14 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
   )
   .put(
     "/:id",
-    async ({ params, body, error }) => {
+    async ({ params, body, error, bearer }) => {
+      if (bearer !== process.env.API_BEARER) {
+        return error(401, {
+          status: 401,
+          error: "Not authorised to edit entries.",
+        });
+      }
+
       try {
         await db.update(entries).set(body).where(eq(entries.id, params.id));
 
@@ -234,6 +241,10 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
           success: t.String(),
         }),
         400: t.Object({
+          status: t.Number(),
+          error: t.String(),
+        }),
+        401: t.Object({
           status: t.Number(),
           error: t.String(),
         }),
