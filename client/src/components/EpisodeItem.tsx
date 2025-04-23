@@ -9,7 +9,7 @@ type Props = {
 };
 export const EpisodeItem = ({ episode }: Props) => {
   const [selected, setSelected] = useState<boolean>(false);
-  const { episodes, setEpisodes } = useList()!;
+  const { episodes, storeEpisodes } = useList()!;
 
   useEffect(() => {
     setSelected(episodes.includes(episode));
@@ -20,14 +20,14 @@ export const EpisodeItem = ({ episode }: Props) => {
 
     // If checkbox is checked
     if (selected) {
-      setEpisodes(episodes.filter((e) => e.id !== episode.id));
+      storeEpisodes(episodes.filter((e) => e.id !== episode.id));
       return;
     }
 
     // If entry is already in watchlist, return immediately
     if (episodes.includes(episode)) return;
 
-    setEpisodes([...episodes, episode]);
+    storeEpisodes([...episodes, episode]);
     return;
   }
 

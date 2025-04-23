@@ -1,5 +1,5 @@
 import { entry } from "../types";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { format, formatDuration } from "date-fns";
 import {
   Sheet,
@@ -25,7 +25,7 @@ type Props = {
 };
 
 export const EntryCard = ({ entry }: Props) => {
-  const { entries, setEntries, episodes } = useList()!;
+  const { entries, storeEntries, episodes } = useList()!;
 
   useEffect(() => {
     if (entry.medium !== "Show") return;
@@ -34,21 +34,21 @@ export const EntryCard = ({ entry }: Props) => {
       episodes.find((x) => x.series === entry.id) &&
       !entries.find((e) => e.id === entry.id)
     ) {
-      setEntries([...entries, entry]);
+      storeEntries([...entries, entry]);
     }
-  }, [entry, setEntries, episodes, entries]);
+  }, [entry, storeEntries, episodes, entries]);
 
   function toggleSelect() {
     // If checkbox is checked
     if (entries.find((e) => e.id === entry.id)) {
-      setEntries(entries.filter((e) => e.id !== entry.id));
+      storeEntries(entries.filter((e) => e.id !== entry.id));
       return;
     }
 
     // If entry is already in watchlist, return immediately
     if (entries.find((e) => e.id === entry.id)) return;
 
-    setEntries([...entries, entry]);
+    storeEntries([...entries, entry]);
     return;
   }
 

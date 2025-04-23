@@ -14,7 +14,7 @@ export const FilePickerField = ({ label, password }: Props) => {
 
   const [file, setFile] = useState<File | null>(null);
 
-  const upload = useQuery({
+  useQuery({
     queryKey: ["upload"],
     queryFn: () => {
       axios

@@ -1,11 +1,17 @@
 import { entry, episode } from "@/types";
-import { createContext, ReactElement, useContext, useState } from "react";
+import {
+  createContext,
+  ReactElement,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface listTypes {
   entries: entry[];
   episodes: episode[];
-  setEntries: (value: entry[]) => void;
-  setEpisodes: (value: episode[]) => void;
+  storeEntries: (value: entry[]) => void;
+  storeEpisodes: (value: episode[]) => void;
   getCombined: () => entry[];
 }
 
@@ -17,6 +23,24 @@ type Props = {
 export const ListProvider = ({ children }: Props) => {
   const [entries, setEntries] = useState<entry[]>([]);
   const [episodes, setEpisodes] = useState<episode[]>([]);
+
+  useEffect(() => {
+    const loadEntries = JSON.parse(localStorage.getItem("entries")!);
+    if (loadEntries) setEntries(loadEntries);
+
+    const loadEpisodes = JSON.parse(localStorage.getItem("episodes")!);
+    if (loadEpisodes) setEpisodes(loadEpisodes);
+  }, []);
+
+  function storeEntries(e: entry[]) {
+    setEntries(e);
+    localStorage.setItem("entries", JSON.stringify(e));
+  }
+
+  function storeEpisodes(e: episode[]) {
+    setEpisodes(e);
+    localStorage.setItem("episodes", JSON.stringify(e));
+  }
 
   function getCombined(): entry[] {
     const newCombined: entry[] = [];
@@ -51,9 +75,9 @@ export const ListProvider = ({ children }: Props) => {
     <ListContext.Provider
       value={{
         entries,
-        setEntries,
+        storeEntries,
         episodes,
-        setEpisodes,
+        storeEpisodes,
         getCombined,
       }}
     >

@@ -70,9 +70,7 @@ const WatchList = () => {
             </>
           ))}
         </ScrollArea>
-        <SheetFooter>
-          <Button>Export</Button>
-        </SheetFooter>
+        <SheetFooter>{/* <Button>Export</Button> */}</SheetFooter>
       </SheetContent>
     </Sheet>
   );

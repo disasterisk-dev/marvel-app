@@ -9,15 +9,15 @@ type Props = {
   entry: entry;
 };
 export const WatchListItem = ({ entry }: Props) => {
-  const { entries, setEntries, episodes, setEpisodes } = useList()!;
+  const { entries, storeEntries, episodes, storeEpisodes } = useList()!;
 
   function removeFromList() {
     if (entry.medium !== "Show") {
-      setEntries(entries.filter((e) => e.id !== entry.id));
+      storeEntries(entries.filter((e) => e.id !== entry.id));
       return;
     }
 
-    setEpisodes(episodes.filter((e) => e.series !== entry.id));
+    storeEpisodes(episodes.filter((e) => e.series !== entry.id));
   }
 
   return (
