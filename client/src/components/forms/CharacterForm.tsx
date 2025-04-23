@@ -42,6 +42,8 @@ const loadActors = (
 ) => {
   const characters = JSON.parse(localStorage.getItem("characters")!);
 
+  const options: option[] = [];
+
   characters.forEach((c: character) => {
     c.actors.forEach((a) => {
       const newOption = { label: a, value: a };
@@ -50,8 +52,6 @@ const loadActors = (
       }
     });
   });
-
-  const options: option[] = [];
 
   callback(
     options.filter((o) =>
