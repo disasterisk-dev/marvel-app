@@ -3,12 +3,13 @@ import { character, entry, option } from "@/types";
 import axios from "axios";
 
 type Props = {
+  initial?: entry;
   password: string | undefined;
   close: () => void;
 };
 
-const EntryForm = ({ password, close }: Props) => {
-  const form = useEntryForm(password, close);
+const EntryForm = ({ initial, password, close }: Props) => {
+  const form = useEntryForm(initial, password, close);
 
   return (
     <form.AppForm>
