@@ -28,8 +28,9 @@ export const SelectAsync = ({ label, isMulti = true, loadMethod }: Props) => {
           valueContainer: () => "flex gap-2 text-foreground",
           multiValue: () =>
             "bg-input px-2 py-1 rounded-sm flex items-center gap-2",
-          menuList: () => "bg-background border border-input rounded-md py-2",
-          option: () => "p-4 hover:bg-input",
+          menuList: () => "bg-background border border-input rounded-md",
+          option: () =>
+            "px-2 py-1 hover:bg-muted m-1 border-sm w-min rounded-sm text-sm",
         }}
         unstyled
         isMulti={isMulti}

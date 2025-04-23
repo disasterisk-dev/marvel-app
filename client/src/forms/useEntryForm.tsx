@@ -1,21 +1,33 @@
 import { toast } from "sonner";
 import { useAppForm } from "./useAppForm";
 import axios from "axios";
+import { entry } from "@/types";
 
 export const useEntryForm = (
+  initial: entry = {
+    id: 0,
+    title: "",
+    releaseDate: new Date(),
+    directors: [""],
+    medium: "Movie",
+    runtime: 0,
+    posterUrl: "",
+    characters: [0],
+    phase: 1,
+  },
   password: string | undefined,
   close: () => void,
 ) => {
   const form = useAppForm({
     defaultValues: {
-      title: "",
-      releaseDate: "",
-      directors: [""],
-      medium: "Movie",
-      runtime: 0,
-      posterUrl: "",
-      characters: [0],
-      phase: 1,
+      title: initial.title,
+      releaseDate: initial.releaseDate.toString(),
+      directors: initial.directors,
+      medium: initial.medium,
+      runtime: initial.runtime,
+      posterUrl: initial.posterUrl,
+      characters: initial.characters,
+      phase: initial.phase,
     },
     validators: {
       onChange: ({ value }) => {
