@@ -10,8 +10,13 @@ type Props = {
     inputValue: string,
     callback: (options: option[]) => void,
   ) => void;
+  initialValues: option[];
 };
-export const SelectAsyncCreatable = ({ label, loadMethod }: Props) => {
+export const SelectAsyncCreatable = ({
+  label,
+  loadMethod,
+  initialValues,
+}: Props) => {
   const field = useFieldContext<string[]>();
   return (
     <>
@@ -42,6 +47,7 @@ export const SelectAsyncCreatable = ({ label, loadMethod }: Props) => {
           vList.forEach((v) => values.push(v.value));
           field.handleChange(values);
         }}
+        defaultValue={initialValues}
       />
     </>
   );

@@ -25,7 +25,8 @@ export const useEntryForm = (
       directors: initial.directors,
       medium: initial.medium,
       runtime: initial.runtime,
-      posterUrl: initial.posterUrl,
+      posterUrl:
+        initial.posterUrl.split("/")[initial.posterUrl.split("/").length - 1],
       characters: initial.characters,
       phase: initial.phase,
     },
@@ -86,6 +87,10 @@ export const useEntryForm = (
       },
     },
     onSubmit: async ({ value }) => {
+      if (initial.id > 0) {
+        console.log(value);
+        return;
+      }
       console.log(value);
       await axios
         .post(

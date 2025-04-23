@@ -1,15 +1,14 @@
 import { useCharacterForm } from "@/forms/useCharacterForm";
-import axios from "axios";
 import { character, option } from "@/types";
+import { useAdmin } from "@/context/AdminContext";
 
-type Props = {
-  password: string | undefined;
-  close: () => void;
-};
-
-const CharacterForm = ({ password, close }: Props) => {
+const CharacterForm = () => {
   // Pulling in details from the character form hook, contains validation and default values, and the submission method
-  const form = useCharacterForm(password, close);
+  const { password, setOpen } = useAdmin()!;
+
+  const form = useCharacterForm(password, () => setOpen(false));
+
+  const initialActors: option[] = [];
 
   return (
     <form.AppForm>
@@ -24,6 +23,7 @@ const CharacterForm = ({ password, close }: Props) => {
             <field.SelectAsyncCreatable
               label="Actors"
               loadMethod={loadActors}
+              initialValues={initialActors}
             />
           )}
         />
@@ -40,24 +40,22 @@ const loadActors = (
   inputValue: string,
   callback: (options: option[]) => void,
 ) => {
-  axios.get(import.meta.env.VITE_API_BASE_URL + "/characters").then((res) => {
-    const characters: character[] = res.data.items;
+  const characters = JSON.parse(localStorage.getItem("characters")!);
 
-    const options: option[] = [];
-
-    characters.forEach((c) => {
-      c.actors.forEach((a) => {
-        const newOption = { label: a, value: a };
-        if (!options.includes(newOption)) {
-          options.push(newOption);
-        }
-      });
+  characters.forEach((c: character) => {
+    c.actors.forEach((a) => {
+      const newOption = { label: a, value: a };
+      if (!options.includes(newOption)) {
+        options.push(newOption);
+      }
     });
-
-    callback(
-      options.filter((o) =>
-        o.label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()),
-      ),
-    );
   });
+
+  const options: option[] = [];
+
+  callback(
+    options.filter((o) =>
+      o.label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()),
+    ),
+  );
 };

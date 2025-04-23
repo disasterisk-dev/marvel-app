@@ -14,11 +14,22 @@ import { Button } from "./ui/button";
 import { EpisodeView } from "./EpisodeView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAdd,
   faCalendar,
   faClapperboard,
   faClock,
+  faMinus,
+  faPencil,
 } from "@fortawesome/free-solid-svg-icons";
 import { useList } from "@/context/ListContext";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuTrigger,
+} from "./ui/context-menu";
+import { useAdmin } from "@/context/AdminContext";
 
 type Props = {
   entry: entry;
@@ -26,6 +37,7 @@ type Props = {
 
 export const EntryCard = ({ entry }: Props) => {
   const { entries, storeEntries, episodes } = useList()!;
+  const { setOpen, setEdit, setTab } = useAdmin()!;
 
   useEffect(() => {
     if (entry.medium !== "Show") return;
@@ -52,32 +64,61 @@ export const EntryCard = ({ entry }: Props) => {
     return;
   }
 
+  function openEdit() {
+    setEdit(entry);
+    setTab("entry");
+    setOpen(true);
+  }
+
   return (
     <>
       <div className="relative overflow-hidden rounded-md">
         <Sheet>
           <SheetTrigger asChild>
-            <div className="bg-inverse dark:bg-bold flex cursor-pointer flex-col gap-2 md:flex-row">
-              <img
-                className="aspect-2/3 md:max-h-64 lg:max-h-full"
-                src={entry.posterUrl}
-                alt=""
-              />
+            <div className="bg-inverse dark:bg-bold cursor-pointer gap-2">
+              <img className="aspect-2/3" src={entry.posterUrl} alt="" />
             </div>
           </SheetTrigger>
 
           <SheetContent>
-            <SheetHeader>
-              <SheetTitle>{entry.title}</SheetTitle>
-              <SheetDescription className="flex gap-2">
-                <img
-                  className="aspect-2/3 h-auto w-1/2"
-                  src={entry.posterUrl}
-                  alt=""
-                />
-                <CardContent entry={entry} />
-              </SheetDescription>
-            </SheetHeader>
+            <ContextMenu>
+              <ContextMenuTrigger>
+                <SheetHeader>
+                  <SheetTitle>{entry.title}</SheetTitle>
+                  <SheetDescription className="flex gap-2">
+                    <img
+                      className="aspect-2/3 h-auto w-1/2"
+                      src={entry.posterUrl}
+                      alt=""
+                    />
+                    <CardContent entry={entry} />
+                  </SheetDescription>
+                </SheetHeader>
+              </ContextMenuTrigger>
+              <ContextMenuContent>
+                <ContextMenuLabel className="text-card-foreground font-semibold">
+                  {entry.title}
+                </ContextMenuLabel>
+                <ContextMenuItem onClick={toggleSelect}>
+                  {entries.find((e) => e.id === entry.id) ? (
+                    <>
+                      <FontAwesomeIcon icon={faAdd} />
+                      Add to List
+                    </>
+                  ) : (
+                    <>
+                      <FontAwesomeIcon icon={faMinus} />
+                      Remove from List
+                    </>
+                  )}
+                </ContextMenuItem>
+                <ContextMenuItem onClick={openEdit}>
+                  <FontAwesomeIcon icon={faPencil} />
+                  Edit
+                </ContextMenuItem>
+              </ContextMenuContent>
+            </ContextMenu>
+
             {(entry.medium === "Show" || entry.id === 56) && (
               <EpisodeView entryID={entry.id} />
             )}

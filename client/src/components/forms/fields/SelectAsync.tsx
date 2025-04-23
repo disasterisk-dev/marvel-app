@@ -11,8 +11,14 @@ type Props = {
     inputValue: string,
     callback: (options: option[]) => void,
   ) => void;
+  initialValues: option | option[];
 };
-export const SelectAsync = ({ label, isMulti = true, loadMethod }: Props) => {
+export const SelectAsync = ({
+  label,
+  isMulti = true,
+  loadMethod,
+  initialValues,
+}: Props) => {
   const field = useFieldContext<number[]>();
   return (
     <>
@@ -50,6 +56,7 @@ export const SelectAsync = ({ label, isMulti = true, loadMethod }: Props) => {
           // @ts-expect-error - This will be caught by validators
           field.handleChange(v.value);
         }}
+        defaultValue={initialValues}
       />
     </>
   );

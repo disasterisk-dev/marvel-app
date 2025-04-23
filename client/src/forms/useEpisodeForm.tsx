@@ -1,19 +1,29 @@
 import axios from "axios";
 import { useAppForm } from "./useAppForm";
 import { toast } from "sonner";
+import { episode } from "@/types";
 
 export const useEpisodeForm = (
+  initial: episode = {
+    id: 0,
+    title: "",
+    releaseDate: new Date(),
+    directors: [""],
+    runtime: 0,
+    series: 0,
+    episodeNumber: 1,
+  },
   password: string | undefined,
   close: () => void,
 ) => {
   const form = useAppForm({
     defaultValues: {
-      title: "",
-      releaseDate: "",
-      directors: [""],
-      runtime: 0,
-      series: 0,
-      episodeNumber: 1,
+      title: initial.title,
+      releaseDate: initial.releaseDate.toString(),
+      directors: initial.directors,
+      runtime: initial.runtime,
+      series: initial.series,
+      episodeNumber: initial.episodeNumber,
     },
     validators: {
       onChange: ({ value }) => {

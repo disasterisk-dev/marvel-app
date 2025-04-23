@@ -14,22 +14,24 @@ import {
   SheetHeader,
   SheetTitle,
 } from "./ui/sheet";
+import { useAdmin } from "@/context/AdminContext";
 
 const AdminPanel = () => {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen, tab, setTab, setEdit } = useAdmin()!;
   const [password, setPassword] = useState<string | undefined>();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setOpen((open) => !open);
+        setEdit(undefined);
+        setOpen(!open);
       }
     };
 
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, []);
+  }, [open, setOpen]);
 
   return (
     <>
@@ -43,23 +45,25 @@ const AdminPanel = () => {
             </SheetDescription>
           </SheetHeader>
           <ScrollArea className="mx-2 h-full overflow-scroll pr-4">
-            <Tabs defaultValue="entry" className="h-min w-full">
+            <Tabs
+              defaultValue={tab}
+              // @ts-expect-error - Possible values can all be accpeted by the union type
+              onValueChange={(v) => setTab(v)}
+              className="h-min w-full"
+            >
               <TabsList>
                 <TabsTrigger value="entry">Entry</TabsTrigger>
                 <TabsTrigger value="character">Character</TabsTrigger>
                 <TabsTrigger value="episode">Episode</TabsTrigger>
               </TabsList>
               <TabsContent value="entry">
-                <EntryForm password={password} close={() => setOpen(false)} />
+                <EntryForm />
               </TabsContent>
               <TabsContent value="character">
-                <CharacterForm
-                  password={password}
-                  close={() => setOpen(false)}
-                />
+                <CharacterForm />
               </TabsContent>
               <TabsContent value="episode">
-                <EpisodeForm password={password} close={() => setOpen(false)} />
+                <EpisodeForm />
               </TabsContent>
             </Tabs>
           </ScrollArea>

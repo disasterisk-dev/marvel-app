@@ -7,6 +7,7 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { FilterContextProvider } from "./context/FilterContext.tsx";
 import { ThemeProvider } from "./context/ThemeContext.tsx";
 import { ListProvider } from "./context/ListContext.tsx";
+import { AdminProvider } from "./context/AdminContext.tsx";
 
 const queryClient = new QueryClient();
 const router = createRouter({ routeTree });
@@ -16,9 +17,11 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <ListProvider>
         <FilterContextProvider>
-          <ThemeProvider>
-            <RouterProvider router={router} />
-          </ThemeProvider>
+          <AdminProvider>
+            <ThemeProvider>
+              <RouterProvider router={router} />
+            </ThemeProvider>
+          </AdminProvider>
         </FilterContextProvider>
       </ListProvider>
     </QueryClientProvider>

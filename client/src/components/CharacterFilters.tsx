@@ -9,6 +9,8 @@ import {
 import { useFilter } from "@/context/FilterContext";
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "./ui/label";
+import axios from "axios";
+import { toast } from "sonner";
 
 const CharacterFilters = () => {
   const { charFilter, setCharFilter } = useFilter()!;
@@ -35,20 +37,20 @@ const CharacterFilters = () => {
   const characters = useQuery({
     queryKey: ["characters"],
     queryFn: async () => {
-      const res = await fetch(
-        import.meta.env.VITE_API_BASE_URL + "/characters",
-      );
+      const data = await axios
+        .get(import.meta.env.VITE_API_BASE_URL + "/characters")
+        .then((res) => {
+          return res.data.items;
+        })
+        .catch(() => {
+          toast("Couldn't load characters");
+        });
 
-      if (!res.ok) {
-        throw new Error("Couldn't get characters");
-      }
-
-      const data = await res.json();
-
-      data.items.sort((a: character, b: character) =>
+      data.sort((a: character, b: character) =>
         a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
       );
 
+      localStorage.setItem("characters", JSON.stringify(data));
       return data;
     },
   });
@@ -67,7 +69,7 @@ const CharacterFilters = () => {
           <AccordionContent>
             {characters.error && <div>{characters.error.message}</div>}
             {characters.data &&
-              characters.data.items.map((c: character) => (
+              characters.data.map((c: character) => (
                 <div className="flex gap-2 pb-1" key={c.id}>
                   <Checkbox
                     name={c.name}

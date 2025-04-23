@@ -1,15 +1,37 @@
+import { useAdmin } from "@/context/AdminContext";
 import { useEntryForm } from "@/forms/useEntryForm";
 import { character, entry, option } from "@/types";
 import axios from "axios";
 
-type Props = {
-  initial?: entry;
-  password: string | undefined;
-  close: () => void;
-};
+const EntryForm = () => {
+  const { edit, setEdit } = useAdmin()!;
+  const { password, setOpen } = useAdmin()!;
 
-const EntryForm = ({ initial, password, close }: Props) => {
-  const form = useEntryForm(initial, password, close);
+  const form = useEntryForm(edit as entry, password, () => {
+    setOpen(false);
+    setEdit(undefined);
+  });
+
+  const initialDirectors: option[] = [];
+  const initialCharacters: option[] = [];
+
+  if (edit) {
+    form.getFieldValue("directors").forEach((d) => {
+      initialDirectors.push({ label: d, value: d });
+    });
+
+    const characters = JSON.parse(localStorage.getItem("characters")!);
+
+    form.getFieldValue("characters").forEach((c) => {
+      const character: character = characters.find(
+        (char: character) => char.id === c,
+      );
+
+      if (character) {
+        initialCharacters.push({ label: character.name, value: character.id });
+      }
+    });
+  }
 
   return (
     <form.AppForm>
@@ -28,6 +50,7 @@ const EntryForm = ({ initial, password, close }: Props) => {
             <field.SelectAsyncCreatable
               label="Director(s)"
               loadMethod={loadDirectors}
+              initialValues={initialDirectors}
             />
           )}
         />
@@ -52,7 +75,11 @@ const EntryForm = ({ initial, password, close }: Props) => {
         <form.AppField
           name="characters"
           children={(field) => (
-            <field.SelectAsync label="Characters" loadMethod={loadCharacters} />
+            <field.SelectAsync
+              label="Characters"
+              loadMethod={loadCharacters}
+              initialValues={initialCharacters}
+            />
           )}
         />
         <form.AppField
@@ -115,19 +142,25 @@ const loadCharacters = (
   inputValue: string,
   callback: (options: option[]) => void,
 ) => {
-  axios.get(import.meta.env.VITE_API_BASE_URL + "/characters").then((res) => {
-    const characters: character[] = res.data.items;
+  // axios.get(import.meta.env.VITE_API_BASE_URL + "/characters").then((res) => {
+  //   const characters: character[] = res.data.items;
 
-    const options: option[] = [];
+  //   const options: option[] = [];
 
-    characters.forEach((c) => {
-      options.push({ label: c.name, value: c.id });
-    });
+  //   characters.forEach((c) => {
+  //     options.push({ label: c.name, value: c.id });
+  //   });
 
-    callback(
-      options.filter((o) =>
-        o.label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()),
-      ),
-    );
+  const characters = JSON.parse(localStorage.getItem("characters")!);
+  const options: option[] = [];
+
+  characters.forEach((c: character) => {
+    options.push({ label: c.name, value: c.id });
   });
+
+  callback(
+    options.filter((o) =>
+      o.label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase()),
+    ),
+  );
 };

@@ -1,13 +1,32 @@
+import { useAdmin } from "@/context/AdminContext";
 import { useEpisodeForm } from "@/forms/useEpisodeForm";
 import { entry, episode, option } from "@/types";
 import axios from "axios";
 
-type Props = {
-  password: string | undefined;
-  close: () => void;
-};
-export const EpisodeForm = ({ password, close }: Props) => {
-  const form = useEpisodeForm(password, close);
+export const EpisodeForm = () => {
+  const { edit, setEdit } = useAdmin()!;
+  const { password, setOpen } = useAdmin()!;
+
+  const form = useEpisodeForm(edit as episode, password, () => {
+    setOpen(false);
+    setEdit(undefined);
+  });
+
+  const initialDirectors: option[] = [];
+  let initialSeries: option;
+
+  if (edit) {
+    form.getFieldValue("directors").forEach((d) => {
+      initialDirectors.push({ label: d, value: d });
+    });
+
+    const series: entry = JSON.parse(localStorage.getItem("shows")!).find(
+      (s: entry) => s.id === form.getFieldValue("series"),
+    );
+
+    initialSeries = { label: series.title, value: series.id };
+  }
+
   return (
     <form.AppForm>
       <div className="flex flex-col gap-2">
@@ -25,6 +44,7 @@ export const EpisodeForm = ({ password, close }: Props) => {
             <field.SelectAsyncCreatable
               label="Director(s)"
               loadMethod={loadDirectors}
+              initialValues={initialDirectors}
             />
           )}
         />
@@ -41,6 +61,7 @@ export const EpisodeForm = ({ password, close }: Props) => {
               label="Series"
               isMulti={false}
               loadMethod={loadSeries}
+              initialValues={initialSeries}
             />
           )}
         />

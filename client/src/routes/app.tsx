@@ -7,6 +7,8 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import SortOrder from "@/components/SortOrder";
 import AppSidebar from "@/components/AppSidebar";
 import WatchList from "@/components/WatchList";
+import axios from "axios";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/app")({
   component: App,
@@ -19,13 +21,20 @@ function App() {
   const entries = useQuery({
     queryKey: ["entries"],
     queryFn: async () => {
-      const res = await fetch(import.meta.env.VITE_API_BASE_URL + "/entries");
+      const data = await axios
+        .get(import.meta.env.VITE_API_BASE_URL + "/entries")
+        .then((res) => {
+          const shows: entry[] = res.data.items.filter(
+            (e: entry) => e.medium === "Show",
+          );
 
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
+          localStorage.setItem("shows", JSON.stringify(shows));
 
-      const data = await res.json();
+          return res.data;
+        })
+        .catch(() => {
+          toast("Couldn't load DB");
+        });
       return data;
     },
     refetchOnWindowFocus: false,
