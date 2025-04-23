@@ -45,6 +45,32 @@ export const ListProvider = ({ children }: Props) => {
   function getCombined(): entry[] {
     const newCombined: entry[] = [];
 
+    const shows: entry[] = JSON.parse(localStorage.getItem("shows")!);
+
+    const printOut: (entry | episode)[] = [];
+
+    episodes.forEach((e) => {
+      const series = shows.find((s) => s.id === e.series);
+
+      series!.episodes = [e];
+      series!.releaseDate = e.releaseDate;
+      series!.title = e.title;
+
+      newCombined.push({
+        id: e.id,
+        title: e.title,
+        directors: e.directors,
+        releaseDate: e.releaseDate,
+        runtime: e.runtime,
+        characters: [],
+        medium: "Show",
+        posterUrl: series!.posterUrl,
+        phase: series!.phase,
+      });
+
+      printOut.push(e);
+    });
+
     entries.forEach((e) => {
       if (e.medium === "Show") {
         const eps = episodes
@@ -64,11 +90,16 @@ export const ListProvider = ({ children }: Props) => {
         eps.forEach((x) => (runtime += x.runtime));
         e.runtime = runtime;
       }
-
+      printOut.push(e);
       newCombined.push(e);
     });
-
-    return newCombined;
+    console.log(
+      printOut.sort(
+        (a, b) =>
+          new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime(),
+      ),
+    );
+    return newCombined.sort((e) => new Date(e.runtime).getTime());
   }
 
   return (

@@ -36,19 +36,19 @@ type Props = {
 };
 
 export const EntryCard = ({ entry }: Props) => {
-  const { entries, storeEntries, episodes } = useList()!;
+  const { entries, storeEntries } = useList()!;
   const { setOpen, setEdit, setTab } = useAdmin()!;
 
-  useEffect(() => {
-    if (entry.medium !== "Show") return;
+  // useEffect(() => {
+  //   if (entry.medium !== "Show") return;
 
-    if (
-      episodes.find((x) => x.series === entry.id) &&
-      !entries.find((e) => e.id === entry.id)
-    ) {
-      storeEntries([...entries, entry]);
-    }
-  }, [entry, storeEntries, episodes, entries]);
+  //   if (
+  //     episodes.find((x) => x.series === entry.id) &&
+  //     !entries.find((e) => e.id === entry.id)
+  //   ) {
+  //     storeEntries([...entries, entry]);
+  //   }
+  // }, [entry, storeEntries, episodes, entries]);
 
   function toggleSelect() {
     // If checkbox is checked
