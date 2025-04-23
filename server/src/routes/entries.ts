@@ -205,4 +205,38 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
         description: "Create a new media entries. NOT PUBLICLY ACCESSIBLE",
       },
     }
+  )
+  .put(
+    "/:id",
+    async ({ params, body, error }) => {
+      try {
+        await db.update(entries).set(body).where(eq(entries.id, params.id));
+
+        return {
+          status: 202,
+          success: "Updated " + body.title,
+        };
+      } catch {
+        return error(400, {
+          status: 400,
+          error: "Could not update " + body.title,
+        });
+      }
+    },
+    {
+      params: t.Object({
+        id: t.Number(),
+      }),
+      body: t.Omit(entrySelectSchema, ["id"]),
+      response: {
+        202: t.Object({
+          status: t.Number(),
+          success: t.String(),
+        }),
+        400: t.Object({
+          status: t.Number(),
+          error: t.String(),
+        }),
+      },
+    }
   );

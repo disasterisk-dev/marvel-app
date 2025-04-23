@@ -88,32 +88,10 @@ export const useEntryForm = (
     },
     onSubmit: async ({ value }) => {
       if (initial.id > 0) {
-        console.log(value);
-        return;
+        updateEntry(value, initial.id, password!);
+      } else {
+        createEntry(value, password!);
       }
-      console.log(value);
-      await axios
-        .post(
-          import.meta.env.VITE_API_BASE_URL + "/entries",
-          { ...value },
-          {
-            headers: {
-              Authorization: "Bearer " + password!,
-            },
-          },
-        )
-        .then((res) => {
-          toast("Created New Entry", res.data);
-        })
-        .catch((err) => {
-          toast("Something went wrong", {
-            description: err.message,
-            action: {
-              label: "More",
-              onClick: () => console.log(err),
-            },
-          });
-        });
 
       close();
     },
@@ -121,3 +99,53 @@ export const useEntryForm = (
 
   return form;
 };
+
+async function createEntry(value, password: string) {
+  await axios
+    .post(
+      import.meta.env.VITE_API_BASE_URL + "/entries",
+      { ...value },
+      {
+        headers: {
+          Authorization: "Bearer " + password,
+        },
+      },
+    )
+    .then((res) => {
+      toast("Created New Entry", res.data);
+    })
+    .catch((err) => {
+      toast("Something went wrong", {
+        description: err.message,
+        action: {
+          label: "More",
+          onClick: () => console.log(err),
+        },
+      });
+    });
+}
+
+async function updateEntry(value, id: number, password: string) {
+  await axios
+    .put(
+      import.meta.env.VITE_API_BASE_URL + "/entries/" + id,
+      { ...value },
+      {
+        headers: {
+          Authorization: "Bearer " + password,
+        },
+      },
+    )
+    .then((res) => {
+      toast("Updated entry", res.data);
+    })
+    .catch((err) => {
+      toast("Something went wrong", {
+        description: err.message,
+        action: {
+          label: "More",
+          onClick: () => console.log(err),
+        },
+      });
+    });
+}
