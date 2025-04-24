@@ -11,13 +11,17 @@ export interface entry {
   episodes?: episode[];
 }
 
-export interface character {
+export function isEntry(object: any): object is entry {
+  return "medium" in object;
+}
+
+export type character = {
   id: number;
   name: string;
   actors: string[];
-}
+};
 
-export interface episode {
+export type episode = {
   id: number;
   title: string;
   releaseDate: Date;
@@ -25,7 +29,7 @@ export interface episode {
   runtime: number;
   series: number;
   episodeNumber: number;
-}
+};
 
 export interface option {
   readonly value: string | number;

@@ -1,5 +1,4 @@
 import { entry } from "../types";
-import { useEffect } from "react";
 import { format, formatDuration } from "date-fns";
 import {
   Sheet,

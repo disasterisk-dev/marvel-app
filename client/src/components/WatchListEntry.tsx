@@ -2,48 +2,49 @@ import { entry } from "@/types";
 import { Button } from "./ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { formatDuration } from "date-fns";
 import { useList } from "@/context/ListContext";
+import { Separator } from "./ui/separator";
+import { formatRuntime } from "@/utils";
 
 type Props = {
   entry: entry;
+  isShell?: boolean;
 };
-export const WatchListItem = ({ entry }: Props) => {
-  const { entries, storeEntries, episodes, storeEpisodes } = useList()!;
+export const WatchListEntry = ({ entry, isShell = false }: Props) => {
+  const { entries, storeEntries } = useList()!;
 
   function removeFromList() {
     if (entry.medium !== "Show") {
       storeEntries(entries.filter((e) => e.id !== entry.id));
       return;
     }
-
-    storeEpisodes(episodes.filter((e) => e.series !== entry.id));
   }
 
   return (
     <>
-      <div className="h-min">
+      <div id={"watch-item-" + entry.id} className="h-min">
         <div className="my-2 flex gap-2">
           <div className="max-w-1/3">
             <img className="aspect-2/3 w-full" src={entry.posterUrl} alt="" />
           </div>
           <div className="text-muted-foreground basis-full">
             <h3 className="font-semibold">{entry.title}</h3>
-            <span>
-              <FontAwesomeIcon icon={faClock} />{" "}
-              {formatDuration({
-                hours: Math.floor(entry.runtime / 60),
-                minutes: entry.runtime % 60,
-              })}
-            </span>
+            {!isShell && (
+              <span>
+                <FontAwesomeIcon icon={faClock} />{" "}
+                {formatRuntime(entry.runtime)}
+              </span>
+            )}
           </div>
-          <Button
-            variant={"outline"}
-            className="text-destructive aspect-square"
-            onClick={removeFromList}
-          >
-            <FontAwesomeIcon icon={faTrash} />
-          </Button>
+          {!isShell && (
+            <Button
+              variant={"outline"}
+              className="text-destructive aspect-square"
+              onClick={removeFromList}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </Button>
+          )}
         </div>
         {entry.episodes && (
           <div className="border-muted-foreground border-l-2 pl-4">
@@ -52,6 +53,7 @@ export const WatchListItem = ({ entry }: Props) => {
             ))}
           </div>
         )}
+        <Separator className="last:hidden" />
       </div>
     </>
   );

@@ -15,23 +15,23 @@ import {
   faVideoCamera,
 } from "@fortawesome/free-solid-svg-icons";
 import { useList } from "@/context/ListContext";
-import { entry } from "@/types";
+import { entry, isEntry } from "@/types";
 import { formatDuration } from "date-fns";
-import { WatchListItem } from "./WatchListItem";
+import { WatchListEntry } from "./WatchListEntry";
 import { ScrollArea } from "./ui/scroll-area";
 import { Separator } from "./ui/separator";
+import { WatchListEpisode } from "./WatchListEpisode";
 
 const WatchList = () => {
   const { getCombined } = useList()!;
 
-  const list = getCombined().sort(
-    (a, b) =>
-      new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime(),
-  );
+  const shows: entry[] = JSON.parse(localStorage.getItem("shows")!);
+
+  const list = getCombined();
 
   let totalRuntime = 0;
 
-  list.forEach((e: entry) => {
+  list.forEach((e) => {
     totalRuntime += e.runtime;
   });
 
@@ -63,12 +63,39 @@ const WatchList = () => {
           </SheetDescription>
         </SheetHeader>
         <ScrollArea className="m-2 overflow-scroll pr-4">
-          {list.map((e: entry) => (
-            <>
-              <WatchListItem entry={e} key={e.id} />
-              <Separator className="last:hidden" />
-            </>
-          ))}
+          {list.map((e, i) => {
+            if (isEntry(e)) {
+              return (
+                <>
+                  {/* {series && (
+                    <>
+                      <WatchListItem entry={series} key={i * 10} />
+                      <Separator className="last:hidden" />
+                    </>
+                  )} */}
+                  <WatchListEntry entry={e} key={i} />
+                  <Separator className="last:hidden" />
+                </>
+              );
+            }
+
+            return (
+              <>
+                {isEntry(list[i - 1]) && (
+                  <>
+                    <WatchListEntry
+                      entry={shows.find((s) => s.id === e.series)!}
+                      key={i}
+                      isShell
+                    />
+                    <Separator className="last:hidden" />
+                  </>
+                )}
+                <WatchListEpisode episode={e} />
+                <Separator className="last:hidden" />
+              </>
+            );
+          })}
         </ScrollArea>
         <SheetFooter>{/* <Button>Export</Button> */}</SheetFooter>
       </SheetContent>

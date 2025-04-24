@@ -12,7 +12,7 @@ interface listTypes {
   episodes: episode[];
   storeEntries: (value: entry[]) => void;
   storeEpisodes: (value: episode[]) => void;
-  getCombined: () => entry[];
+  getCombined: () => (entry | episode)[];
 }
 
 const ListContext = createContext<listTypes | null>(null);
@@ -42,64 +42,11 @@ export const ListProvider = ({ children }: Props) => {
     localStorage.setItem("episodes", JSON.stringify(e));
   }
 
-  function getCombined(): entry[] {
-    const newCombined: entry[] = [];
-
-    const shows: entry[] = JSON.parse(localStorage.getItem("shows")!);
-
-    const printOut: (entry | episode)[] = [];
-
-    episodes.forEach((e) => {
-      const series = shows.find((s) => s.id === e.series);
-
-      series!.episodes = [e];
-      series!.releaseDate = e.releaseDate;
-      series!.title = e.title;
-
-      newCombined.push({
-        id: e.id,
-        title: e.title,
-        directors: e.directors,
-        releaseDate: e.releaseDate,
-        runtime: e.runtime,
-        characters: [],
-        medium: "Show",
-        posterUrl: series!.posterUrl,
-        phase: series!.phase,
-      });
-
-      printOut.push(e);
-    });
-
-    entries.forEach((e) => {
-      if (e.medium === "Show") {
-        const eps = episodes
-          .filter((x) => x.series === e.id)
-          .sort(
-            (a, b) =>
-              new Date(a.releaseDate).getTime() -
-              new Date(b.releaseDate).getTime(),
-          );
-
-        // if no episodes remove entry
-        if (eps.length === 0) return;
-
-        e.episodes = eps;
-
-        let runtime = 0;
-        eps.forEach((x) => (runtime += x.runtime));
-        e.runtime = runtime;
-      }
-      printOut.push(e);
-      newCombined.push(e);
-    });
-    console.log(
-      printOut.sort(
-        (a, b) =>
-          new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime(),
-      ),
+  function getCombined(): (entry | episode)[] {
+    return [...entries, ...episodes].sort(
+      (a, b) =>
+        new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime(),
     );
-    return newCombined.sort((e) => new Date(e.runtime).getTime());
   }
 
   return (
