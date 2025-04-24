@@ -18,7 +18,9 @@ export const WatchListEpisode = ({ episode }: Props) => {
   return (
     <div className="my-2 flex gap-2">
       <div className="text-muted-foreground basis-full">
-        <h3 className="font-semibold">{episode.title}</h3>
+        <h3 className="font-semibold">
+          {episode.episodeNumber}. {episode.title}
+        </h3>
 
         <span>
           <FontAwesomeIcon icon={faClock} /> {formatRuntime(episode.runtime)}

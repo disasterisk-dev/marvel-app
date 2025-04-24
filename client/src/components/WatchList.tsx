@@ -62,7 +62,7 @@ const WatchList = () => {
             </span>
           </SheetDescription>
         </SheetHeader>
-        <ScrollArea className="m-2 overflow-scroll pr-4">
+        <div className="m-2 overflow-scroll pr-4">
           {list.map((e, i) => {
             if (isEntry(e)) {
               return (
@@ -74,6 +74,21 @@ const WatchList = () => {
                     </>
                   )} */}
                   <WatchListEntry entry={e} key={i} />
+                  <Separator className="last:hidden" />
+                </>
+              );
+            }
+
+            if (i === 0) {
+              return (
+                <>
+                  <WatchListEntry
+                    entry={shows.find((s) => s.id === e.series)!}
+                    key={i}
+                    isShell
+                  />
+                  <Separator className="last:hidden" />
+                  <WatchListEpisode episode={e} />
                   <Separator className="last:hidden" />
                 </>
               );
@@ -96,7 +111,7 @@ const WatchList = () => {
               </>
             );
           })}
-        </ScrollArea>
+        </div>
         <SheetFooter>{/* <Button>Export</Button> */}</SheetFooter>
       </SheetContent>
     </Sheet>

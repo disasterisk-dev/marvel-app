@@ -98,19 +98,21 @@ export const EntryCard = ({ entry }: Props) => {
                 <ContextMenuLabel className="text-card-foreground font-semibold">
                   {entry.title}
                 </ContextMenuLabel>
-                <ContextMenuItem onClick={toggleSelect}>
-                  {entries.find((e) => e.id === entry.id) ? (
-                    <>
-                      <FontAwesomeIcon icon={faAdd} />
-                      Add to List
-                    </>
-                  ) : (
-                    <>
-                      <FontAwesomeIcon icon={faMinus} />
-                      Remove from List
-                    </>
-                  )}
-                </ContextMenuItem>
+                {entry.medium !== "Show" && (
+                  <ContextMenuItem onClick={toggleSelect}>
+                    {entries.find((e) => e.id === entry.id) ? (
+                      <>
+                        <FontAwesomeIcon icon={faAdd} />
+                        Add to List
+                      </>
+                    ) : (
+                      <>
+                        <FontAwesomeIcon icon={faMinus} />
+                        Remove from List
+                      </>
+                    )}
+                  </ContextMenuItem>
+                )}
                 <ContextMenuItem onClick={openEdit}>
                   <FontAwesomeIcon icon={faPencil} />
                   Edit
@@ -118,9 +120,7 @@ export const EntryCard = ({ entry }: Props) => {
               </ContextMenuContent>
             </ContextMenu>
 
-            {(entry.medium === "Show" || entry.id === 56) && (
-              <EpisodeView entryID={entry.id} />
-            )}
+            {entry.medium === "Show" && <EpisodeView entryID={entry.id} />}
             <SheetFooter>
               {entry.medium !== "Show" && (
                 <Button onClick={toggleSelect}>
