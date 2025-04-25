@@ -1,4 +1,4 @@
-import { entry } from "../types";
+import { entry, episode } from "../types";
 import { format, formatDuration } from "date-fns";
 import {
   Sheet,
@@ -29,25 +29,39 @@ import {
   ContextMenuTrigger,
 } from "./ui/context-menu";
 import { useAdmin } from "@/context/AdminContext";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 type Props = {
   entry: entry;
 };
 
 export const EntryCard = ({ entry }: Props) => {
-  const { entries, storeEntries } = useList()!;
+  const { entries, episodes, storeEntries, storeEpisodes } = useList()!;
   const { setOpen, setEdit, setTab } = useAdmin()!;
 
-  // useEffect(() => {
-  //   if (entry.medium !== "Show") return;
+  const episodeList = useQuery({
+    queryKey: ["episodes", entry.id],
+    queryFn: async () => {
+      const data = await axios
+        .get(import.meta.env.VITE_API_BASE_URL + "/episodes/from/" + entry.id)
+        .then((res) => {
+          return res.data;
+        })
+        .catch(() => {
+          throw new Error("");
+        });
 
-  //   if (
-  //     episodes.find((x) => x.series === entry.id) &&
-  //     !entries.find((e) => e.id === entry.id)
-  //   ) {
-  //     storeEntries([...entries, entry]);
-  //   }
-  // }, [entry, storeEntries, episodes, entries]);
+      data.items.sort(
+        (a: episode, b: episode) =>
+          new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime(),
+      );
+
+      return data;
+    },
+    enabled: entry.medium === "Show",
+    refetchOnWindowFocus: false,
+  });
 
   function toggleSelect() {
     // If checkbox is checked
@@ -61,6 +75,15 @@ export const EntryCard = ({ entry }: Props) => {
 
     storeEntries([...entries, entry]);
     return;
+  }
+
+  async function toggleAllEpisodes() {
+    if (episodes.find((e) => e.series === entry.id)) {
+      storeEpisodes(episodes.filter((e) => e.series !== entry.id));
+      return;
+    }
+
+    storeEpisodes([...episodes, ...episodeList.data.items]);
   }
 
   function openEdit() {
@@ -124,13 +147,22 @@ export const EntryCard = ({ entry }: Props) => {
               </ContextMenuContent>
             </ContextMenu>
 
-            {entry.medium === "Show" && <EpisodeView entryID={entry.id} />}
-            <SheetFooter>
+            {episodeList.data && (
+              <EpisodeView episodes={episodeList.data.items} />
+            )}
+            <SheetFooter className="pb-4">
               {entry.medium !== "Show" && (
                 <Button onClick={toggleSelect}>
                   {entries.find((e) => e.id === entry.id)
                     ? "Remove from List"
                     : "Add to List"}
+                </Button>
+              )}
+              {entry.medium === "Show" && (
+                <Button onClick={toggleAllEpisodes}>
+                  {episodes.find((e) => e.series === entry.id)
+                    ? "Remove all from List"
+                    : "Add all to List"}
                 </Button>
               )}
             </SheetFooter>
