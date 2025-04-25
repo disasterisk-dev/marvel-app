@@ -22,9 +22,15 @@ export const EpisodeItem = ({ episode }: Props) => {
   const { setOpen, setEdit, setTab } = useAdmin()!;
 
   useEffect(() => {
-    const ep = JSON.parse(localStorage.getItem("episodes")!).find(
-      (e: episode) => e.id === episode.id,
-    );
+    const eps = JSON.parse(localStorage.getItem("episodes")!);
+
+    if (!eps) {
+      setSelected(false);
+      return;
+    }
+
+    const ep = eps.find((e: episode) => e.id === episode.id);
+
     setSelected(ep ? true : false);
   }, [episode, episodes]);
 
