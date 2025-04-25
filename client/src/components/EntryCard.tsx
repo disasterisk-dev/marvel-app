@@ -75,7 +75,11 @@ export const EntryCard = ({ entry }: Props) => {
         <Sheet>
           <SheetTrigger asChild>
             <div className="bg-inverse dark:bg-bold cursor-pointer gap-2">
-              <img className="aspect-2/3" src={entry.posterUrl} alt="" />
+              <img
+                className="aspect-2/3"
+                src={import.meta.env.VITE_FILE_BASE_URL + entry.posterUrl}
+                alt=""
+              />
             </div>
           </SheetTrigger>
 
@@ -87,7 +91,7 @@ export const EntryCard = ({ entry }: Props) => {
                   <SheetDescription className="flex gap-2">
                     <img
                       className="aspect-2/3 h-auto w-1/2"
-                      src={entry.posterUrl}
+                      src={import.meta.env.VITE_FILE_BASE_URL + entry.posterUrl}
                       alt=""
                     />
                     <CardContent entry={entry} />

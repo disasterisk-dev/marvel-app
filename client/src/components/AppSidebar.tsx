@@ -17,7 +17,7 @@ const AppSidebar = () => {
     <Sidebar>
       <div className="bg-brand text-background dark:text-foreground">
         <SidebarHeader>
-          <h1 className="grow text-2xl font-bold">Uatu IO</h1>
+          <h1 className="grow text-2xl font-bold">UATU IO</h1>
         </SidebarHeader>
       </div>
       <SidebarContent>

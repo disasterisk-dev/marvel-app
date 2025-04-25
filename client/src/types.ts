@@ -31,6 +31,10 @@ export type episode = {
   episodeNumber: number;
 };
 
+export function isEpisode(object: any): object is episode {
+  return "series" in object;
+}
+
 export interface option {
   readonly value: string | number;
   readonly label: string;

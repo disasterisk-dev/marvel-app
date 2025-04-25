@@ -26,7 +26,6 @@ export interface entryBrief {
 }
 
 export const app = new Elysia()
-  .use(cors())
   .use(staticPlugin())
   .use(
     swagger({
@@ -49,6 +48,7 @@ export const app = new Elysia()
   .use(charactersRoute)
   .use(episodesRoute)
   .use(uploadRoute)
+  .use(cors())
   .listen(3000);
 
 console.log(

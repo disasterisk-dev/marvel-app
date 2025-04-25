@@ -1,5 +1,10 @@
 import Elysia, { t } from "elysia";
 import bearer from "@elysiajs/bearer";
+import { UTApi } from "uploadthing/server";
+
+export const utapi = new UTApi({
+  token: process.env.UPLOADTHING_TOKEN,
+});
 
 export const uploadRoute = new Elysia({ prefix: "/upload" }).use(bearer()).post(
   "/",
@@ -11,17 +16,21 @@ export const uploadRoute = new Elysia({ prefix: "/upload" }).use(bearer()).post(
       });
     }
 
-    const fileBuffer = await body.file.arrayBuffer();
-    const uint8Arr = new Uint8Array(fileBuffer);
-    const buffer = Buffer.from(uint8Arr);
+    const res = await utapi.uploadFiles(body.file);
 
-    const path = "./public/" + body.file.name;
-    await Bun.write(path, buffer);
+    const url = res.data?.ufsUrl;
+
+    // const fileBuffer = await body.file.arrayBuffer();
+    // const uint8Arr = new Uint8Array(fileBuffer);
+    // const buffer = Buffer.from(uint8Arr);
+
+    // const path = "./public/" + body.file.name;
+    // await Bun.write(path, buffer);
 
     return {
       status: 200,
       success: "Image successfully uploaded",
-      url: body.file.name,
+      url: url,
     };
   },
   {

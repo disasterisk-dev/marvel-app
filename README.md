@@ -13,7 +13,8 @@ The frontend leverages the Tanstack suites of tools to full effect, and is built
 - Bun
 - Elysia
 - Drizzle ORM
-- TursoDB 
+- TursoDB
+- UploadThing
 
 ## Frontend
 

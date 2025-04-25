@@ -41,10 +41,6 @@ export const entriesRoute = new Elysia({ prefix: "/entries" })
           error: "Something went wrong",
         });
 
-      data.forEach((e) => {
-        e.posterUrl = `http://${app.server?.hostname}:${app.server?.port}/public/${e.posterUrl}`;
-      });
-
       return {
         status: 200,
         retrievedAt: new Date(),

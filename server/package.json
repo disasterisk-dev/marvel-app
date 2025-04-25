@@ -14,7 +14,8 @@
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.40.0",
     "drizzle-typebox": "^0.3.1",
-    "elysia": "latest"
+    "elysia": "latest",
+    "uploadthing": "^7.6.0"
   },
   "devDependencies": {
     "bun-types": "latest",

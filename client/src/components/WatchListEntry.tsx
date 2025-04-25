@@ -25,7 +25,11 @@ export const WatchListEntry = ({ entry, isShell = false }: Props) => {
       <div id={"watch-item-" + entry.id} className="h-min">
         <div className="my-2 flex gap-2">
           <div className="max-w-1/3">
-            <img className="aspect-2/3 w-full" src={entry.posterUrl} alt="" />
+            <img
+              className="aspect-2/3 w-full"
+              src={import.meta.env.VITE_FILE_BASE_URL + entry.posterUrl}
+              alt=""
+            />
           </div>
           <div className="text-muted-foreground basis-full">
             <h3 className="font-semibold">{entry.title}</h3>

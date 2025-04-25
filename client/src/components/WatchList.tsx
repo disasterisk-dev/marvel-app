@@ -15,7 +15,7 @@ import {
   faVideoCamera,
 } from "@fortawesome/free-solid-svg-icons";
 import { useList } from "@/context/ListContext";
-import { entry, isEntry } from "@/types";
+import { entry, isEntry, isEpisode } from "@/types";
 import { formatDuration } from "date-fns";
 import { WatchListEntry } from "./WatchListEntry";
 import { Separator } from "./ui/separator";
@@ -66,12 +66,6 @@ const WatchList = () => {
             if (isEntry(e)) {
               return (
                 <>
-                  {/* {series && (
-                    <>
-                      <WatchListItem entry={series} key={i * 10} />
-                      <Separator className="last:hidden" />
-                    </>
-                  )} */}
                   <WatchListEntry entry={e} key={i} />
                   <Separator className="last:hidden" />
                 </>
@@ -93,20 +87,25 @@ const WatchList = () => {
               );
             }
 
+            const previous = list[i - 1];
+
             return (
               <>
-                {isEntry(list[i - 1]) && (
-                  <>
-                    <WatchListEntry
-                      entry={shows.find((s) => s.id === e.series)!}
-                      key={i}
-                      isShell
-                    />
-                    <Separator className="last:hidden" />
-                  </>
+                {isEntry(previous) && (
+                  <WatchListEntry
+                    entry={shows.find((s) => s.id === e.series)!}
+                    key={i}
+                    isShell
+                  />
+                )}
+                {isEpisode(previous) && previous.series !== e.series && (
+                  <WatchListEntry
+                    entry={shows.find((s) => s.id === e.series)!}
+                    key={i}
+                    isShell
+                  />
                 )}
                 <WatchListEpisode episode={e} />
-                <Separator className="last:hidden" />
               </>
             );
           })}
