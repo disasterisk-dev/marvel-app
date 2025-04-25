@@ -50,7 +50,7 @@ const CharacterFilters = () => {
         a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
       );
 
-      localStorage.setItem("characters", JSON.stringify(data));
+      sessionStorage.setItem("characters", JSON.stringify(data));
       return data;
     },
   });

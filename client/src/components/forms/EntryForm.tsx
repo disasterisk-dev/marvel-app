@@ -151,7 +151,7 @@ const loadCharacters = (
   //     options.push({ label: c.name, value: c.id });
   //   });
 
-  const characters = JSON.parse(localStorage.getItem("characters")!);
+  const characters = JSON.parse(sessionStorage.getItem("characters")!);
   const options: option[] = [];
 
   characters.forEach((c: character) => {

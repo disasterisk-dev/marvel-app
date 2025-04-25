@@ -40,7 +40,7 @@ const loadActors = (
   inputValue: string,
   callback: (options: option[]) => void,
 ) => {
-  const characters = JSON.parse(localStorage.getItem("characters")!);
+  const characters = JSON.parse(sessionStorage.getItem("chara`1cters")!);
 
   const options: option[] = [];
 
