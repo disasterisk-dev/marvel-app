@@ -90,7 +90,7 @@ export const EntryCard = ({ entry }: Props) => {
                   <SheetTitle>{entry.title}</SheetTitle>
                   <SheetDescription className="flex gap-2">
                     <img
-                      className="aspect-2/3 h-auto w-1/2"
+                      className="aspect-2/3 h-auto w-1/2 overflow-hidden rounded-sm"
                       src={import.meta.env.VITE_FILE_BASE_URL + entry.posterUrl}
                       alt=""
                     />
