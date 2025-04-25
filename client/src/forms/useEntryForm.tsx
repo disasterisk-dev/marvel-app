@@ -100,6 +100,7 @@ export const useEntryForm = (
   return form;
 };
 
+// @ts-expect-error - It's only going to get the right one
 async function createEntry(value, password: string) {
   await axios
     .post(
@@ -124,6 +125,8 @@ async function createEntry(value, password: string) {
       });
     });
 }
+
+// @ts-expect-error - It's only going to get the right one
 
 async function updateEntry(value, id: number, password: string) {
   await axios

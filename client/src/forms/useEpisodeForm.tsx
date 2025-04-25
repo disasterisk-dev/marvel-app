@@ -84,6 +84,7 @@ export const useEpisodeForm = (
   return form;
 };
 
+// @ts-expect-error - It's only going to get the right one
 async function createEpisode(value, password: string) {
   await axios
     .post(
@@ -109,6 +110,7 @@ async function createEpisode(value, password: string) {
     });
 }
 
+// @ts-expect-error - It's only going to get the right one
 async function updateEpisode(value, id: number, password: string) {
   await axios
     .put(

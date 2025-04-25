@@ -18,7 +18,6 @@ import { useList } from "@/context/ListContext";
 import { entry, isEntry } from "@/types";
 import { formatDuration } from "date-fns";
 import { WatchListEntry } from "./WatchListEntry";
-import { ScrollArea } from "./ui/scroll-area";
 import { Separator } from "./ui/separator";
 import { WatchListEpisode } from "./WatchListEpisode";
 

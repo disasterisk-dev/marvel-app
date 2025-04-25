@@ -1,6 +1,6 @@
 import EntryForm from "@/components/forms/EntryForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import CharacterForm from "./forms/CharacterForm";
 import { Label } from "./ui/label";
 import { PasswordField } from "./forms/fields/PasswordField";
@@ -31,7 +31,7 @@ const AdminPanel = () => {
 
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, [open, setOpen]);
+  }, [open, setOpen, setEdit]);
 
   return (
     <>
