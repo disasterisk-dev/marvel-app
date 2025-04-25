@@ -22,7 +22,10 @@ export const EpisodeItem = ({ episode }: Props) => {
   const { setOpen, setEdit, setTab } = useAdmin()!;
 
   useEffect(() => {
-    setSelected(episodes.includes(episode));
+    const ep = JSON.parse(localStorage.getItem("episodes")!).find(
+      (e: episode) => e.id === episode.id,
+    );
+    setSelected(ep ? true : false);
   }, [episode, episodes]);
 
   function toggleSelected() {
