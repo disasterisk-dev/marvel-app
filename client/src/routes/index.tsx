@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import axios from "axios";
@@ -10,7 +12,7 @@ export const Route = createFileRoute("/")({
 function RouteComponent() {
   const navigate = useNavigate();
 
-  const { data, isError } = useQuery({
+  const { data, isError, isLoading } = useQuery({
     queryKey: ["about"],
     queryFn: async () => {
       const data = await axios
@@ -38,14 +40,20 @@ function RouteComponent() {
           <h3 className="text-muted-foreground max-w-prose text-2xl font-semibold">
             {Math.ceil(data.totalRuntime / 60)} hours of Marvel
           </h3>
+          <Button
+            className="bg-brand text-background dark:text-foreground hover:text-background w-full max-w-screen-sm cursor-pointer text-xl font-bold md:w-1/2"
+            onClick={() => navigate({ to: "/app" })}
+          >
+            Get Started
+          </Button>
         </>
       )}
-      <Button
-        className="bg-brand text-background dark:text-foreground hover:text-background w-full max-w-screen-sm cursor-pointer text-xl font-bold md:w-1/2"
-        onClick={() => navigate({ to: "/app" })}
-      >
-        Get Started
-      </Button>
+      {isLoading && (
+        <>
+          <FontAwesomeIcon icon={faSpinner} className="animate-spin text-5xl" />
+          <h4>Loading (this can take a minute while the server wakes up)</h4>
+        </>
+      )}
       {isError && <span>Oops</span>}
     </div>
   );
