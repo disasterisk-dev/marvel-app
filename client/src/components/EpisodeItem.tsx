@@ -12,6 +12,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { useAdmin } from "@/context/AdminContext";
+import { getRouteApi, useNavigate } from "@tanstack/react-router";
+
+const routeApi = getRouteApi("/app");
 
 type Props = {
   episode: episode;
@@ -20,6 +23,9 @@ export const EpisodeItem = ({ episode }: Props) => {
   const [selected, setSelected] = useState<boolean>(false);
   const { episodes, storeEpisodes } = useList()!;
   const { setOpen, setEdit, setTab } = useAdmin()!;
+
+  const navigate = useNavigate();
+  const { episodes: sEps } = routeApi.useSearch();
 
   useEffect(() => {
     const eps = JSON.parse(localStorage.getItem("episodes")!);
@@ -32,10 +38,32 @@ export const EpisodeItem = ({ episode }: Props) => {
     const ep = eps.find((e: episode) => e.id === episode.id);
 
     setSelected(ep ? true : false);
-  }, [episode, episodes]);
+  }, [episode, episodes, sEps]);
 
   function toggleSelected() {
     setSelected(!selected);
+
+    if (!sEps.includes(episode.id)) {
+      navigate({
+        to: "/app",
+        search: (prev) => ({
+          entries: prev.entries,
+          episodes: prev.episodes
+            ? [...prev.episodes, episode.id]
+            : [episode.id],
+        }),
+      });
+    } else {
+      navigate({
+        to: "/app",
+        search: (prev) => ({
+          entries: prev.entries,
+          episodes: prev.episodes
+            ? [...prev.episodes.filter((e: number) => e !== episode.id)]
+            : undefined,
+        }),
+      });
+    }
 
     // If checkbox is checked
     if (selected) {

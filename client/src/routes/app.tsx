@@ -9,10 +9,19 @@ import AppSidebar from "@/components/AppSidebar";
 import WatchList from "@/components/WatchList";
 import axios from "axios";
 import { toast } from "sonner";
+import { z } from "zod";
 
 export const Route = createFileRoute("/app")({
   component: App,
+  validateSearch: (search) => appSearchSchema.parse(search),
 });
+
+const appSearchSchema = z.object({
+  entries: z.optional(z.array(z.number())),
+  episodes: z.optional(z.array(z.number())),
+});
+
+type AppSearch = z.infer<typeof appSearchSchema>;
 
 function App() {
   const { charFilter, mediumFilter, sortOrder, phaseFilter } = useFilter()!;
