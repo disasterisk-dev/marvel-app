@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { WatchListEntry } from "@/components/WatchListEntry";
 import { WatchListEpisode } from "@/components/WatchListEpisode";
+import { useList } from "@/context/ListContext";
 import { entry, episode, isEntry, isEpisode, listQuerySchema } from "@/types";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import axios from "axios";
-import { useState } from "react";
 
 export const Route = createFileRoute("/list")({
   component: RouteComponent,
@@ -18,9 +18,10 @@ export const Route = createFileRoute("/list")({
 });
 
 function RouteComponent() {
-  const { entries, episodes } = Route.useSearch();
-
-  const [shows, setShows] = useState<entry[] | null>(null);
+  const { entries: entryQ, episodes: episodeQ } = Route.useSearch();
+  const { entries, episodes, storeEntries, storeEpisodes, getCombined } =
+    useList()!;
+  const navigate = useNavigate();
 
   // fetch entries and episodes
   const { data, isLoading, isError, error } = useQuery({
@@ -33,11 +34,11 @@ function RouteComponent() {
             (e: entry) => e.medium === "Show",
           );
 
-          setShows(shows);
+          sessionStorage.setItem("shows", JSON.stringify(shows));
 
           if (!entries) return [];
 
-          return res.data.items.filter((e: entry) => entries.includes(e.id));
+          return res.data.items.filter((e: entry) => entryQ.includes(e.id));
         });
 
       const episodeData = await axios
@@ -45,7 +46,7 @@ function RouteComponent() {
         .then((res) => {
           if (!episodes) return [];
 
-          return res.data.items.filter((e: episode) => episodes.includes(e.id));
+          return res.data.items.filter((e: episode) => episodeQ.includes(e.id));
         });
 
       console.log([...entryData, ...episodeData]);
@@ -58,7 +59,13 @@ function RouteComponent() {
 
   // EDIT LIST -  set entries and episodes to local storage and reroute to App
   function editList() {
-    return;
+    if (!data) return;
+
+    storeEntries(data.filter((e: episode | entry) => isEntry(e)));
+    storeEpisodes(data.filter((e: episode | entry) => isEpisode(e)));
+
+    console.log(getCombined());
+    navigate({ from: "/list", to: "/app" });
   }
 
   return (
@@ -78,10 +85,14 @@ function RouteComponent() {
                 if (isEntry(e)) {
                   return (
                     <>
-                      <WatchListEntry entry={e} key={i} />
+                      <WatchListEntry entry={e} isShell key={i} />
                     </>
                   );
                 }
+
+                const shows: entry[] = JSON.parse(
+                  sessionStorage.getItem("shows")!,
+                );
 
                 if (i === 0) {
                   return (
@@ -91,7 +102,7 @@ function RouteComponent() {
                         key={i}
                         isShell
                       />
-                      <WatchListEpisode episode={e} />
+                      <WatchListEpisode isShell episode={e} />
                     </>
                   );
                 }
@@ -114,17 +125,19 @@ function RouteComponent() {
                         isShell
                       />
                     )}
-                    <WatchListEpisode episode={e} />
+                    <WatchListEpisode episode={e} isShell />
                   </>
                 );
               })}
             </div>
           )}
         </main>
-        <Button className="fixed right-4 bottom-4" onClick={editList}>
-          <FontAwesomeIcon icon={faPencil} />
-          Edit this List
-        </Button>
+        {data && (
+          <Button className="fixed right-4 bottom-4" onClick={editList}>
+            <FontAwesomeIcon icon={faPencil} />
+            Edit this List
+          </Button>
+        )}
       </SidebarProvider>
     </>
   );
