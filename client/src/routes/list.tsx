@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import axios from "axios";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/list")({
   component: RouteComponent,
@@ -44,7 +45,7 @@ function RouteComponent() {
       const episodeData = await axios
         .get(import.meta.env.VITE_API_BASE_URL + "/episodes")
         .then((res) => {
-          if (!episodes) return [];
+          if (!episodeQ) return [];
 
           return res.data.items.filter((e: episode) => episodeQ.includes(e.id));
         });
@@ -61,11 +62,20 @@ function RouteComponent() {
   function editList() {
     if (!data) return;
 
-    storeEntries(data.filter((e: episode | entry) => isEntry(e)));
-    storeEpisodes(data.filter((e: episode | entry) => isEpisode(e)));
+    if (entries.length > 0 || episodes.length > 0) {
+      toast("This will overwrite your data", {
+        action: {
+          label: "OK",
+          onClick: () => {
+            storeEntries(data.filter((e: episode | entry) => isEntry(e)));
+            storeEpisodes(data.filter((e: episode | entry) => isEpisode(e)));
 
-    console.log(getCombined());
-    navigate({ from: "/list", to: "/app" });
+            console.log(getCombined());
+            navigate({ from: "/list", to: "/app" });
+          },
+        },
+      });
+    }
   }
 
   return (
