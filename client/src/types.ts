@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export interface entry {
   id: number;
   title: string;
@@ -39,3 +41,10 @@ export interface option {
   readonly value: string | number;
   readonly label: string;
 }
+
+export const listQuerySchema = z.object({
+  entries: z.optional(z.array(z.number())),
+  episodes: z.optional(z.array(z.number())),
+});
+
+export type AppSearch = z.infer<typeof listQuerySchema>;

@@ -12,6 +12,7 @@ import {
 import {
   faClock,
   faHashtag,
+  faShareAlt,
   faVideoCamera,
 } from "@fortawesome/free-solid-svg-icons";
 import { useList } from "@/context/ListContext";
@@ -20,9 +21,11 @@ import { formatDuration } from "date-fns";
 import { WatchListEntry } from "./WatchListEntry";
 import { Separator } from "./ui/separator";
 import { WatchListEpisode } from "./WatchListEpisode";
+import { useNavigate } from "@tanstack/react-router";
 
 const WatchList = () => {
-  const { getCombined } = useList()!;
+  const { getCombined, entries, episodes } = useList()!;
+  const navigate = useNavigate();
 
   const shows: entry[] = JSON.parse(localStorage.getItem("shows")!);
 
@@ -33,6 +36,23 @@ const WatchList = () => {
   list.forEach((e) => {
     totalRuntime += e.runtime;
   });
+
+  function shareList() {
+    const entryIds: number[] = [];
+    const episodeIds: number[] = [];
+
+    entries.forEach((e) => entryIds.push(e.id));
+    episodes.forEach((e) => episodeIds.push(e.id));
+
+    navigate({
+      from: "/app",
+      to: "/list",
+      search: {
+        entries: entryIds.length > 0 ? entryIds : undefined,
+        episodes: episodeIds.length > 0 ? episodeIds : undefined,
+      },
+    });
+  }
 
   return (
     <Sheet key={"right"}>
@@ -110,7 +130,12 @@ const WatchList = () => {
             );
           })}
         </div>
-        <SheetFooter>{/* <Button>Export</Button> */}</SheetFooter>
+        <SheetFooter>
+          <Button onClick={shareList}>
+            <FontAwesomeIcon icon={faShareAlt} />
+            Share
+          </Button>
+        </SheetFooter>
       </SheetContent>
     </Sheet>
   );

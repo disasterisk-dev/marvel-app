@@ -12,7 +12,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { useAdmin } from "@/context/AdminContext";
-import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { getRouteApi } from "@tanstack/react-router";
 
 const routeApi = getRouteApi("/app");
 
@@ -24,7 +24,6 @@ export const EpisodeItem = ({ episode }: Props) => {
   const { episodes, storeEpisodes } = useList()!;
   const { setOpen, setEdit, setTab } = useAdmin()!;
 
-  const navigate = useNavigate();
   const { episodes: sEps } = routeApi.useSearch();
 
   useEffect(() => {
@@ -42,28 +41,6 @@ export const EpisodeItem = ({ episode }: Props) => {
 
   function toggleSelected() {
     setSelected(!selected);
-
-    if (!sEps.includes(episode.id)) {
-      navigate({
-        to: "/app",
-        search: (prev) => ({
-          entries: prev.entries,
-          episodes: prev.episodes
-            ? [...prev.episodes, episode.id]
-            : [episode.id],
-        }),
-      });
-    } else {
-      navigate({
-        to: "/app",
-        search: (prev) => ({
-          entries: prev.entries,
-          episodes: prev.episodes
-            ? [...prev.episodes.filter((e: number) => e !== episode.id)]
-            : undefined,
-        }),
-      });
-    }
 
     // If checkbox is checked
     if (selected) {

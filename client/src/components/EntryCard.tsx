@@ -31,20 +31,14 @@ import {
 import { useAdmin } from "@/context/AdminContext";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { getRouteApi, useNavigate } from "@tanstack/react-router";
 
 type Props = {
   entry: entry;
 };
 
-const routeApi = getRouteApi("/app");
-
 export const EntryCard = ({ entry }: Props) => {
   const { entries, episodes, storeEntries, storeEpisodes } = useList()!;
   const { setOpen, setEdit, setTab } = useAdmin()!;
-
-  const navigate = useNavigate();
-  const { entries: sEnts } = routeApi.useSearch();
 
   const episodeList = useQuery({
     queryKey: ["episodes", entry.id],
@@ -70,26 +64,6 @@ export const EntryCard = ({ entry }: Props) => {
   });
 
   function toggleSelect() {
-    if (!sEnts || !sEnts.includes(entry.id)) {
-      navigate({
-        to: "/app",
-        search: (prev) => ({
-          entries: prev.entries ? [...prev.entries, entry.id] : [entry.id],
-          episodes: prev.episodes,
-        }),
-      });
-    } else {
-      navigate({
-        to: "/app",
-        search: (prev) => ({
-          entries: prev.entries
-            ? [...prev.entries.filter((e: number) => e !== entry.id)]
-            : undefined,
-          episodes: [],
-        }),
-      });
-    }
-
     // If checkbox is checked
     if (entries.find((e) => e.id === entry.id)) {
       storeEntries(entries.filter((e) => e.id !== entry.id));

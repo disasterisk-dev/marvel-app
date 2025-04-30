@@ -48,6 +48,7 @@ const MediumFilters = () => {
                   name={m}
                   id={m}
                   className=""
+                  checked={mediumFilter.includes(m)}
                   onCheckedChange={() => updateFilter(m)}
                 />
                 <Label htmlFor={m}>{m}</Label>

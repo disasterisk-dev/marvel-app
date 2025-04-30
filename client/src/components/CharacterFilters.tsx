@@ -74,6 +74,7 @@ const CharacterFilters = () => {
                   <Checkbox
                     name={c.name}
                     id={c.name}
+                    checked={charFilter.includes(c.id)}
                     onCheckedChange={() => updateFilter(c.id)}
                   />
                   <Label htmlFor={c.name}>{c.name}</Label>
