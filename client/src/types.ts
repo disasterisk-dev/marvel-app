@@ -13,7 +13,7 @@ export interface entry {
   episodes?: episode[];
 }
 
-export function isEntry(object: any): object is entry {
+export function isEntry(object: object): object is entry {
   return "medium" in object;
 }
 
@@ -33,7 +33,7 @@ export type episode = {
   episodeNumber: number;
 };
 
-export function isEpisode(object: any): object is episode {
+export function isEpisode(object: object): object is episode {
   return "series" in object;
 }
 
