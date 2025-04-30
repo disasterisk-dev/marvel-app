@@ -17,11 +17,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useList } from "@/context/ListContext";
 import { entry, isEntry, isEpisode } from "@/types";
-import { formatDuration } from "date-fns";
 import { WatchListEntry } from "./WatchListEntry";
 import { Separator } from "./ui/separator";
 import { WatchListEpisode } from "./WatchListEpisode";
 import { useNavigate } from "@tanstack/react-router";
+import { formatRuntime } from "@/utils";
 
 const WatchList = () => {
   const { getCombined, entries, episodes } = useList()!;
@@ -71,13 +71,7 @@ const WatchList = () => {
               <FontAwesomeIcon icon={faHashtag} /> {list.length} items to watch
             </span>
             <span>
-              <FontAwesomeIcon icon={faClock} />{" "}
-              {list.length === 0 && "0 minutes"}
-              {list.length > 0 &&
-                formatDuration({
-                  hours: Math.floor(totalRuntime / 60),
-                  minutes: totalRuntime % 60,
-                })}
+              <FontAwesomeIcon icon={faClock} /> {formatRuntime(totalRuntime)}
             </span>
           </SheetDescription>
         </SheetHeader>

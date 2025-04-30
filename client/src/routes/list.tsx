@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { WatchListEntry } from "@/components/WatchListEntry";
 import { WatchListEpisode } from "@/components/WatchListEpisode";
+import { useFilter } from "@/context/FilterContext";
 import { useList } from "@/context/ListContext";
 import { entry, episode, isEntry, isEpisode, listQuerySchema } from "@/types";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
@@ -23,6 +24,7 @@ function RouteComponent() {
   const { entries, episodes, storeEntries, storeEpisodes, getCombined } =
     useList()!;
   const navigate = useNavigate();
+  const { filterList } = useFilter()!;
 
   // fetch entries and episodes
   const { data, isLoading, isError, error } = useQuery({
@@ -50,11 +52,12 @@ function RouteComponent() {
           return res.data.items.filter((e: episode) => episodeQ.includes(e.id));
         });
 
-      console.log([...entryData, ...episodeData]);
-      return [...entryData, ...episodeData].sort(
+      const data = [...entryData, ...episodeData].sort(
         (a, b) =>
           new Date(a.releaseDate).getTime() - new Date(b.releaseDate).getTime(),
       );
+
+      return data;
     },
   });
 
@@ -91,7 +94,7 @@ function RouteComponent() {
           {isError && <div>{error.message}</div>}
           {data && (
             <div className="m-2 overflow-scroll pr-4">
-              {data.map((e, i) => {
+              {filterList(data).map((e: entry | episode, i: number) => {
                 if (isEntry(e)) {
                   return (
                     <>
