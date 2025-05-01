@@ -130,13 +130,13 @@ function RouteComponent() {
               </>
             );
           })}
-          {data && (
-            <Button className="fixed right-4 bottom-4" onClick={editList}>
-              <FontAwesomeIcon icon={faPencil} />
-              Edit this List
-            </Button>
-          )}
         </div>
+      )}
+      {data && (
+        <Button className="fixed right-4 bottom-4" onClick={editList}>
+          <FontAwesomeIcon icon={faPencil} />
+          Edit this List
+        </Button>
       )}
     </>
   );

@@ -42,7 +42,7 @@ function App() {
       <div className="relative flex flex-col gap-4 lg:flex-row">
         <div className="@container order-3 grow lg:order-2">
           {entries.data && (
-            <div className="mx-auto grid max-w-screen-lg auto-rows-min grid-cols-1 gap-2 px-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid auto-rows-min grid-cols-1 gap-2 px-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
               {filterList(entries.data.items).map((e) => {
                 if (isEntry(e)) return <EntryCard entry={e} key={e.id} />;
               })}

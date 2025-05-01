@@ -31,7 +31,9 @@ function Root() {
               </>
             )}
           </div>
-          <Outlet />
+          <div className="mx-auto max-w-screen-lg">
+            <Outlet />
+          </div>
         </main>
         <AdminPanel />
         <Toaster />

@@ -94,81 +94,79 @@ export const EntryCard = ({ entry }: Props) => {
 
   return (
     <>
-      <div className="relative overflow-hidden rounded-md">
-        <Sheet>
-          <SheetTrigger asChild>
-            <div className="bg-inverse dark:bg-bold cursor-pointer gap-2">
-              <img
-                className="aspect-2/3"
-                src={import.meta.env.VITE_FILE_BASE_URL + entry.posterUrl}
-                alt=""
-              />
-            </div>
-          </SheetTrigger>
+      <Sheet>
+        <SheetTrigger asChild>
+          <div className="bg-inverse dark:bg-bold cursor-pointer gap-2">
+            <img
+              className="aspect-2/3 w-full overflow-hidden rounded-md"
+              src={import.meta.env.VITE_FILE_BASE_URL + entry.posterUrl}
+              alt=""
+            />
+          </div>
+        </SheetTrigger>
 
-          <SheetContent>
-            <ContextMenu>
-              <ContextMenuTrigger>
-                <SheetHeader>
-                  <SheetTitle>{entry.title}</SheetTitle>
-                  <SheetDescription className="flex gap-2">
-                    <img
-                      className="aspect-2/3 h-auto w-1/2 overflow-hidden rounded-sm"
-                      src={import.meta.env.VITE_FILE_BASE_URL + entry.posterUrl}
-                      alt=""
-                    />
-                    <CardContent entry={entry} />
-                  </SheetDescription>
-                </SheetHeader>
-              </ContextMenuTrigger>
-              <ContextMenuContent>
-                <ContextMenuLabel className="text-card-foreground font-semibold">
-                  {entry.title}
-                </ContextMenuLabel>
-                {entry.medium !== "Show" && (
-                  <ContextMenuItem onClick={toggleSelect}>
-                    {entries.find((e) => e.id === entry.id) ? (
-                      <>
-                        <FontAwesomeIcon icon={faAdd} />
-                        Add to List
-                      </>
-                    ) : (
-                      <>
-                        <FontAwesomeIcon icon={faMinus} />
-                        Remove from List
-                      </>
-                    )}
-                  </ContextMenuItem>
-                )}
-                <ContextMenuItem onClick={openEdit}>
-                  <FontAwesomeIcon icon={faPencil} />
-                  Edit
-                </ContextMenuItem>
-              </ContextMenuContent>
-            </ContextMenu>
-
-            {episodeList.data && (
-              <EpisodeView episodes={episodeList.data.items} />
-            )}
-            <SheetFooter className="pb-4">
+        <SheetContent>
+          <ContextMenu>
+            <ContextMenuTrigger>
+              <SheetHeader>
+                <SheetTitle>{entry.title}</SheetTitle>
+                <SheetDescription className="flex gap-2">
+                  <img
+                    className="aspect-2/3 h-auto w-1/2 overflow-hidden rounded-sm"
+                    src={import.meta.env.VITE_FILE_BASE_URL + entry.posterUrl}
+                    alt=""
+                  />
+                  <CardContent entry={entry} />
+                </SheetDescription>
+              </SheetHeader>
+            </ContextMenuTrigger>
+            <ContextMenuContent>
+              <ContextMenuLabel className="text-card-foreground font-semibold">
+                {entry.title}
+              </ContextMenuLabel>
               {entry.medium !== "Show" && (
-                <Button onClick={toggleSelect}>
-                  {entries.find((e) => e.id === entry.id)
-                    ? "Remove from List"
-                    : "Add to List"}
-                </Button>
+                <ContextMenuItem onClick={toggleSelect}>
+                  {entries.find((e) => e.id === entry.id) ? (
+                    <>
+                      <FontAwesomeIcon icon={faAdd} />
+                      Add to List
+                    </>
+                  ) : (
+                    <>
+                      <FontAwesomeIcon icon={faMinus} />
+                      Remove from List
+                    </>
+                  )}
+                </ContextMenuItem>
               )}
-              {entry.medium === "Show" && (
-                <Button onClick={toggleAllEpisodes}>
-                  {episodes.find((e) => e.series === entry.id)
-                    ? "Remove all from List"
-                    : "Add all to List"}
-                </Button>
-              )}
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
-      </div>
+              <ContextMenuItem onClick={openEdit}>
+                <FontAwesomeIcon icon={faPencil} />
+                Edit
+              </ContextMenuItem>
+            </ContextMenuContent>
+          </ContextMenu>
+
+          {episodeList.data && (
+            <EpisodeView episodes={episodeList.data.items} />
+          )}
+          <SheetFooter className="pb-4">
+            {entry.medium !== "Show" && (
+              <Button onClick={toggleSelect}>
+                {entries.find((e) => e.id === entry.id)
+                  ? "Remove from List"
+                  : "Add to List"}
+              </Button>
+            )}
+            {entry.medium === "Show" && (
+              <Button onClick={toggleAllEpisodes}>
+                {episodes.find((e) => e.series === entry.id)
+                  ? "Remove all from List"
+                  : "Add all to List"}
+              </Button>
+            )}
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </>
   );
 };
