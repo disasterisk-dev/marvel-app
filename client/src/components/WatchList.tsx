@@ -20,12 +20,19 @@ import { entry, isEntry, isEpisode } from "@/types";
 import { WatchListEntry } from "./WatchListEntry";
 import { Separator } from "./ui/separator";
 import { WatchListEpisode } from "./WatchListEpisode";
-import { useNavigate } from "@tanstack/react-router";
-import { formatRuntime } from "@/utils";
+import { useLinkProps } from "@tanstack/react-router";
+import { formatRuntime, getIds } from "@/utils";
+import { toast } from "sonner";
 
 const WatchList = () => {
   const { getCombined, entries, episodes } = useList()!;
-  const navigate = useNavigate();
+  const { href } = useLinkProps({
+    to: "/list",
+    search: {
+      entries: getIds(entries),
+      episodes: getIds(episodes),
+    },
+  });
 
   const shows: entry[] = JSON.parse(localStorage.getItem("shows")!);
 
@@ -38,20 +45,8 @@ const WatchList = () => {
   });
 
   function shareList() {
-    const entryIds: number[] = [];
-    const episodeIds: number[] = [];
-
-    entries.forEach((e) => entryIds.push(e.id));
-    episodes.forEach((e) => episodeIds.push(e.id));
-
-    navigate({
-      from: "/app",
-      to: "/list",
-      search: {
-        entries: entryIds.length > 0 ? entryIds : undefined,
-        episodes: episodeIds.length > 0 ? episodeIds : undefined,
-      },
-    });
+    navigator.clipboard.writeText(window.location.host + href!);
+    toast("Copied to clipboard!");
   }
 
   return (
