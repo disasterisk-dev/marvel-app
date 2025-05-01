@@ -1,7 +1,4 @@
-import AppSidebar from "@/components/AppSidebar";
-import SortOrder from "@/components/SortOrder";
 import { Button } from "@/components/ui/button";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { WatchListEntry } from "@/components/WatchListEntry";
 import { WatchListEpisode } from "@/components/WatchListEpisode";
 import { useFilter } from "@/context/FilterContext";
@@ -83,75 +80,64 @@ function RouteComponent() {
 
   return (
     <>
-      <SidebarProvider>
-        <AppSidebar />
-        <main className="bg-inverse-subtle dark:bg-subtle grow overflow-scroll">
-          <div className="mb-4 flex items-center justify-between p-4">
-            <SidebarTrigger />
-            <SortOrder />
-          </div>
-          {isLoading && <div>Loading...</div>}
-          {isError && <div>{error.message}</div>}
+      {isLoading && <div>Loading...</div>}
+      {isError && <div>{error.message}</div>}
+      {data && (
+        <div className="m-2 overflow-scroll pr-4">
+          {filterList(data).map((e: entry | episode, i: number) => {
+            if (isEntry(e)) {
+              return (
+                <>
+                  <WatchListEntry entry={e} isShell key={i} />
+                </>
+              );
+            }
+
+            const shows: entry[] = JSON.parse(sessionStorage.getItem("shows")!);
+
+            if (i === 0) {
+              return (
+                <>
+                  <WatchListEntry
+                    entry={shows!.find((s) => s.id === e.series)!}
+                    key={i}
+                    isShell
+                  />
+                  <WatchListEpisode isShell episode={e} />
+                </>
+              );
+            }
+
+            const previous = data[i - 1];
+
+            return (
+              <>
+                {isEntry(previous) && (
+                  <WatchListEntry
+                    entry={shows!.find((s) => s.id === e.series)!}
+                    key={i}
+                    isShell
+                  />
+                )}
+                {isEpisode(previous) && previous.series !== e.series && (
+                  <WatchListEntry
+                    entry={shows!.find((s) => s.id === e.series)!}
+                    key={i}
+                    isShell
+                  />
+                )}
+                <WatchListEpisode episode={e} isShell />
+              </>
+            );
+          })}
           {data && (
-            <div className="m-2 overflow-scroll pr-4">
-              {filterList(data).map((e: entry | episode, i: number) => {
-                if (isEntry(e)) {
-                  return (
-                    <>
-                      <WatchListEntry entry={e} isShell key={i} />
-                    </>
-                  );
-                }
-
-                const shows: entry[] = JSON.parse(
-                  sessionStorage.getItem("shows")!,
-                );
-
-                if (i === 0) {
-                  return (
-                    <>
-                      <WatchListEntry
-                        entry={shows!.find((s) => s.id === e.series)!}
-                        key={i}
-                        isShell
-                      />
-                      <WatchListEpisode isShell episode={e} />
-                    </>
-                  );
-                }
-
-                const previous = data[i - 1];
-
-                return (
-                  <>
-                    {isEntry(previous) && (
-                      <WatchListEntry
-                        entry={shows!.find((s) => s.id === e.series)!}
-                        key={i}
-                        isShell
-                      />
-                    )}
-                    {isEpisode(previous) && previous.series !== e.series && (
-                      <WatchListEntry
-                        entry={shows!.find((s) => s.id === e.series)!}
-                        key={i}
-                        isShell
-                      />
-                    )}
-                    <WatchListEpisode episode={e} isShell />
-                  </>
-                );
-              })}
-            </div>
+            <Button className="fixed right-4 bottom-4" onClick={editList}>
+              <FontAwesomeIcon icon={faPencil} />
+              Edit this List
+            </Button>
           )}
-        </main>
-        {data && (
-          <Button className="fixed right-4 bottom-4" onClick={editList}>
-            <FontAwesomeIcon icon={faPencil} />
-            Edit this List
-          </Button>
-        )}
-      </SidebarProvider>
+        </div>
+      )}
     </>
   );
 }
