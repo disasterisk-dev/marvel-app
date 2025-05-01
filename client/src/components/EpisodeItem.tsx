@@ -12,6 +12,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { useAdmin } from "@/context/AdminContext";
+import { getRouteApi } from "@tanstack/react-router";
+
+const routeApi = getRouteApi("/app");
 
 type Props = {
   episode: episode;
@@ -20,6 +23,8 @@ export const EpisodeItem = ({ episode }: Props) => {
   const [selected, setSelected] = useState<boolean>(false);
   const { episodes, storeEpisodes } = useList()!;
   const { setOpen, setEdit, setTab } = useAdmin()!;
+
+  const { episodes: sEps } = routeApi.useSearch();
 
   useEffect(() => {
     const eps = JSON.parse(localStorage.getItem("episodes")!);
@@ -32,7 +37,7 @@ export const EpisodeItem = ({ episode }: Props) => {
     const ep = eps.find((e: episode) => e.id === episode.id);
 
     setSelected(ep ? true : false);
-  }, [episode, episodes]);
+  }, [episode, episodes, sEps]);
 
   function toggleSelected() {
     setSelected(!selected);

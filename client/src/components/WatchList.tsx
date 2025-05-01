@@ -12,17 +12,27 @@ import {
 import {
   faClock,
   faHashtag,
+  faShareAlt,
   faVideoCamera,
 } from "@fortawesome/free-solid-svg-icons";
 import { useList } from "@/context/ListContext";
 import { entry, isEntry, isEpisode } from "@/types";
-import { formatDuration } from "date-fns";
 import { WatchListEntry } from "./WatchListEntry";
 import { Separator } from "./ui/separator";
 import { WatchListEpisode } from "./WatchListEpisode";
+import { useLinkProps } from "@tanstack/react-router";
+import { formatRuntime, getIds } from "@/utils";
+import { toast } from "sonner";
 
 const WatchList = () => {
-  const { getCombined } = useList()!;
+  const { getCombined, entries, episodes } = useList()!;
+  const { href } = useLinkProps({
+    to: "/list",
+    search: {
+      entries: getIds(entries),
+      episodes: getIds(episodes),
+    },
+  });
 
   const shows: entry[] = JSON.parse(localStorage.getItem("shows")!);
 
@@ -34,12 +44,18 @@ const WatchList = () => {
     totalRuntime += e.runtime;
   });
 
+  function shareList() {
+    navigator.clipboard.writeText(window.location.host + href!);
+    toast("Copied to clipboard!");
+  }
+
   return (
     <Sheet key={"right"}>
       <SheetTrigger asChild>
         {list.length > 0 && (
-          <Button className="fixed right-4 bottom-4 aspect-square">
+          <Button className="font-heading fixed right-4 bottom-4 aspect-square font-medium">
             <FontAwesomeIcon icon={faVideoCamera} />
+            My Watchlist
           </Button>
         )}
       </SheetTrigger>
@@ -51,17 +67,11 @@ const WatchList = () => {
               <FontAwesomeIcon icon={faHashtag} /> {list.length} items to watch
             </span>
             <span>
-              <FontAwesomeIcon icon={faClock} />{" "}
-              {list.length === 0 && "0 minutes"}
-              {list.length > 0 &&
-                formatDuration({
-                  hours: Math.floor(totalRuntime / 60),
-                  minutes: totalRuntime % 60,
-                })}
+              <FontAwesomeIcon icon={faClock} /> {formatRuntime(totalRuntime)}
             </span>
           </SheetDescription>
         </SheetHeader>
-        <div className="m-2 overflow-scroll pr-4">
+        <div className="m-2 overflow-auto pr-4">
           {list.map((e, i) => {
             if (isEntry(e)) {
               return (
@@ -110,7 +120,12 @@ const WatchList = () => {
             );
           })}
         </div>
-        <SheetFooter>{/* <Button>Export</Button> */}</SheetFooter>
+        <SheetFooter>
+          <Button onClick={shareList}>
+            <FontAwesomeIcon icon={faShareAlt} />
+            Share
+          </Button>
+        </SheetFooter>
       </SheetContent>
     </Sheet>
   );

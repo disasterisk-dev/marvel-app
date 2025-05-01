@@ -33,12 +33,12 @@ export const ListProvider = ({ children }: Props) => {
   }, []);
 
   function storeEntries(e: entry[]) {
-    setEntries(e);
+    setEntries(Array.from(new Set(e)));
     localStorage.setItem("entries", JSON.stringify(e));
   }
 
   function storeEpisodes(e: episode[]) {
-    setEpisodes(e);
+    setEpisodes(Array.from(new Set(e)));
     localStorage.setItem("episodes", JSON.stringify(e));
   }
 

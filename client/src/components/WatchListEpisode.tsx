@@ -8,8 +8,9 @@ import { Separator } from "./ui/separator";
 
 type Props = {
   episode: episode;
+  isShell?: boolean;
 };
-export const WatchListEpisode = ({ episode }: Props) => {
+export const WatchListEpisode = ({ episode, isShell = false }: Props) => {
   const { episodes, storeEpisodes } = useList()!;
 
   function removeFromList() {
@@ -28,13 +29,15 @@ export const WatchListEpisode = ({ episode }: Props) => {
             <FontAwesomeIcon icon={faClock} /> {formatRuntime(episode.runtime)}
           </span>
         </div>
-        <Button
-          variant={"outline"}
-          className="text-destructive aspect-square"
-          onClick={removeFromList}
-        >
-          <FontAwesomeIcon icon={faTrash} />
-        </Button>
+        {!isShell && (
+          <Button
+            variant={"outline"}
+            className="text-destructive aspect-square"
+            onClick={removeFromList}
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </Button>
+        )}
       </div>
       <Separator className="last:hidden" />
     </>

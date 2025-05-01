@@ -50,6 +50,7 @@ const PhaseFilter = () => {
                 name={p}
                 id={p}
                 className=""
+                checked={phaseFilter.includes(i + 1)}
                 onCheckedChange={() => updateFilter(i + 1)}
               />
               <Label htmlFor={p}>{p}</Label>
