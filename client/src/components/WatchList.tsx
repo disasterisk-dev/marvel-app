@@ -75,7 +75,7 @@ const WatchList = () => {
             </span>
           </SheetDescription>
         </SheetHeader>
-        <div className="m-2 overflow-scroll pr-4">
+        <div className="m-2 overflow-auto pr-4">
           {list.map((e, i) => {
             if (isEntry(e)) {
               return (

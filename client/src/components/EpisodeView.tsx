@@ -6,7 +6,7 @@ type Props = {
 };
 export const EpisodeView = ({ episodes }: Props) => {
   return (
-    <div className="overflow-scroll p-4">
+    <div className="overflow-auto p-4">
       {episodes && (
         <>
           <div>

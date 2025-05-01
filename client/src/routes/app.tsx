@@ -44,7 +44,7 @@ function App() {
     <>
       <SidebarProvider>
         <AppSidebar />
-        <main className="bg-inverse-subtle dark:bg-subtle grow overflow-scroll">
+        <main className="bg-inverse-subtle dark:bg-subtle grow">
           <div className="mb-4 flex items-center justify-between p-4">
             <SidebarTrigger />
             <SortOrder />
