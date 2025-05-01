@@ -10,6 +10,10 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import axios from "axios";
 import { toast } from "sonner";
+import { sumBy, times } from "lodash-es";
+import { formatRuntime } from "@/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@radix-ui/react-select";
 
 export const Route = createFileRoute("/list")({
   component: RouteComponent,
@@ -24,7 +28,7 @@ function RouteComponent() {
   const { filterList } = useFilter()!;
 
   // fetch entries and episodes
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error, isFetching } = useQuery({
     queryKey: ["list-entries"],
     queryFn: async () => {
       const entryData = await axios
@@ -80,10 +84,20 @@ function RouteComponent() {
 
   return (
     <>
-      {isLoading && <div>Loading...</div>}
+      {(isFetching || isLoading) &&
+        times(10, () => (
+          <>
+            <div className="mb-2 flex gap-2">
+              <Skeleton className="aspect-2/3 w-32" />
+              <Skeleton className="h-4 w-full pt-1" />
+            </div>
+            <Separator />
+          </>
+        ))}
       {isError && <div>{error.message}</div>}
       {data && (
         <div className="m-2 overflow-scroll pr-4">
+          <div>{formatRuntime(sumBy(data, (e) => e.runtime))}</div>
           {filterList(data).map((e: entry | episode, i: number) => {
             if (isEntry(e)) {
               return (

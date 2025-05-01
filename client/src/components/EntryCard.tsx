@@ -1,5 +1,5 @@
 import { entry, episode } from "../types";
-import { format, formatDuration } from "date-fns";
+import { format } from "date-fns";
 import {
   Sheet,
   SheetContent,
@@ -31,6 +31,7 @@ import {
 import { useAdmin } from "@/context/AdminContext";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import { formatRuntime } from "@/utils";
 
 type Props = {
   entry: entry;
@@ -96,9 +97,9 @@ export const EntryCard = ({ entry }: Props) => {
     <>
       <Sheet>
         <SheetTrigger asChild>
-          <div className="bg-inverse dark:bg-bold cursor-pointer gap-2">
+          <div className="bg-inverse dark:bg-bold aspect-2/3 w-full cursor-pointer gap-2 overflow-hidden rounded-md">
             <img
-              className="aspect-2/3 w-full overflow-hidden rounded-md"
+              className="w-full"
               src={import.meta.env.VITE_FILE_BASE_URL + entry.posterUrl}
               alt=""
             />
@@ -197,15 +198,8 @@ const CardContent = ({ entry }: Props) => {
         {format(entry.releaseDate, "do MMMM yyyy")}
       </div>
       <div className="flex items-center gap-2 text-sm">
-        {entry.medium !== "Show" && (
-          <>
-            <FontAwesomeIcon className="text-muted-foreground" icon={faClock} />
-            {formatDuration({
-              hours: Math.floor(entry.runtime / 60),
-              minutes: entry.runtime % 60,
-            })}
-          </>
-        )}
+        <FontAwesomeIcon className="text-muted-foreground" icon={faClock} />
+        {entry.medium !== "Show" && <>{formatRuntime(entry.runtime)}</>}
       </div>
     </div>
   );
