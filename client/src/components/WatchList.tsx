@@ -53,8 +53,9 @@ const WatchList = () => {
     <Sheet key={"right"}>
       <SheetTrigger asChild>
         {list.length > 0 && (
-          <Button className="fixed right-4 bottom-4 aspect-square">
+          <Button className="font-heading fixed right-4 bottom-4 aspect-square font-medium">
             <FontAwesomeIcon icon={faVideoCamera} />
+            My Watchlist
           </Button>
         )}
       </SheetTrigger>
