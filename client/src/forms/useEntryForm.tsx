@@ -41,9 +41,6 @@ export const useEntryForm = (
         if (new Date(value.releaseDate).toDateString() == "Invalid Date")
           return "A date is required";
 
-        if (new Date(value.releaseDate) > new Date())
-          return "Future dates are not allowed";
-
         // Directors validators
         if (value.directors[0] === "" || value.directors.length === 0) {
           return "At least one director or showrunner is needed.";

@@ -20,7 +20,7 @@ const EntryForm = () => {
       initialDirectors.push({ label: d, value: d });
     });
 
-    const characters = JSON.parse(localStorage.getItem("characters")!);
+    const characters = JSON.parse(sessionStorage.getItem("characters")!);
 
     form.getFieldValue("characters").forEach((c) => {
       const character: character = characters.find(

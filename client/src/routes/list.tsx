@@ -1,7 +1,4 @@
-import AppSidebar from "@/components/AppSidebar";
-import SortOrder from "@/components/SortOrder";
 import { Button } from "@/components/ui/button";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { WatchListEntry } from "@/components/WatchListEntry";
 import { WatchListEpisode } from "@/components/WatchListEpisode";
 import { useFilter } from "@/context/FilterContext";
@@ -13,6 +10,10 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import axios from "axios";
 import { toast } from "sonner";
+import { sumBy, times } from "lodash-es";
+import { formatRuntime } from "@/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@radix-ui/react-select";
 
 export const Route = createFileRoute("/list")({
   component: RouteComponent,
@@ -27,7 +28,7 @@ function RouteComponent() {
   const { filterList } = useFilter()!;
 
   // fetch entries and episodes
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error, isFetching } = useQuery({
     queryKey: ["list-entries"],
     queryFn: async () => {
       const entryData = await axios
@@ -83,75 +84,74 @@ function RouteComponent() {
 
   return (
     <>
-      <SidebarProvider>
-        <AppSidebar />
-        <main className="bg-inverse-subtle dark:bg-subtle grow overflow-scroll">
-          <div className="mb-4 flex items-center justify-between p-4">
-            <SidebarTrigger />
-            <SortOrder />
-          </div>
-          {isLoading && <div>Loading...</div>}
-          {isError && <div>{error.message}</div>}
-          {data && (
-            <div className="m-2 overflow-scroll pr-4">
-              {filterList(data).map((e: entry | episode, i: number) => {
-                if (isEntry(e)) {
-                  return (
-                    <>
-                      <WatchListEntry entry={e} isShell key={i} />
-                    </>
-                  );
-                }
-
-                const shows: entry[] = JSON.parse(
-                  sessionStorage.getItem("shows")!,
-                );
-
-                if (i === 0) {
-                  return (
-                    <>
-                      <WatchListEntry
-                        entry={shows!.find((s) => s.id === e.series)!}
-                        key={i}
-                        isShell
-                      />
-                      <WatchListEpisode isShell episode={e} />
-                    </>
-                  );
-                }
-
-                const previous = data[i - 1];
-
-                return (
-                  <>
-                    {isEntry(previous) && (
-                      <WatchListEntry
-                        entry={shows!.find((s) => s.id === e.series)!}
-                        key={i}
-                        isShell
-                      />
-                    )}
-                    {isEpisode(previous) && previous.series !== e.series && (
-                      <WatchListEntry
-                        entry={shows!.find((s) => s.id === e.series)!}
-                        key={i}
-                        isShell
-                      />
-                    )}
-                    <WatchListEpisode episode={e} isShell />
-                  </>
-                );
-              })}
+      {(isFetching || isLoading) &&
+        times(10, () => (
+          <>
+            <div className="mb-2 flex gap-2">
+              <Skeleton className="aspect-2/3 w-32" />
+              <Skeleton className="h-4 w-full pt-1" />
             </div>
-          )}
-        </main>
-        {data && (
-          <Button className="fixed right-4 bottom-4" onClick={editList}>
-            <FontAwesomeIcon icon={faPencil} />
-            Edit this List
-          </Button>
-        )}
-      </SidebarProvider>
+            <Separator />
+          </>
+        ))}
+      {isError && <div>{error.message}</div>}
+      {data && (
+        <div className="m-2 overflow-scroll pr-4">
+          <div>{formatRuntime(sumBy(data, (e) => e.runtime))}</div>
+          {filterList(data).map((e: entry | episode, i: number) => {
+            if (isEntry(e)) {
+              return (
+                <>
+                  <WatchListEntry entry={e} isShell key={i} />
+                </>
+              );
+            }
+
+            const shows: entry[] = JSON.parse(sessionStorage.getItem("shows")!);
+
+            if (i === 0) {
+              return (
+                <>
+                  <WatchListEntry
+                    entry={shows!.find((s) => s.id === e.series)!}
+                    key={i}
+                    isShell
+                  />
+                  <WatchListEpisode isShell episode={e} />
+                </>
+              );
+            }
+
+            const previous = data[i - 1];
+
+            return (
+              <>
+                {isEntry(previous) && (
+                  <WatchListEntry
+                    entry={shows!.find((s) => s.id === e.series)!}
+                    key={i}
+                    isShell
+                  />
+                )}
+                {isEpisode(previous) && previous.series !== e.series && (
+                  <WatchListEntry
+                    entry={shows!.find((s) => s.id === e.series)!}
+                    key={i}
+                    isShell
+                  />
+                )}
+                <WatchListEpisode episode={e} isShell />
+              </>
+            );
+          })}
+        </div>
+      )}
+      {data && (
+        <Button className="fixed right-4 bottom-4" onClick={editList}>
+          <FontAwesomeIcon icon={faPencil} />
+          Edit this List
+        </Button>
+      )}
     </>
   );
 }

@@ -57,8 +57,8 @@ export const WatchListEntry = ({ entry, isShell = false }: Props) => {
             ))}
           </div>
         )}
-        <Separator className="last:hidden" />
       </div>
+      <Separator className="last:hidden" />
     </>
   );
 };

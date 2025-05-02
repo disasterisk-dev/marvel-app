@@ -11,13 +11,16 @@ import CharacterFilters from "@/components/CharacterFilters";
 import ThemeToggle from "@/components/ThemeToggle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { Link } from "@tanstack/react-router";
 
 const AppSidebar = () => {
   return (
     <Sidebar>
       <div className="bg-brand text-background dark:text-foreground">
         <SidebarHeader>
-          <h1 className="grow text-2xl font-bold">UATU IO</h1>
+          <Link to={"/app"}>
+            <h1 className="grow text-2xl font-bold">UATU IO</h1>
+          </Link>
         </SidebarHeader>
       </div>
       <SidebarContent>
@@ -34,7 +37,10 @@ const AppSidebar = () => {
             href="https://github.com/disasterisk-dev/marvel-app"
             target="_blank"
           >
-            <FontAwesomeIcon icon={faGithub} className="text-4xl" />
+            <FontAwesomeIcon
+              icon={faGithub}
+              className="text-foreground text-4xl"
+            />
           </a>
         </div>
       </SidebarFooter>

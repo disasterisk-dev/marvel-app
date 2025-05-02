@@ -1,7 +1,14 @@
 import * as React from "react";
-import { Outlet, createRootRoute } from "@tanstack/react-router";
+import {
+  Outlet,
+  createRootRoute,
+  useRouterState,
+} from "@tanstack/react-router";
 import AdminPanel from "@/components/admin";
 import { Toaster } from "sonner";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import AppSidebar from "@/components/AppSidebar";
+import SortOrder from "@/components/SortOrder";
 
 export const Route = createRootRoute({
   component: Root,
@@ -9,11 +16,28 @@ export const Route = createRootRoute({
 });
 
 function Root() {
+  const { location } = useRouterState();
   return (
     <React.Fragment>
-      <Outlet />
-      <AdminPanel />
-      <Toaster />
+      <SidebarProvider defaultOpen={false}>
+        <AppSidebar />
+
+        <main className="bg-inverse-subtle dark:bg-subtle grow">
+          <div className="sticky top-0 mb-4 flex items-center justify-between p-4">
+            {location.pathname !== "/" && (
+              <>
+                <SidebarTrigger />
+                <SortOrder />
+              </>
+            )}
+          </div>
+          <div className="mx-auto max-w-screen-lg">
+            <Outlet />
+          </div>
+        </main>
+        <AdminPanel />
+        <Toaster />
+      </SidebarProvider>
     </React.Fragment>
   );
 }

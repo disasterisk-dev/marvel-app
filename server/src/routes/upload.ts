@@ -18,7 +18,7 @@ export const uploadRoute = new Elysia({ prefix: "/upload" }).use(bearer()).post(
 
     const res = await utapi.uploadFiles(body.file);
 
-    const url = res.data?.ufsUrl;
+    const url = res.data?.key;
 
     // const fileBuffer = await body.file.arrayBuffer();
     // const uint8Arr = new Uint8Array(fileBuffer);
@@ -36,7 +36,7 @@ export const uploadRoute = new Elysia({ prefix: "/upload" }).use(bearer()).post(
   {
     body: t.Object({
       file: t.File({
-        type: "image/jpeg",
+        type: "image/*",
       }),
     }),
     response: {
