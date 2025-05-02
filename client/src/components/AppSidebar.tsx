@@ -37,7 +37,10 @@ const AppSidebar = () => {
             href="https://github.com/disasterisk-dev/marvel-app"
             target="_blank"
           >
-            <FontAwesomeIcon icon={faGithub} className="text-4xl" />
+            <FontAwesomeIcon
+              icon={faGithub}
+              className="text-foreground text-4xl"
+            />
           </a>
         </div>
       </SidebarFooter>

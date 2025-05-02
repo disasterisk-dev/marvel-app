@@ -16,13 +16,14 @@ import {
   faVideoCamera,
 } from "@fortawesome/free-solid-svg-icons";
 import { useList } from "@/context/ListContext";
-import { entry, isEntry, isEpisode } from "@/types";
+import { entry, episode, isEntry, isEpisode } from "@/types";
 import { WatchListEntry } from "./WatchListEntry";
 import { Separator } from "./ui/separator";
 import { WatchListEpisode } from "./WatchListEpisode";
 import { useLinkProps } from "@tanstack/react-router";
 import { formatRuntime, getIds } from "@/utils";
 import { toast } from "sonner";
+import { sumBy } from "lodash-es";
 
 const WatchList = () => {
   const { getCombined, entries, episodes } = useList()!;
@@ -38,14 +39,8 @@ const WatchList = () => {
 
   const list = getCombined();
 
-  let totalRuntime = 0;
-
-  list.forEach((e) => {
-    totalRuntime += e.runtime;
-  });
-
   function shareList() {
-    navigator.clipboard.writeText(window.location.host + href!);
+    navigator.clipboard.writeText("https://" + window.location.host + href!);
     toast("Copied to clipboard!");
   }
 
@@ -67,7 +62,10 @@ const WatchList = () => {
               <FontAwesomeIcon icon={faHashtag} /> {list.length} items to watch
             </span>
             <span>
-              <FontAwesomeIcon icon={faClock} /> {formatRuntime(totalRuntime)}
+              <FontAwesomeIcon icon={faClock} />{" "}
+              {formatRuntime(
+                sumBy(getCombined(), (e: entry | episode) => e.runtime),
+              )}
             </span>
           </SheetDescription>
         </SheetHeader>

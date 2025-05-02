@@ -32,9 +32,11 @@ import { useAdmin } from "@/context/AdminContext";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { formatRuntime } from "@/utils";
+import { sumBy } from "lodash-es";
 
 type Props = {
   entry: entry;
+  episodes?: episode[];
 };
 
 export const EntryCard = ({ entry }: Props) => {
@@ -117,7 +119,12 @@ export const EntryCard = ({ entry }: Props) => {
                     src={import.meta.env.VITE_FILE_BASE_URL + entry.posterUrl}
                     alt=""
                   />
-                  <CardContent entry={entry} />
+                  <CardContent
+                    entry={entry}
+                    episodes={
+                      episodeList.data ? episodeList.data.items : undefined
+                    }
+                  />
                 </SheetDescription>
               </SheetHeader>
             </ContextMenuTrigger>
@@ -172,7 +179,7 @@ export const EntryCard = ({ entry }: Props) => {
   );
 };
 
-const CardContent = ({ entry }: Props) => {
+const CardContent = ({ entry, episodes }: Props) => {
   return (
     <div className="flex h-full flex-col gap-2">
       <div className="flex items-center gap-2 text-sm">
@@ -200,6 +207,9 @@ const CardContent = ({ entry }: Props) => {
       <div className="flex items-center gap-2 text-sm">
         <FontAwesomeIcon className="text-muted-foreground" icon={faClock} />
         {entry.medium !== "Show" && <>{formatRuntime(entry.runtime)}</>}
+        {entry.medium === "Show" && episodes && (
+          <>{formatRuntime(sumBy(episodes, (e) => e.runtime))}</>
+        )}
       </div>
     </div>
   );
