@@ -10,16 +10,31 @@ The frontend leverages the Tanstack suites of tools to full effect, and is built
 
 ## Web API
 
-- Bun
-- Elysia
-- Drizzle ORM
-- TursoDB
-- UploadThing
+**Bun** -
+This is the first project I've completed and published since jumping to Bun. It was a toss up between Bun and Deno, but Deno came with too many new concepts to learn and limitations to work around where Bun's promise of being a drop in replacement for Node delivers in full.
+
+**Elysia** -
+With the jump to Bun I figured it would be a good time to try a new REST API framework while I was at it. Elysia emphasised DX and does a great job. Its first party plugins and integrations with other backend tools made me start to enjoy backend.
+
+**Drizzle ORM** -
+I hate working with SQL, so Drizzle was a no brainer.
+
+**TursoDB** -
+I've heard some bad things about Turso, but so far I have no complaints!
+
+**UploadThing** -
+Starting the project I had a bunch of poster images as part of the repository, which wasn't going to scale. This file upload tool courtesy of [t3dotgg](https://github.com/t3dotgg) and co makes managing images a snap.
 
 ## Frontend
 
-- React (Vite)
-- Tanstack Query
-- Tanstack Router
-- Tanstack Form
-- Shadcn UI
+**React (Vite)** -
+If it ain't broke don't fix it. I just like React
+
+**Tanstack** -
+Tanner's tools are incredibly easy to use and made connecting the front and backend a lot simpler.
+- Query
+- Router
+- Form
+
+**Shadcn UI** -
+I didn't want to spend ages designing a frontend this time, as this project was meant to help improve my backend skills. Shadcn's components work great, look great, and feel great to use.
