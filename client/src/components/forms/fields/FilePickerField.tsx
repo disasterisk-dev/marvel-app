@@ -1,9 +1,10 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFieldContext } from "@/forms/useAppForm";
-import { useQuery } from "@tanstack/react-query";
+import { faCheckCircle, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { useState } from "react";
 
 type Props = {
   label: string;
@@ -12,12 +13,10 @@ type Props = {
 export const FilePickerField = ({ label, password }: Props) => {
   const field = useFieldContext<string>();
 
-  const [file, setFile] = useState<File | null>(null);
-
-  useQuery({
-    queryKey: ["upload"],
-    queryFn: () => {
-      axios
+  const mutation = useMutation({
+    mutationKey: ["upload"],
+    mutationFn: async (file: File) => {
+      await axios
         .post(
           import.meta.env.VITE_API_BASE_URL + "/upload",
           {
@@ -35,23 +34,36 @@ export const FilePickerField = ({ label, password }: Props) => {
           field.handleChange(res.data.url);
           return res.data;
         })
-        .catch(() => {
-          throw new Error("Couldn't upload");
+        .catch((err) => {
+          throw new Error(err.message);
         });
     },
-    enabled: !!file,
   });
 
   return (
     <>
       <Label htmlFor={field.name}>{label}</Label>
-      <Input
-        id={field.name}
-        name={field.name}
-        // value={field.state.value}
-        onChange={(e) => setFile(e.target.files![0])}
-        type="file"
-      />
+      <div className="flex items-stretch gap-2">
+        <Input
+          id={field.name}
+          name={field.name}
+          // value={field.state.value}
+          onChange={(e) => mutation.mutateAsync(e.target.files![0])}
+          type="file"
+        />
+        {mutation.isPending && (
+          <FontAwesomeIcon className="animate-spin" icon={faSpinner} />
+        )}
+        {mutation.isSuccess && (
+          <FontAwesomeIcon
+            className="text-chart-2 aspect-square h-full"
+            icon={faCheckCircle}
+          />
+        )}
+      </div>
+      {mutation.isError && (
+        <em className="text-destructive">{mutation.error.toString()}</em>
+      )}
     </>
   );
 };

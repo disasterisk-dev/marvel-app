@@ -36,7 +36,7 @@ export const uploadRoute = new Elysia({ prefix: "/upload" }).use(bearer()).post(
   {
     body: t.Object({
       file: t.File({
-        type: "image/jpeg",
+        type: "image/*",
       }),
     }),
     response: {
