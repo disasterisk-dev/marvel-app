@@ -23,7 +23,7 @@ function Root() {
         <AppSidebar />
 
         <main className="bg-inverse-subtle dark:bg-subtle grow">
-          <div className="mb-4 flex items-center justify-between p-4">
+          <div className="sticky top-0 mb-4 flex items-center justify-between p-4">
             {location.pathname !== "/" && (
               <>
                 <SidebarTrigger />
