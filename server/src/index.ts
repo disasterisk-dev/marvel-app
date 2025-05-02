@@ -26,7 +26,11 @@ export interface entryBrief {
 }
 
 export const app = new Elysia()
-  .use(cors())
+  .use(
+    cors({
+      allowedHeaders: ["Content-Type", "Authorization"],
+    })
+  )
   .use(staticPlugin())
   .use(
     swagger({
