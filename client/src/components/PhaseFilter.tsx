@@ -9,7 +9,7 @@ import { Checkbox } from "./ui/checkbox";
 import { Label } from "./ui/label";
 
 const PhaseFilter = () => {
-  const phases = ["One", "Two", "Three", "Four", "Five"];
+  const phases = ["One", "Two", "Three", "Four", "Five", "Six"];
 
   const { phaseFilter, setPhaseFilter } = useFilter()!;
 
