@@ -74,7 +74,15 @@
     "@rollup/rollup-linux-arm64-gnu": "^4.32.0",
     "@rollup/rollup-linux-x64-gnu": "^4.32.0",
     "@rollup/rollup-win32-arm64-msvc": "^4.32.0",
-    "@rollup/rollup-win32-x64-msvc": "^4.32.0"
+    "@rollup/rollup-win32-x64-msvc": "^4.32.0",
+    "lightningcss-darwin-arm64": "1.18.0",
+    "lightningcss-darwin-x64": "1.18.0",
+    "lightningcss-linux-arm-gnueabihf": "1.18.0",
+    "lightningcss-linux-arm64-gnu": "1.18.0",
+    "lightningcss-linux-arm64-musl": "1.18.0",
+    "lightningcss-linux-x64-gnu": "1.18.0",
+    "lightningcss-linux-x64-musl": "1.18.0",
+    "lightningcss-win32-x64-msvc": "1.18.0"
   },
   "prettier": {
     "plugins": [
